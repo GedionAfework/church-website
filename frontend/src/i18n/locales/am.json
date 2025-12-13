@@ -73,7 +73,16 @@
     "editFamily": "ቤተሰብ አርም",
     "headMember": "የቤተሰብ አለቃ",
     "familyMembers": "የቤተሰብ አባላት",
-    "relationship": "ዝምድና"
+    "relationship": "ዝምድና",
+    "relationshipFather": "አባት",
+    "relationshipMother": "እናት",
+    "relationshipSon": "ወንድ ልጅ",
+    "relationshipDaughter": "ሴት ልጅ",
+    "relationshipGuardian": "አሳዳሪ",
+    "relationshipOther": "ሌላ",
+    "displayName": "የቤተሰብ ስም",
+    "memberCount": "አባላት",
+    "noFamilies": "ቤተሰቦች አልተገኙም"
   },
   "zones": {
     "title": "ዞኖች",
@@ -81,13 +90,103 @@
     "editZone": "ዞን አርም",
     "name": "ስም",
     "description": "መግለጫ",
-    "locationHint": "የአካባቢ ማስታወሻ"
+    "locationHint": "የአካባቢ ማስታወሻ",
+    "noZones": "ዞኖች አልተገኙም"
+  },
+  "serviceDivisions": {
+    "title": "የአገልግሎት ክፍሎች",
+    "addServiceDivision": "የአገልግሎት ክፍል ጨምር",
+    "editServiceDivision": "የአገልግሎት ክፍል አርም",
+    "name": "ስም",
+    "noServiceDivisions": "የአገልግሎት ክፍሎች አልተገኙም"
   },
   "content": {
     "title": "ይዘት",
     "blog": "ብሎግ",
     "heroSection": "የመሪ ክፍል",
     "socialFeeds": "የማህበራዊ ሚዲያ ምግቦች"
+  },
+  "blog": {
+    "title": "ብሎግ",
+    "addPost": "ፖስት ጨምር",
+    "editPost": "ፖስት አርም",
+    "content": "ይዘት",
+    "author": "ደራሲ",
+    "status": "ሁኔታ",
+    "statusDraft": "አልተጻፈም",
+    "statusPublished": "የታተመ",
+    "publishedAt": "የታተመበት ቀን",
+    "thumbnail": "የአንድ እይታ ምስል",
+    "allStatuses": "ሁሉም ሁኔታዎች",
+    "noPosts": "ፖስቶች አልተገኙም"
+  },
+  "hero": {
+    "title": "ርዕስ",
+    "addHero": "የመሪ ክፍል ጨምር",
+    "editHero": "የመሪ ክፍል አርም",
+    "subtitle": "ንዑስ ርዕስ",
+    "buttonText": "የአዝራር ጽሑፍ",
+    "buttonLink": "የአዝራር አድራሻ",
+    "startDate": "የመጀመሪያ ቀን",
+    "endDate": "የመጨረሻ ቀን",
+    "backgroundImage": "የጀርባ ምስል",
+    "layout": "ዲዛይን",
+    "layoutClassic": "ክላሲክ",
+    "layoutLeftImage": "ምስል በግራ",
+    "layoutRightImage": "ምስል በቀኝ",
+    "layoutOverlayDark": "ጨለማ ሽፋን",
+    "layoutOverlayLight": "ብርሃን ሽፋን",
+    "textAlignment": "የጽሑፍ አሰላለፍ",
+    "alignmentLeft": "ግራ",
+    "alignmentCenter": "መሃል",
+    "alignmentRight": "ቀኝ",
+    "buttonVariant": "የአዝራር ዓይነት",
+    "variantPrimary": "ዋና",
+    "variantOutline": "ውጫዊ ድንበር",
+    "variantGhost": "መናፈሻ",
+    "overlayOpacity": "የሽፋን ግልጽነት",
+    "titleColor": "የርዕስ ቀለም",
+    "subtitleColor": "የንዑስ ርዕስ ቀለም",
+    "extraClasses": "ተጨማሪ CSS ክፍሎች",
+    "noHeros": "የመሪ ክፍሎች አልተገኙም"
+  },
+  "socialFeeds": {
+    "addFeed": "የማህበራዊ ሚዲያ ምግብ ጨምር",
+    "editFeed": "የማህበራዊ ሚዲያ ምግብ አርም",
+    "platform": "መድረክ",
+    "handleOrPageId": "የተጠቃሚ ስም ወይም የገጽ መለያ",
+    "apiKeyOrToken": "የ API ቁልፍ ወይም ቶከን",
+    "noFeeds": "የማህበራዊ ሚዲያ ምግቦች አልተገኙም"
+  },
+  "home": {
+    "welcome": "ወደ እኛ ቤተክርስቲያን እንኳን ደህና መጡ",
+    "welcomeMessage": "በአምልኮ እና በአብሮነት ይቀላቀሉን",
+    "recentPosts": "የቅርብ ጊዜ ፖስቶች",
+    "viewAllPosts": "ሁሉንም ፖስቶች ይመልከቱ",
+    "noPosts": "እስካሁን ምንም ፖስት የለም"
+  },
+  "staff": {
+    "title": "የእኛ ሰራተኞች",
+    "subtitle": "የተገለጸ ቡድናችንን ይቀላቀሉ",
+    "noStaff": "ለማሳየት ሰራተኞች የሉም"
+  },
+  "blog": {
+    "title": "ብሎግ",
+    "addPost": "ፖስት ጨምር",
+    "editPost": "ፖስት አርም",
+    "content": "ይዘት",
+    "author": "ደራሲ",
+    "status": "ሁኔታ",
+    "statusDraft": "አልተጻፈም",
+    "statusPublished": "የታተመ",
+    "publishedAt": "የታተመበት ቀን",
+    "thumbnail": "የአንድ እይታ ምስል",
+    "allStatuses": "ሁሉም ሁኔታዎች",
+    "noPosts": "ፖስቶች አልተገኙም",
+    "by": "በ",
+    "readMore": "ተጨማሪ ያንብቡ",
+    "backToBlog": "ወደ ብሎግ ተመለስ",
+    "postNotFound": "ፖስት አልተገኘም"
   }
 }
 

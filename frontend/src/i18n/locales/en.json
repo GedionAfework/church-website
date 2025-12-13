@@ -21,7 +21,10 @@
     "page": "Page",
     "of": "of",
     "inactive": "Inactive",
-    "confirmDelete": "Are you sure you want to delete this item?"
+    "confirmDelete": "Are you sure you want to delete this item?",
+    "view": "View",
+    "add": "Add",
+    "createdAt": "Created"
   },
   "auth": {
     "username": "Username",
@@ -73,7 +76,16 @@
     "editFamily": "Edit Family",
     "headMember": "Head Member",
     "familyMembers": "Family Members",
-    "relationship": "Relationship"
+    "relationship": "Relationship",
+    "relationshipFather": "Father",
+    "relationshipMother": "Mother",
+    "relationshipSon": "Son",
+    "relationshipDaughter": "Daughter",
+    "relationshipGuardian": "Guardian",
+    "relationshipOther": "Other",
+    "displayName": "Family Name",
+    "memberCount": "Members",
+    "noFamilies": "No families found"
   },
   "zones": {
     "title": "Zones",
@@ -81,13 +93,103 @@
     "editZone": "Edit Zone",
     "name": "Name",
     "description": "Description",
-    "locationHint": "Location Hint"
+    "locationHint": "Location Hint",
+    "noZones": "No zones found"
+  },
+  "serviceDivisions": {
+    "title": "Service Divisions",
+    "addServiceDivision": "Add Service Division",
+    "editServiceDivision": "Edit Service Division",
+    "name": "Name",
+    "noServiceDivisions": "No service divisions found"
   },
   "content": {
     "title": "Content",
     "blog": "Blog",
     "heroSection": "Hero Section",
     "socialFeeds": "Social Feeds"
+  },
+  "blog": {
+    "title": "Blog",
+    "addPost": "Add Post",
+    "editPost": "Edit Post",
+    "content": "Content",
+    "author": "Author",
+    "status": "Status",
+    "statusDraft": "Draft",
+    "statusPublished": "Published",
+    "publishedAt": "Published Date",
+    "thumbnail": "Thumbnail Image",
+    "allStatuses": "All Statuses",
+    "noPosts": "No posts found"
+  },
+  "hero": {
+    "title": "Title",
+    "addHero": "Add Hero Section",
+    "editHero": "Edit Hero Section",
+    "subtitle": "Subtitle",
+    "buttonText": "Button Text",
+    "buttonLink": "Button Link",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "backgroundImage": "Background Image",
+    "layout": "Layout",
+    "layoutClassic": "Classic",
+    "layoutLeftImage": "Image Left",
+    "layoutRightImage": "Image Right",
+    "layoutOverlayDark": "Dark Overlay",
+    "layoutOverlayLight": "Light Overlay",
+    "textAlignment": "Text Alignment",
+    "alignmentLeft": "Left",
+    "alignmentCenter": "Center",
+    "alignmentRight": "Right",
+    "buttonVariant": "Button Variant",
+    "variantPrimary": "Primary",
+    "variantOutline": "Outline",
+    "variantGhost": "Ghost",
+    "overlayOpacity": "Overlay Opacity",
+    "titleColor": "Title Color",
+    "subtitleColor": "Subtitle Color",
+    "extraClasses": "Extra CSS Classes",
+    "noHeros": "No hero sections found"
+  },
+  "socialFeeds": {
+    "addFeed": "Add Social Feed",
+    "editFeed": "Edit Social Feed",
+    "platform": "Platform",
+    "handleOrPageId": "Handle or Page ID",
+    "apiKeyOrToken": "API Key or Token",
+    "noFeeds": "No social feeds found"
+  },
+  "home": {
+    "welcome": "Welcome to Our Church",
+    "welcomeMessage": "Join us in worship and fellowship",
+    "recentPosts": "Recent Posts",
+    "viewAllPosts": "View All Posts",
+    "noPosts": "No posts yet"
+  },
+  "staff": {
+    "title": "Our Staff",
+    "subtitle": "Meet our dedicated team",
+    "noStaff": "No staff members to display"
+  },
+  "blog": {
+    "title": "Blog",
+    "addPost": "Add Post",
+    "editPost": "Edit Post",
+    "content": "Content",
+    "author": "Author",
+    "status": "Status",
+    "statusDraft": "Draft",
+    "statusPublished": "Published",
+    "publishedAt": "Published Date",
+    "thumbnail": "Thumbnail Image",
+    "allStatuses": "All Statuses",
+    "noPosts": "No posts found",
+    "by": "By",
+    "readMore": "Read More",
+    "backToBlog": "Back to Blog",
+    "postNotFound": "Post not found"
   }
 }
 
