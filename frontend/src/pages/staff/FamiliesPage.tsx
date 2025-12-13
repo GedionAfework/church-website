@@ -143,7 +143,15 @@ const FamiliesPage: React.FC = () => {
                   </tr>
                 ) : (
                   families.map((family) => (
-                    <tr key={family.id}>
+                    <tr
+                      key={family.id}
+                      onClick={() => {
+                        if (family.id) {
+                          window.location.href = `/staff/families/${family.id}`;
+                        }
+                      }}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <td>
                         <strong>{family.display_name || 'Unnamed Family'}</strong>
                       </td>
@@ -156,7 +164,7 @@ const FamiliesPage: React.FC = () => {
                           ? formatToEthiopian(family.created_at, i18n.language)
                           : '-'}
                       </td>
-                      <td>
+                      <td onClick={(e) => e.stopPropagation()}>
                         <button
                           onClick={() => handleEdit(family)}
                           className="btn-sm btn-edit"
@@ -172,17 +180,6 @@ const FamiliesPage: React.FC = () => {
                           className="btn-sm btn-delete"
                         >
                           {t('common.delete')}
-                        </button>
-                        <button
-                          onClick={() => {
-                            if (family.id) {
-                              // Navigate to family detail view
-                              window.location.href = `/staff/families/${family.id}`;
-                            }
-                          }}
-                          className="btn-sm btn-view"
-                        >
-                          {t('common.view') || 'View'}
                         </button>
                       </td>
                     </tr>

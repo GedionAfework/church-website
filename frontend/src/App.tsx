@@ -15,6 +15,7 @@ import DashboardPage from './pages/staff/DashboardPage';
 import MembersPage from './pages/staff/MembersPage';
 import MemberDetailPage from './pages/staff/MemberDetailPage';
 import FamiliesPage from './pages/staff/FamiliesPage';
+import FamilyDetailPage from './pages/staff/FamilyDetailPage';
 import ZonesPage from './pages/staff/ZonesPage';
 import ZoneDetailPage from './pages/staff/ZoneDetailPage';
 import ServiceDivisionsPage from './pages/staff/ServiceDivisionsPage';
@@ -55,6 +56,7 @@ function App() {
             <Route path="members" element={<MembersPage />} />
             <Route path="members/:id" element={<MemberDetailPage />} />
             <Route path="families" element={<FamiliesPage />} />
+            <Route path="families/:id" element={<FamilyDetailPage />} />
             <Route path="zones" element={<ZonesPage />} />
             <Route path="zones/:id" element={<ZoneDetailPage />} />
             <Route path="service-divisions" element={<ServiceDivisionsPage />} />

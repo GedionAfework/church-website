@@ -10,14 +10,16 @@ export interface FamilyMember {
 export interface Family {
   id?: number;
   head_member?: number;
+  head_member_name?: string;
   display_name?: string;
   family_members?: Array<{
     id: number;
-    member: {
+    member?: {
       id: number;
       first_name: string;
       last_name: string;
       full_name: string;
+      father_name?: string;
     };
     relationship: string;
     relationship_display: string;
