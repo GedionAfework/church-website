@@ -371,8 +371,6 @@ const HeroSectionPage: React.FC = () => {
                           : '-'}
                       </td>
                       <td>
-                      </td>
-                      <td>
                         <button
                           onClick={() => handleEdit(hero)}
                           className="btn-sm btn-edit"
