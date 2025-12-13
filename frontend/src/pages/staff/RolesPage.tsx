@@ -203,7 +203,7 @@ const RolesPage: React.FC = () => {
                     .map(([key, group]) => (
                       <div key={key} className="permission-group">
                         <h4>
-                          {group.app_label}.{group.model_name}
+                          {t(`permissions.apps.${group.app_label}`, group.app_label)}.{t(`permissions.models.${group.model_name}`, group.model_name)}
                         </h4>
                         <div className="permission-list">
                           {group.permissions.map((perm) => (
@@ -214,7 +214,7 @@ const RolesPage: React.FC = () => {
                                 onChange={() => handlePermissionToggle(perm.id)}
                               />
                               <span>
-                                {perm.name}
+                                {t(`permissions.${perm.full_codename}`, perm.name)}
                                 <small style={{ color: '#666', marginLeft: '8px' }}>
                                   ({perm.full_codename})
                                 </small>
