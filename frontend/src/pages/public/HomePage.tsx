@@ -6,15 +6,25 @@ import apiClient from '../../services/api';
 import { API_ENDPOINTS } from '../../config/api';
 import { formatToEthiopian } from '../../utils/dateFormatter';
 
+interface SocialFeedConfig {
+  id: number;
+  platform: 'instagram' | 'facebook' | 'youtube';
+  platform_display: string;
+  handle_or_page_id: string;
+  is_active: boolean;
+}
+
 const HomePage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [hero, setHero] = useState<HeroSection | null>(null);
   const [recentPosts, setRecentPosts] = useState<BlogPost[]>([]);
+  const [socialFeeds, setSocialFeeds] = useState<SocialFeedConfig[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchHero();
     fetchRecentPosts();
+    fetchSocialFeeds();
   }, []);
 
   const fetchHero = async () => {
@@ -34,6 +44,17 @@ const HomePage: React.FC = () => {
       console.error('Error fetching posts:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchSocialFeeds = async () => {
+    try {
+      const response = await apiClient.get(API_ENDPOINTS.SOCIAL_FEEDS, {
+        params: { is_active: true, page_size: 100 },
+      });
+      setSocialFeeds(response.data.results || []);
+    } catch (error) {
+      console.error('Error fetching social feeds:', error);
     }
   };
 
@@ -150,6 +171,48 @@ const HomePage: React.FC = () => {
             </Link>
           </div>
         </section>
+
+        {socialFeeds.length > 0 && (
+          <section className="social-feeds-section">
+            <h2>{t('home.socialFeeds') || 'Follow Us'}</h2>
+            <div className="social-feeds-grid">
+              {socialFeeds.map((feed) => {
+                const getFeedUrl = () => {
+                  switch (feed.platform) {
+                    case 'instagram':
+                      return `https://instagram.com/${feed.handle_or_page_id}`;
+                    case 'facebook':
+                      return `https://facebook.com/${feed.handle_or_page_id}`;
+                    case 'youtube':
+                      return `https://youtube.com/${feed.handle_or_page_id}`;
+                    default:
+                      return '#';
+                  }
+                };
+
+                return (
+                  <a
+                    key={feed.id}
+                    href={getFeedUrl()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="social-feed-card"
+                  >
+                    <div className="social-feed-icon">
+                      {feed.platform === 'instagram' && '📷'}
+                      {feed.platform === 'facebook' && '📘'}
+                      {feed.platform === 'youtube' && '▶️'}
+                    </div>
+                    <div className="social-feed-info">
+                      <h3>{feed.platform_display || feed.platform.charAt(0).toUpperCase() + feed.platform.slice(1)}</h3>
+                      <p>@{feed.handle_or_page_id}</p>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );

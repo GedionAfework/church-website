@@ -10,18 +10,20 @@ const BlogListPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetchPosts();
-  }, [page]);
+  }, [page, searchTerm]);
 
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      const data = await contentService.getBlogPosts({
-        page,
-        status: 'published',
-      });
+      const params: any = { page, status: 'published' };
+      if (searchTerm) {
+        params.search = searchTerm;
+      }
+      const data = await contentService.getBlogPosts(params);
       setPosts(data.results);
       setTotalPages(Math.ceil(data.count / 20));
     } catch (error) {
@@ -35,6 +37,20 @@ const BlogListPage: React.FC = () => {
     <div className="blog-list-page">
       <div className="page-header">
         <h1>{t('blog.title') || 'Blog'}</h1>
+      </div>
+
+      <div className="filters" style={{ marginBottom: '30px' }}>
+        <input
+          type="text"
+          placeholder={t('blog.searchPlaceholder') || 'Search posts...'}
+          value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setPage(1);
+          }}
+          className="search-input"
+          style={{ maxWidth: '400px', width: '100%' }}
+        />
       </div>
 
       {loading ? (

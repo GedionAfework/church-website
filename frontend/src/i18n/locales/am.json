@@ -158,7 +158,12 @@
     "publishedAt": "የታተመበት ቀን",
     "thumbnail": "የአንድ እይታ ምስል",
     "allStatuses": "ሁሉም ሁኔታዎች",
-    "noPosts": "ፖስቶች አልተገኙም"
+    "noPosts": "ፖስቶች አልተገኙም",
+    "by": "በ",
+    "readMore": "ተጨማሪ ያንብቡ",
+    "backToBlog": "ወደ ብሎግ ተመለስ",
+    "postNotFound": "ፖስት አልተገኘም",
+    "searchPlaceholder": "ልጥፎችን ይፈልጉ..."
   },
   "hero": {
     "title": "ርዕስ",
@@ -204,7 +209,8 @@
     "welcomeMessage": "በአምልኮ እና በአብሮነት ይቀላቀሉን",
     "recentPosts": "የቅርብ ጊዜ ፖስቶች",
     "viewAllPosts": "ሁሉንም ፖስቶች ይመልከቱ",
-    "noPosts": "እስካሁን ምንም ፖስት የለም"
+    "noPosts": "እስካሁን ምንም ፖስት የለም",
+    "socialFeeds": "እንከተለን"
   },
   "staff": {
     "title": "የእኛ ሰራተኞች",
@@ -239,6 +245,19 @@
   },
   "footer": {
     "copyright": "© 2024 የቤተክርስቲያን ድርጅት. ሁሉም መብቶች የተጠበቁ ናቸው."
+  },
+  "roles": {
+    "title": "ሚናዎች እና ፍቃዶች",
+    "addRole": "ሚና ጨምር",
+    "editRole": "ሚና አርም",
+    "name": "የሚና ስም",
+    "namePlaceholder": "የሚና ስም ያስገቡ",
+    "nameRequired": "የሚና ስም ያስፈልጋል",
+    "permissions": "ፍቃዶች",
+    "permissionCount": "ፍቃዶች",
+    "userCount": "ተጠቃሚዎች",
+    "noRoles": "ምንም ሚናዎች አልተገኙም",
+    "confirmDelete": "እርግጠኛ ነዎት ይህንን ሚና ማስወገድ ይፈልጋሉ?"
   }
 }
 

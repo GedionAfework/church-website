@@ -1,7 +1,121 @@
-from rest_framework import status
+from rest_framework import viewsets, filters, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
+from django_filters.rest_framework import DjangoFilterBackend
+from .serializers import GroupSerializer, GroupListSerializer, PermissionSerializer
+from .permissions import RolePermission
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for managing Groups (Roles)
+    """
+    queryset = Group.objects.prefetch_related('permissions', 'user_set').all()
+    permission_classes = [RolePermission]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name']
+    ordering_fields = ['name']
+    ordering = ['name']
+    
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return GroupListSerializer
+        return GroupSerializer
+    
+    @action(detail=False, methods=['get'])
+    def available_permissions(self, request):
+        """
+        Get all available permissions in the system, grouped by app and model
+        """
+        permissions = Permission.objects.select_related('content_type').all()
+        
+        # Group permissions by app and model
+        grouped_permissions = {}
+        for perm in permissions:
+            app_label = perm.content_type.app_label
+            model_name = perm.content_type.model
+            key = f"{app_label}.{model_name}"
+            
+            if key not in grouped_permissions:
+                grouped_permissions[key] = {
+                    'app_label': app_label,
+                    'model_name': model_name,
+                    'permissions': []
+                }
+            
+            grouped_permissions[key]['permissions'].append({
+                'id': perm.id,
+                'name': perm.name,
+                'codename': perm.codename,
+                'full_codename': f"{app_label}.{perm.codename}"
+            })
+        
+        return Response({
+            'grouped': grouped_permissions,
+            'flat': PermissionSerializer(permissions, many=True).data
+        })
+    
+    @action(detail=True, methods=['post'])
+    def assign_permissions(self, request, pk=None):
+        """
+        Assign permissions to a role
+        """
+        group = self.get_object()
+        permission_ids = request.data.get('permission_ids', [])
+        
+        if not isinstance(permission_ids, list):
+            return Response(
+                {'error': 'permission_ids must be a list'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        permissions = Permission.objects.filter(id__in=permission_ids)
+        group.permissions.set(permissions)
+        
+        serializer = self.get_serializer(group)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['get'])
+    def users(self, request, pk=None):
+        """
+        Get all users in this role
+        """
+        group = self.get_object()
+        users = group.user_set.all()
+        
+        user_data = [{
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'is_staff': user.is_staff,
+            'is_superuser': user.is_superuser,
+        } for user in users]
+        
+        return Response({
+            'count': len(user_data),
+            'users': user_data
+        })
+
+
+class PermissionViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Read-only ViewSet for viewing available permissions
+    """
+    queryset = Permission.objects.select_related('content_type').all()
+    serializer_class = PermissionSerializer
+    permission_classes = [RolePermission]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['content_type']
+    search_fields = ['name', 'codename']
+
+
+# Keep the original auth views
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import User

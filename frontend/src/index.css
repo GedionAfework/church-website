@@ -803,6 +803,68 @@ code {
   margin-top: 40px;
 }
 
+/* Social Feeds Section */
+.social-feeds-section {
+  margin-top: 60px;
+  padding-top: 60px;
+  border-top: 1px solid #eee;
+}
+
+.social-feeds-section h2 {
+  text-align: center;
+  margin-bottom: 40px;
+  color: #2c3e50;
+}
+
+.social-feeds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.social-feed-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  color: #2c3e50;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.social-feed-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.social-feed-icon {
+  font-size: 2.5rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border-radius: 50%;
+}
+
+.social-feed-info h3 {
+  margin: 0 0 5px 0;
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
+
+.social-feed-info p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
 /* Blog List Page */
 .blog-list-page {
   max-width: 1200px;
@@ -1120,6 +1182,98 @@ code {
     flex-wrap: wrap;
     justify-content: center;
   }
+}
+
+/* Roles Page */
+.roles-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.permissions-container {
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 15px;
+  background: #f9f9f9;
+}
+
+.permission-group {
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.permission-group:last-child {
+  border-bottom: none;
+}
+
+.permission-group h4 {
+  margin-bottom: 10px;
+  color: #2c3e50;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.permission-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 8px;
+}
+
+.permission-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.permission-item:hover {
+  background-color: #f0f0f0;
+}
+
+.permission-item input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.permission-item span {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  padding: 30px;
+  max-width: 900px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+  color: #2c3e50;
 }
 
 /* Detail Pages */

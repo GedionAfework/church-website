@@ -42,6 +42,7 @@ const StaffLayout: React.FC = () => {
           <li><Link to="/staff/blog">{t('content.blog')}</Link></li>
           <li><Link to="/staff/hero-section">{t('content.heroSection')}</Link></li>
           <li><Link to="/staff/social-feeds">{t('content.socialFeeds')}</Link></li>
+          <li><Link to="/staff/roles">{t('roles.title') || 'Roles'}</Link></li>
         </ul>
       </nav>
       <main className="staff-main">

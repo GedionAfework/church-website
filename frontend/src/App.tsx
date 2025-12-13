@@ -23,6 +23,7 @@ import ServiceDivisionDetailPage from './pages/staff/ServiceDivisionDetailPage';
 import BlogManagementPage from './pages/staff/BlogManagementPage';
 import HeroSectionPage from './pages/staff/HeroSectionPage';
 import SocialFeedsPage from './pages/staff/SocialFeedsPage';
+import RolesPage from './pages/staff/RolesPage';
 
 // Layouts
 import StaffLayout from './layouts/StaffLayout';
@@ -61,9 +62,10 @@ function App() {
             <Route path="zones/:id" element={<ZoneDetailPage />} />
             <Route path="service-divisions" element={<ServiceDivisionsPage />} />
             <Route path="service-divisions/:id" element={<ServiceDivisionDetailPage />} />
-            <Route path="blog" element={<BlogManagementPage />} />
-            <Route path="hero-section" element={<HeroSectionPage />} />
-            <Route path="social-feeds" element={<SocialFeedsPage />} />
+                  <Route path="blog" element={<BlogManagementPage />} />
+                  <Route path="hero-section" element={<HeroSectionPage />} />
+                  <Route path="social-feeds" element={<SocialFeedsPage />} />
+                  <Route path="roles" element={<RolesPage />} />
           </Route>
 
           {/* 404 */}

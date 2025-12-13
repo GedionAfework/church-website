@@ -164,7 +164,12 @@
     "publishedAt": "Published Date",
     "thumbnail": "Thumbnail Image",
     "allStatuses": "All Statuses",
-    "noPosts": "No posts found"
+    "noPosts": "No posts found",
+    "by": "By",
+    "readMore": "Read More",
+    "backToBlog": "Back to Blog",
+    "postNotFound": "Post not found",
+    "searchPlaceholder": "Search posts..."
   },
   "hero": {
     "title": "Title",
@@ -210,7 +215,8 @@
     "welcomeMessage": "Join us in worship and fellowship",
     "recentPosts": "Recent Posts",
     "viewAllPosts": "View All Posts",
-    "noPosts": "No posts yet"
+    "noPosts": "No posts yet",
+    "socialFeeds": "Follow Us"
   },
   "staff": {
     "title": "Our Staff",
@@ -245,6 +251,19 @@
   },
   "footer": {
     "copyright": "© 2024 Church Website. All rights reserved."
+  },
+  "roles": {
+    "title": "Roles & Permissions",
+    "addRole": "Add Role",
+    "editRole": "Edit Role",
+    "name": "Role Name",
+    "namePlaceholder": "Enter role name",
+    "nameRequired": "Role name is required",
+    "permissions": "Permissions",
+    "permissionCount": "Permissions",
+    "userCount": "Users",
+    "noRoles": "No roles found",
+    "confirmDelete": "Are you sure you want to delete this role?"
   }
 }
 

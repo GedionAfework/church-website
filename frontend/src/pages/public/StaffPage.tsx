@@ -6,11 +6,12 @@ import { API_ENDPOINTS } from '../../config/api';
 interface StaffMember {
   id: number;
   first_name: string;
+  father_name?: string;
   last_name: string;
-  full_name: string;
+  full_name?: string;
   staff_title: string;
   staff_bio: string;
-  photo?: string;
+  photo?: string | File;
 }
 
 const StaffPage: React.FC = () => {
@@ -62,24 +63,29 @@ const StaffPage: React.FC = () => {
         </div>
       ) : (
         <div className="staff-grid">
-          {staff.map((member) => (
-            <div key={member.id} className="staff-card">
-              {member.photo && (
-                <div className="staff-photo">
-                  <img src={member.photo} alt={member.full_name} />
+          {staff.map((member) => {
+            const displayName = member.full_name || `${member.first_name} ${member.father_name || ''} ${member.last_name}`.trim();
+            const photoUrl = typeof member.photo === 'string' ? member.photo : undefined;
+            
+            return (
+              <div key={member.id} className="staff-card">
+                {photoUrl && (
+                  <div className="staff-photo">
+                    <img src={photoUrl} alt={displayName} />
+                  </div>
+                )}
+                <div className="staff-info">
+                  <h3>{displayName}</h3>
+                  {member.staff_title && (
+                    <p className="staff-title">{member.staff_title}</p>
+                  )}
+                  {member.staff_bio && (
+                    <p className="staff-bio">{member.staff_bio}</p>
+                  )}
                 </div>
-              )}
-              <div className="staff-info">
-                <h3>{member.full_name}</h3>
-                {member.staff_title && (
-                  <p className="staff-title">{member.staff_title}</p>
-                )}
-                {member.staff_bio && (
-                  <p className="staff-bio">{member.staff_bio}</p>
-                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
