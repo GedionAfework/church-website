@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "ethiopian-calendar-finova": "^1.7.1",
+    "ethiopian-date-picker-and-converter": "^1.2.1"
+  }
+}

@@ -53,6 +53,16 @@ class HeroSectionSerializer(serializers.ModelSerializer):
             'created_at', 'updated_at'
         ]
         read_only_fields = ['created_at', 'updated_at']
+        extra_kwargs = {
+            'background_image': {'required': True, 'allow_null': False},
+            'title': {'required': False, 'allow_blank': True, 'allow_null': True},
+        }
+
+    def validate_background_image(self, value):
+        """Ensure background_image is provided"""
+        if not value:
+            raise serializers.ValidationError("Background image is required.")
+        return value
 
 
 class SocialFeedConfigSerializer(serializers.ModelSerializer):

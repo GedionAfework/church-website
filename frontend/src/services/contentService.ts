@@ -133,7 +133,12 @@ export const contentService = {
     try {
       const response = await apiClient.get<HeroSection>(API_ENDPOINTS.ACTIVE_HERO);
       return response.data;
-    } catch {
+    } catch (error: any) {
+      // If 404, no active hero exists
+      if (error.response?.status === 404) {
+        return null;
+      }
+      console.error('Error fetching active hero:', error);
       return null;
     }
   },

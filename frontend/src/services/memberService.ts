@@ -4,9 +4,13 @@ import { API_ENDPOINTS } from '../config/api';
 export interface Member {
   id?: number;
   first_name: string;
+  father_name?: string;
   last_name: string;
+  full_name?: string;
   gender: 'M' | 'F' | 'O';
   date_of_birth?: string;
+  age?: number;
+  use_age_instead_of_birthdate?: boolean;
   phone?: string;
   email?: string;
   address?: string;

@@ -75,7 +75,7 @@ class HeroSection(models.Model):
         ('ghost', 'Ghost'),
     ]
 
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, blank=True, null=True)
     subtitle = models.TextField(blank=True)
     background_image = models.ImageField(
         upload_to='hero/backgrounds/',
@@ -121,7 +121,7 @@ class HeroSection(models.Model):
         ]
 
     def __str__(self):
-        return self.title
+        return self.title or f"Hero Section #{self.id}"
 
     @classmethod
     def get_active_hero(cls):

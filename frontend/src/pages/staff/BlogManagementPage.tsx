@@ -3,9 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { contentService, type BlogPost } from '../../services/contentService';
 import apiClient from '../../services/api';
 import { API_ENDPOINTS } from '../../config/api';
+import { formatToEthiopian } from '../../utils/dateFormatter';
+import EthiopianDateInput from '../../components/EthiopianDateInput';
 
 const BlogManagementPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -190,10 +192,10 @@ const BlogManagementPage: React.FC = () => {
           {formData.status === 'published' && (
             <div className="form-group">
               <label>{t('blog.publishedAt') || 'Published Date'}</label>
-              <input
+              <EthiopianDateInput
+                value={formData.published_at || ''}
+                onChange={(value) => setFormData({ ...formData, published_at: value })}
                 type="datetime-local"
-                value={formData.published_at}
-                onChange={(e) => setFormData({ ...formData, published_at: e.target.value })}
               />
             </div>
           )}
@@ -296,7 +298,7 @@ const BlogManagementPage: React.FC = () => {
                       </td>
                       <td>
                         {post.published_at
-                          ? new Date(post.published_at).toLocaleDateString()
+                          ? formatToEthiopian(post.published_at, i18n.language)
                           : '-'}
                       </td>
                       <td>

@@ -19,9 +19,12 @@ class Member(models.Model):
         help_text='Link to User for staff members'
     )
     first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    father_name = models.CharField(max_length=100, blank=True, help_text="Father's name")
+    last_name = models.CharField(max_length=100, help_text="Grandfather's name")
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
     date_of_birth = models.DateField(null=True, blank=True)
+    age = models.IntegerField(null=True, blank=True, help_text='Age in years (if date of birth is unknown)')
+    use_age_instead_of_birthdate = models.BooleanField(default=False, help_text='Use age instead of date of birth')
     phone = models.CharField(max_length=20, blank=True)
     email = models.EmailField(blank=True)
     address = models.CharField(max_length=255, blank=True)
@@ -63,7 +66,13 @@ class Member(models.Model):
 
     @property
     def full_name(self):
-        return f"{self.first_name} {self.last_name}"
+        """Format: First Name Father's Name Last Name (Grandfather's Name)"""
+        parts = [self.first_name]
+        if self.father_name:
+            parts.append(self.father_name)
+        if self.last_name:
+            parts.append(self.last_name)
+        return ' '.join(parts)
 
 
 class Family(models.Model):
@@ -90,17 +99,20 @@ class Family(models.Model):
     @property
     def display_name(self):
         """Compute family display name based on head member or family members"""
-        if self.head_member:
-            return f"{self.head_member.first_name}'s family"
-        
-        # Try to find father or mother
-        family_members = self.family_members.select_related('member').all()
-        
-        for fm in family_members:
-            if fm.relationship == 'father':
-                return f"{fm.member.first_name}'s family"
-            elif fm.relationship == 'mother':
-                return f"{fm.member.first_name}'s family"
+        try:
+            if self.head_member:
+                return f"{self.head_member.first_name}'s family"
+            
+            # Try to find father or mother
+            family_members = self.family_members.select_related('member').all()
+            
+            for fm in family_members:
+                if fm.relationship == 'father' and fm.member:
+                    return f"{fm.member.first_name}'s family"
+                elif fm.relationship == 'mother' and fm.member:
+                    return f"{fm.member.first_name}'s family"
+        except Exception:
+            pass
         
         return "Unnamed family"
 

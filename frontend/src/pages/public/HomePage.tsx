@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { contentService, type HeroSection, type BlogPost } from '../../services/contentService';
 import apiClient from '../../services/api';
 import { API_ENDPOINTS } from '../../config/api';
+import { formatToEthiopian } from '../../utils/dateFormatter';
 
 const HomePage: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -80,7 +81,9 @@ const HomePage: React.FC = () => {
           />
         )}
         <div className="hero-content">
-          <h1 style={{ color: hero.title_color }}>{hero.title}</h1>
+          {hero.title && (
+            <h1 style={{ color: hero.title_color }}>{hero.title}</h1>
+          )}
           {hero.subtitle && (
             <p style={{ color: hero.subtitle_color }}>{hero.subtitle}</p>
           )}
@@ -130,7 +133,7 @@ const HomePage: React.FC = () => {
                     )}
                     {post.published_at && (
                       <p className="blog-date">
-                        {new Date(post.published_at).toLocaleDateString()}
+                        {formatToEthiopian(post.published_at, i18n.language)}
                       </p>
                     )}
                     <Link to={`/blog/${post.slug}`} className="blog-read-more">

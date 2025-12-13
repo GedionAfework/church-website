@@ -184,7 +184,15 @@ const ServiceDivisionsPage: React.FC = () => {
                   </tr>
                 ) : (
                   divisions.map((division) => (
-                    <tr key={division.id}>
+                    <tr
+                      key={division.id}
+                      onClick={() => {
+                        if (division.id) {
+                          window.location.href = `/staff/service-divisions/${division.id}`;
+                        }
+                      }}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <td><strong>{division.name}</strong></td>
                       <td>{division.description || '-'}</td>
                       <td>
@@ -192,7 +200,7 @@ const ServiceDivisionsPage: React.FC = () => {
                           {division.is_active ? t('dashboard.active') : t('common.inactive')}
                         </span>
                       </td>
-                      <td>
+                      <td onClick={(e) => e.stopPropagation()}>
                         <button
                           onClick={() => handleEdit(division)}
                           className="btn-sm btn-edit"

@@ -191,7 +191,15 @@ const ZonesPage: React.FC = () => {
                   </tr>
                 ) : (
                   zones.map((zone) => (
-                    <tr key={zone.id}>
+                    <tr
+                      key={zone.id}
+                      onClick={() => {
+                        if (zone.id) {
+                          window.location.href = `/staff/zones/${zone.id}`;
+                        }
+                      }}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <td><strong>{zone.name}</strong></td>
                       <td>{zone.description || '-'}</td>
                       <td>{zone.location_hint || '-'}</td>
@@ -200,7 +208,7 @@ const ZonesPage: React.FC = () => {
                           {zone.is_active ? t('dashboard.active') : t('common.inactive')}
                         </span>
                       </td>
-                      <td>
+                      <td onClick={(e) => e.stopPropagation()}>
                         <button
                           onClick={() => handleEdit(zone)}
                           className="btn-sm btn-edit"

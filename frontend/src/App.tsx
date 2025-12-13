@@ -13,15 +13,19 @@ import StaffPage from './pages/public/StaffPage';
 import LoginPage from './pages/staff/LoginPage';
 import DashboardPage from './pages/staff/DashboardPage';
 import MembersPage from './pages/staff/MembersPage';
+import MemberDetailPage from './pages/staff/MemberDetailPage';
 import FamiliesPage from './pages/staff/FamiliesPage';
 import ZonesPage from './pages/staff/ZonesPage';
+import ZoneDetailPage from './pages/staff/ZoneDetailPage';
 import ServiceDivisionsPage from './pages/staff/ServiceDivisionsPage';
+import ServiceDivisionDetailPage from './pages/staff/ServiceDivisionDetailPage';
 import BlogManagementPage from './pages/staff/BlogManagementPage';
 import HeroSectionPage from './pages/staff/HeroSectionPage';
 import SocialFeedsPage from './pages/staff/SocialFeedsPage';
 
-// Layout
+// Layouts
 import StaffLayout from './layouts/StaffLayout';
+import PublicLayout from './layouts/PublicLayout';
 
 function App() {
   return (
@@ -29,10 +33,12 @@ function App() {
       <Router>
         <Routes>
           {/* Public routes */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/blog" element={<BlogListPage />} />
-          <Route path="/blog/:slug" element={<BlogDetailPage />} />
-          <Route path="/staff" element={<StaffPage />} />
+          <Route path="/" element={<PublicLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="blog" element={<BlogListPage />} />
+            <Route path="blog/:slug" element={<BlogDetailPage />} />
+            <Route path="staff" element={<StaffPage />} />
+          </Route>
 
           {/* Staff routes */}
           <Route path="/staff/login" element={<LoginPage />} />
@@ -47,9 +53,12 @@ function App() {
             <Route index element={<Navigate to="/staff/dashboard" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="members" element={<MembersPage />} />
+            <Route path="members/:id" element={<MemberDetailPage />} />
             <Route path="families" element={<FamiliesPage />} />
             <Route path="zones" element={<ZonesPage />} />
+            <Route path="zones/:id" element={<ZoneDetailPage />} />
             <Route path="service-divisions" element={<ServiceDivisionsPage />} />
+            <Route path="service-divisions/:id" element={<ServiceDivisionDetailPage />} />
             <Route path="blog" element={<BlogManagementPage />} />
             <Route path="hero-section" element={<HeroSectionPage />} />
             <Route path="social-feeds" element={<SocialFeedsPage />} />

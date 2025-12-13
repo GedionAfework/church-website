@@ -6,17 +6,28 @@ class MemberSerializer(serializers.ModelSerializer):
     full_name = serializers.ReadOnlyField()
     zone_name = serializers.CharField(source='zone.name', read_only=True)
     service_division_name = serializers.CharField(source='service_division.name', read_only=True)
+    age = serializers.SerializerMethodField()
 
     class Meta:
         model = Member
         fields = [
-            'id', 'user', 'first_name', 'last_name', 'full_name',
-            'gender', 'date_of_birth', 'phone', 'email', 'address',
+            'id', 'user', 'first_name', 'father_name', 'last_name', 'full_name',
+            'gender', 'date_of_birth', 'age', 'use_age_instead_of_birthdate', 'phone', 'email', 'address',
             'zone', 'zone_name', 'service_division', 'service_division_name',
             'photo', 'is_active', 'is_staff_member', 'staff_title',
             'staff_bio', 'show_in_staff_page', 'created_at', 'updated_at'
         ]
         read_only_fields = ['created_at', 'updated_at']
+
+    def get_age(self, obj):
+        """Get age - either from stored age field or calculate from date_of_birth"""
+        if obj.use_age_instead_of_birthdate and obj.age:
+            return obj.age
+        elif obj.date_of_birth:
+            from datetime import date
+            today = date.today()
+            return today.year - obj.date_of_birth.year - ((today.month, today.day) < (obj.date_of_birth.month, obj.date_of_birth.day))
+        return obj.age if obj.age else None
 
 
 class FamilyMemberSerializer(serializers.ModelSerializer):

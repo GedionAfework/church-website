@@ -86,18 +86,19 @@ const MembersPage: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (formData: FormData) => {
-    try {
-      if (editingMember?.id) {
-        await memberService.updateMember(editingMember.id, formData);
-      } else {
-        await memberService.createMember(formData);
-      }
+  const handleSubmit = async (formData: FormData): Promise<Member> => {
+    if (editingMember?.id) {
+      const updated = await memberService.updateMember(editingMember.id, formData);
       setShowForm(false);
       setEditingMember(undefined);
       fetchMembers();
-    } catch (error) {
-      throw error;
+      return updated;
+    } else {
+      const created = await memberService.createMember(formData);
+      setShowForm(false);
+      setEditingMember(undefined);
+      fetchMembers();
+      return created;
     }
   };
 
@@ -181,8 +182,7 @@ const MembersPage: React.FC = () => {
             <table className="data-table">
               <thead>
                 <tr>
-                  <th>{t('members.firstName')}</th>
-                  <th>{t('members.lastName')}</th>
+                  <th>{t('members.name') || 'Name'}</th>
                   <th>{t('members.email')}</th>
                   <th>{t('members.phone')}</th>
                   <th>{t('members.zone')}</th>
@@ -194,15 +194,22 @@ const MembersPage: React.FC = () => {
               <tbody>
                 {members.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="empty-state">
+                    <td colSpan={7} className="empty-state">
                       {t('members.noMembers') || 'No members found'}
                     </td>
                   </tr>
                 ) : (
                   members.map((member) => (
-                    <tr key={member.id}>
-                      <td>{member.first_name}</td>
-                      <td>{member.last_name}</td>
+                    <tr
+                      key={member.id}
+                      onClick={() => {
+                        if (member.id) {
+                          window.location.href = `/staff/members/${member.id}`;
+                        }
+                      }}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <td>{member.full_name || `${member.first_name} ${member.father_name || ''} ${member.last_name}`.trim()}</td>
                       <td>{member.email || '-'}</td>
                       <td>{member.phone || '-'}</td>
                       <td>
@@ -216,7 +223,7 @@ const MembersPage: React.FC = () => {
                           {member.is_active ? t('dashboard.active') : t('common.inactive') || 'Inactive'}
                         </span>
                       </td>
-                      <td>
+                      <td onClick={(e) => e.stopPropagation()}>
                         <button
                           onClick={() => handleEdit(member)}
                           className="btn-sm btn-edit"

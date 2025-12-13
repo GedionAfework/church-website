@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { contentService, type BlogPost } from '../../services/contentService';
+import { formatToEthiopian } from '../../utils/dateFormatter';
 
 const BlogListPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -65,7 +66,7 @@ const BlogListPage: React.FC = () => {
                       )}
                       {post.published_at && (
                         <span>
-                          {new Date(post.published_at).toLocaleDateString()}
+                          {formatToEthiopian(post.published_at, i18n.language)}
                         </span>
                       )}
                     </div>

@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { contentService, type HeroSection } from '../../services/contentService';
+import { formatToEthiopian } from '../../utils/dateFormatter';
+import EthiopianDateInput from '../../components/EthiopianDateInput';
 
 const HeroSectionPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [heros, setHeros] = useState<HeroSection[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -106,6 +108,13 @@ const HeroSectionPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate background image
+    if (!editingHero && !backgroundImage) {
+      alert(t('hero.backgroundImageRequired') || 'Background image is required');
+      return;
+    }
+    
     try {
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
@@ -113,8 +122,13 @@ const HeroSectionPage: React.FC = () => {
           formDataToSend.append(key, value.toString());
         }
       });
+      
+      // Background image is required for new, optional for updates
       if (backgroundImage) {
         formDataToSend.append('background_image', backgroundImage);
+      } else if (!editingHero) {
+        alert(t('hero.backgroundImageRequired') || 'Background image is required');
+        return;
       }
 
       if (editingHero?.id) {
@@ -148,12 +162,11 @@ const HeroSectionPage: React.FC = () => {
         </div>
         <form onSubmit={handleSubmit} className="member-form">
           <div className="form-group">
-            <label>{t('hero.title') || 'Title'} *</label>
+            <label>{t('hero.title') || 'Title'}</label>
             <input
               type="text"
-              value={formData.title}
+              value={formData.title || ''}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              required
             />
           </div>
           <div className="form-group">
@@ -185,23 +198,23 @@ const HeroSectionPage: React.FC = () => {
           <div className="form-row">
             <div className="form-group">
               <label>{t('hero.startDate') || 'Start Date'}</label>
-              <input
+              <EthiopianDateInput
+                value={formData.start_date || ''}
+                onChange={(value) => setFormData({ ...formData, start_date: value })}
                 type="datetime-local"
-                value={formData.start_date}
-                onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
               />
             </div>
             <div className="form-group">
               <label>{t('hero.endDate') || 'End Date'}</label>
-              <input
+              <EthiopianDateInput
+                value={formData.end_date || ''}
+                onChange={(value) => setFormData({ ...formData, end_date: value })}
                 type="datetime-local"
-                value={formData.end_date}
-                onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
               />
             </div>
           </div>
           <div className="form-group">
-            <label>{t('hero.backgroundImage') || 'Background Image'}</label>
+            <label>{t('hero.backgroundImage') || 'Background Image'} *</label>
             <input
               type="file"
               accept="image/*"
@@ -210,6 +223,7 @@ const HeroSectionPage: React.FC = () => {
                   setBackgroundImage(e.target.files[0]);
                 }
               }}
+              required={!editingHero}
             />
             {editingHero?.background_image && !backgroundImage && (
               <img
@@ -217,6 +231,9 @@ const HeroSectionPage: React.FC = () => {
                 alt="Current background"
                 style={{ width: '300px', marginTop: '10px' }}
               />
+            )}
+            {!editingHero && (
+              <p className="form-help-text">{t('hero.backgroundImageRequired') || 'Background image is required'}</p>
             )}
           </div>
           <div className="form-row">
@@ -359,12 +376,12 @@ const HeroSectionPage: React.FC = () => {
                       <td>{hero.layout}</td>
                       <td>
                         {hero.start_date
-                          ? new Date(hero.start_date).toLocaleDateString()
+                          ? formatToEthiopian(hero.start_date, i18n.language)
                           : '-'}
                       </td>
                       <td>
                         {hero.end_date
-                          ? new Date(hero.end_date).toLocaleDateString()
+                          ? formatToEthiopian(hero.end_date, i18n.language)
                           : '-'}
                       </td>
                       <td>

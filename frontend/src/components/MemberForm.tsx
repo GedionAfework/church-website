@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { type Member } from '../services/memberService';
+import EthiopianDateInput from './EthiopianDateInput';
 
 interface MemberFormProps {
   member?: Member;
-  onSubmit: (member: FormData) => Promise<void>;
+  onSubmit: (member: FormData) => Promise<Member>;
   onCancel: () => void;
   zones?: Array<{ id: number; name: string }>;
   serviceDivisions?: Array<{ id: number; name: string }>;
@@ -20,9 +21,12 @@ const MemberForm: React.FC<MemberFormProps> = ({
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
     first_name: member?.first_name || '',
+    father_name: member?.father_name || '',
     last_name: member?.last_name || '',
     gender: member?.gender || 'M',
     date_of_birth: member?.date_of_birth || '',
+    age: member?.age || '',
+    use_age_instead_of_birthdate: member?.use_age_instead_of_birthdate ?? false,
     phone: member?.phone || '',
     email: member?.email || '',
     address: member?.address || '',
@@ -62,10 +66,20 @@ const MemberForm: React.FC<MemberFormProps> = ({
     try {
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
-        if (value !== '' && value !== null && value !== undefined) {
+        if (key === 'use_age_instead_of_birthdate') {
+          formDataToSend.append(key, value ? 'true' : 'false');
+        } else if (value !== '' && value !== null && value !== undefined) {
           formDataToSend.append(key, value.toString());
         }
       });
+      
+      // If using age, clear date_of_birth; if using birthdate, clear age
+      if (formData.use_age_instead_of_birthdate) {
+        formDataToSend.delete('date_of_birth');
+      } else {
+        formDataToSend.delete('age');
+        formDataToSend.append('use_age_instead_of_birthdate', 'false');
+      }
       
       if (photo) {
         formDataToSend.append('photo', photo);
@@ -96,6 +110,16 @@ const MemberForm: React.FC<MemberFormProps> = ({
         </div>
 
         <div className="form-group">
+          <label>{t('members.fatherName') || "Father's Name"}</label>
+          <input
+            type="text"
+            name="father_name"
+            value={formData.father_name}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="form-group">
           <label>{t('members.lastName')} *</label>
           <input
             type="text"
@@ -119,12 +143,33 @@ const MemberForm: React.FC<MemberFormProps> = ({
 
         <div className="form-group">
           <label>{t('members.dateOfBirth')}</label>
-          <input
-            type="date"
-            name="date_of_birth"
-            value={formData.date_of_birth}
-            onChange={handleChange}
-          />
+          <div className="form-group checkbox" style={{ marginBottom: '10px' }}>
+            <label>
+              <input
+                type="checkbox"
+                checked={formData.use_age_instead_of_birthdate}
+                onChange={(e) => setFormData({ ...formData, use_age_instead_of_birthdate: e.target.checked })}
+              />
+              {t('members.useAgeInstead') || 'Use age instead of birthdate'}
+            </label>
+          </div>
+          {formData.use_age_instead_of_birthdate ? (
+            <input
+              type="number"
+              name="age"
+              value={formData.age}
+              onChange={handleChange}
+              placeholder={t('members.age') || 'Age'}
+              min={0}
+              max={150}
+            />
+          ) : (
+            <EthiopianDateInput
+              value={formData.date_of_birth || ''}
+              onChange={(value) => setFormData({ ...formData, date_of_birth: value })}
+              type="date"
+            />
+          )}
         </div>
       </div>
 

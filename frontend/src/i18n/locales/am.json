@@ -45,7 +45,10 @@
     "title": "አባላት",
     "addMember": "አባል ጨምር",
     "editMember": "አባል አርም",
+    "name": "ስም",
+    "fullName": "ሙሉ ስም",
     "firstName": "የመጀመሪያ ስም",
+    "fatherName": "የአባት ስም",
     "lastName": "የአያት ስም",
     "gender": "ጾታ",
     "genderM": "ወንድ",
@@ -65,7 +68,20 @@
     "showInStaffPage": "በሰራተኛ ገጽ ላይ አሳይ",
     "allZones": "ሁሉም ዞኖች",
     "allServices": "ሁሉም አገልግሎቶች",
-    "noMembers": "አባላት አልተገኙም"
+    "noMembers": "አባላት አልተገኙም",
+    "fatherName": "የአባት ስም",
+    "fatherNamePlaceholder": "የአባትን ስም ያስገቡ (ወይም ከላይ ይምረጡ)",
+    "selectFather": "አባት ይምረጡ (ያለ አባል)",
+    "searchFather": "አባትን በስም ይፈልጉ...",
+    "noFatherSelected": "አባት አልተመረጠም",
+    "useAgeInstead": "የትውልድ ቀን ሳይሆን ዕድሜ ይጠቀሙ",
+    "age": "ዕድሜ",
+    "memberNotFound": "አባል አልተገኘም",
+    "personalInfo": "የግል መረጃ",
+    "churchInfo": "የቤተክርስቲያን መረጃ",
+    "staffInfo": "የሰራተኛ መረጃ",
+    "viewZone": "ዞን ይመልከቱ",
+    "viewService": "አገልግሎት ይመልከቱ"
   },
   "families": {
     "title": "ቤተሰቦች",
@@ -82,7 +98,8 @@
     "relationshipOther": "ሌላ",
     "displayName": "የቤተሰብ ስም",
     "memberCount": "አባላት",
-    "noFamilies": "ቤተሰቦች አልተገኙም"
+    "noFamilies": "ቤተሰቦች አልተገኙም",
+    "familyName": "ቤተሰብ"
   },
   "zones": {
     "title": "ዞኖች",
@@ -91,14 +108,20 @@
     "name": "ስም",
     "description": "መግለጫ",
     "locationHint": "የአካባቢ ማስታወሻ",
-    "noZones": "ዞኖች አልተገኙም"
+    "noZones": "ዞኖች አልተገኙም",
+    "details": "የዞን ዝርዝሮች",
+    "zoneNotFound": "ዞን አልተገኘም",
+    "noMembers": "በዚህ ዞን ውስጥ አባላት የሉም"
   },
   "serviceDivisions": {
     "title": "የአገልግሎት ክፍሎች",
     "addServiceDivision": "የአገልግሎት ክፍል ጨምር",
     "editServiceDivision": "የአገልግሎት ክፍል አርም",
     "name": "ስም",
-    "noServiceDivisions": "የአገልግሎት ክፍሎች አልተገኙም"
+    "noServiceDivisions": "የአገልግሎት ክፍሎች አልተገኙም",
+    "details": "የአገልግሎት ክፍል ዝርዝሮች",
+    "divisionNotFound": "የአገልግሎት ክፍል አልተገኘም",
+    "noMembers": "በዚህ አገልግሎት ክፍል ውስጥ አባላት የሉም"
   },
   "content": {
     "title": "ይዘት",
@@ -148,7 +171,8 @@
     "titleColor": "የርዕስ ቀለም",
     "subtitleColor": "የንዑስ ርዕስ ቀለም",
     "extraClasses": "ተጨማሪ CSS ክፍሎች",
-    "noHeros": "የመሪ ክፍሎች አልተገኙም"
+    "noHeros": "የመሪ ክፍሎች አልተገኙም",
+    "backgroundImageRequired": "የጀርባ ምስል ያስፈልጋል"
   },
   "socialFeeds": {
     "addFeed": "የማህበራዊ ሚዲያ ምግብ ጨምር",
@@ -187,6 +211,17 @@
     "readMore": "ተጨማሪ ያንብቡ",
     "backToBlog": "ወደ ብሎግ ተመለስ",
     "postNotFound": "ፖስት አልተገኘም"
+  },
+  "site": {
+    "name": "የቤተክርስቲያን ድርጅት"
+  },
+  "nav": {
+    "home": "መነሻ",
+    "blog": "ብሎግ",
+    "staff": "ሰራተኞች"
+  },
+  "footer": {
+    "copyright": "© 2024 የቤተክርስቲያን ድርጅት. ሁሉም መብቶች የተጠበቁ ናቸው."
   }
 }
 

@@ -24,7 +24,10 @@
     "confirmDelete": "Are you sure you want to delete this item?",
     "view": "View",
     "add": "Add",
-    "createdAt": "Created"
+    "createdAt": "Created",
+    "back": "Back",
+    "yes": "Yes",
+    "no": "No"
   },
   "auth": {
     "username": "Username",
@@ -48,8 +51,11 @@
     "title": "Members",
     "addMember": "Add Member",
     "editMember": "Edit Member",
+    "name": "Name",
+    "fullName": "Full Name",
     "firstName": "First Name",
-    "lastName": "Last Name",
+    "fatherName": "Father's Name",
+    "lastName": "Last Name (Grandfather's Name)",
     "gender": "Gender",
     "genderM": "Male",
     "genderF": "Female",
@@ -68,7 +74,20 @@
     "showInStaffPage": "Show in Staff Page",
     "allZones": "All Zones",
     "allServices": "All Services",
-    "noMembers": "No members found"
+    "noMembers": "No members found",
+    "fatherName": "Father's Name",
+    "fatherNamePlaceholder": "Enter father's name (or select from above)",
+    "selectFather": "Select Father (Existing Member)",
+    "searchFather": "Search father by name...",
+    "noFatherSelected": "No father selected",
+    "useAgeInstead": "Use age instead of birthdate",
+    "age": "Age",
+    "memberNotFound": "Member not found",
+    "personalInfo": "Personal Information",
+    "churchInfo": "Church Information",
+    "staffInfo": "Staff Information",
+    "viewZone": "View Zone",
+    "viewService": "View Service"
   },
   "families": {
     "title": "Families",
@@ -85,7 +104,8 @@
     "relationshipOther": "Other",
     "displayName": "Family Name",
     "memberCount": "Members",
-    "noFamilies": "No families found"
+    "noFamilies": "No families found",
+    "familyName": "Family"
   },
   "zones": {
     "title": "Zones",
@@ -94,14 +114,20 @@
     "name": "Name",
     "description": "Description",
     "locationHint": "Location Hint",
-    "noZones": "No zones found"
+    "noZones": "No zones found",
+    "details": "Zone Details",
+    "zoneNotFound": "Zone not found",
+    "noMembers": "No members in this zone"
   },
   "serviceDivisions": {
     "title": "Service Divisions",
     "addServiceDivision": "Add Service Division",
     "editServiceDivision": "Edit Service Division",
     "name": "Name",
-    "noServiceDivisions": "No service divisions found"
+    "noServiceDivisions": "No service divisions found",
+    "details": "Service Division Details",
+    "divisionNotFound": "Service division not found",
+    "noMembers": "No members in this service division"
   },
   "content": {
     "title": "Content",
@@ -151,7 +177,8 @@
     "titleColor": "Title Color",
     "subtitleColor": "Subtitle Color",
     "extraClasses": "Extra CSS Classes",
-    "noHeros": "No hero sections found"
+    "noHeros": "No hero sections found",
+    "backgroundImageRequired": "Background image is required"
   },
   "socialFeeds": {
     "addFeed": "Add Social Feed",
@@ -190,6 +217,17 @@
     "readMore": "Read More",
     "backToBlog": "Back to Blog",
     "postNotFound": "Post not found"
+  },
+  "site": {
+    "name": "Church Website"
+  },
+  "nav": {
+    "home": "Home",
+    "blog": "Blog",
+    "staff": "Staff"
+  },
+  "footer": {
+    "copyright": "© 2024 Church Website. All rights reserved."
   }
 }
 

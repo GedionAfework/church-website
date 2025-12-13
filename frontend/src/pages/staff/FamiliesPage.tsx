@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { familyService, type Family } from '../../services/familyService';
 import FamilyForm from '../../components/FamilyForm';
+import { formatToEthiopian } from '../../utils/dateFormatter';
 
 const FamiliesPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [families, setFamilies] = useState<Family[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -152,7 +153,7 @@ const FamiliesPage: React.FC = () => {
                       <td>{family.family_members?.length || 0}</td>
                       <td>
                         {family.created_at
-                          ? new Date(family.created_at).toLocaleDateString()
+                          ? formatToEthiopian(family.created_at, i18n.language)
                           : '-'}
                       </td>
                       <td>

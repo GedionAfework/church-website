@@ -1,4 +1,6 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { formatToEthiopian } from '../utils/dateFormatter';
 
 interface RecentItem {
   id: number;
@@ -17,6 +19,8 @@ interface RecentListProps {
 }
 
 const RecentList: React.FC<RecentListProps> = ({ title, items, onItemClick, getItemLabel }) => {
+  const { i18n } = useTranslation();
+  
   if (!items || items.length === 0) {
     return (
       <div className="recent-list">
@@ -39,7 +43,7 @@ const RecentList: React.FC<RecentListProps> = ({ title, items, onItemClick, getI
             {getItemLabel(item)}
             {item.created_at && (
               <span className="date">
-                {new Date(item.created_at).toLocaleDateString()}
+                {formatToEthiopian(item.created_at, i18n.language)}
               </span>
             )}
           </li>
