@@ -2,13 +2,13 @@ from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import BlogPost, HeroSection, SocialFeedConfig
+from .models import BlogPost, HeroSection, SocialFeedConfig, Photo
 from .serializers import (
     BlogPostSerializer, BlogPostListSerializer,
-    HeroSectionSerializer, SocialFeedConfigSerializer
+    HeroSectionSerializer, SocialFeedConfigSerializer, PhotoSerializer
 )
 from .permissions import (
-    BlogPostPermission, HeroSectionPermission, SocialFeedConfigPermission
+    BlogPostPermission, HeroSectionPermission, SocialFeedConfigPermission, PhotoPermission
 )
 
 
@@ -78,3 +78,99 @@ class SocialFeedConfigViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(is_active=True)
         
         return queryset
+
+
+class PhotoViewSet(viewsets.ModelViewSet):
+    queryset = Photo.objects.all()
+    serializer_class = PhotoSerializer
+    permission_classes = [PhotoPermission]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['year', 'is_active']
+    search_fields = ['title', 'description']
+    ordering_fields = ['date', 'year', 'created_at']
+    ordering = ['-date', '-created_at']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        
+        # For public access, only show active photos
+        if not self.request.user.is_authenticated:
+            queryset = queryset.filter(is_active=True)
+        elif not (self.request.user.is_superuser or 
+                  self.request.user.has_perm('content.manage_photo')):
+            # Non-admin users only see active photos
+            queryset = queryset.filter(is_active=True)
+        
+        return queryset
+
+    @action(detail=False, methods=['post'])
+    def bulk_create(self, request):
+        """Bulk create photos from multiple images"""
+        if not request.user.is_authenticated:
+            return Response(
+                {'detail': 'Authentication required'},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+        
+        if not (request.user.is_superuser or request.user.has_perm('content.manage_photo')):
+            return Response(
+                {'detail': 'Permission denied'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
+        images = request.FILES.getlist('images')
+        date = request.data.get('date')
+        year = request.data.get('year')
+        title = request.data.get('title', '')
+        description = request.data.get('description', '')
+        is_active = request.data.get('is_active', 'true').lower() == 'true'
+        
+        if not images:
+            return Response(
+                {'detail': 'No images provided'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        if not date:
+            return Response(
+                {'detail': 'Date is required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Auto-populate year from date if not provided
+        if not year and date:
+            from datetime import datetime
+            try:
+                date_obj = datetime.strptime(date, '%Y-%m-%d').date()
+                year = date_obj.year
+            except ValueError:
+                return Response(
+                    {'detail': 'Invalid date format'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        
+        created_photos = []
+        errors = []
+        
+        for idx, image in enumerate(images):
+            try:
+                photo_data = {
+                    'image': image,
+                    'date': date,
+                    'year': year,
+                    'title': f"{title} {idx + 1}" if title else f"Photo {idx + 1}",
+                    'description': description,
+                    'is_active': is_active,
+                }
+                serializer = self.get_serializer(data=photo_data)
+                serializer.is_valid(raise_exception=True)
+                photo = serializer.save()
+                created_photos.append(serializer.data)
+            except Exception as e:
+                errors.append(f"Image {idx + 1}: {str(e)}")
+        
+        return Response({
+            'created': len(created_photos),
+            'errors': errors,
+            'photos': created_photos
+        }, status=status.HTTP_201_CREATED if created_photos else status.HTTP_400_BAD_REQUEST)

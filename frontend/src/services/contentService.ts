@@ -46,6 +46,18 @@ export interface SocialFeedConfig {
   updated_at?: string;
 }
 
+export interface Photo {
+  id?: number;
+  image: string | File;
+  date: string;
+  year: number;
+  title?: string;
+  description?: string;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface ListResponse<T> {
   count: number;
   next: string | null;
@@ -201,6 +213,76 @@ export const contentService = {
 
   async deleteSocialFeed(id: number): Promise<void> {
     await apiClient.delete(`${API_ENDPOINTS.SOCIAL_FEEDS}${id}/`);
+  },
+
+  // Photos
+  async getPhotos(params?: {
+    page?: number;
+    year?: number;
+    is_active?: boolean;
+  }): Promise<ListResponse<Photo>> {
+    const response = await apiClient.get<ListResponse<Photo>>(API_ENDPOINTS.PHOTOS, { params });
+    return response.data;
+  },
+
+  async getPhoto(id: number): Promise<Photo> {
+    const response = await apiClient.get<Photo>(`${API_ENDPOINTS.PHOTOS}${id}/`);
+    return response.data;
+  },
+
+  async createPhoto(photo: FormData | Partial<Photo>): Promise<Photo> {
+    const isFormData = photo instanceof FormData;
+    const response = await apiClient.post<Photo>(
+      API_ENDPOINTS.PHOTOS,
+      photo,
+      isFormData
+        ? {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        : {}
+    );
+    return response.data;
+  },
+
+  async updatePhoto(id: number, photo: FormData | Partial<Photo>): Promise<Photo> {
+    const isFormData = photo instanceof FormData;
+    const response = await apiClient.patch<Photo>(
+      `${API_ENDPOINTS.PHOTOS}${id}/`,
+      photo,
+      isFormData
+        ? {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        : {}
+    );
+    return response.data;
+  },
+
+  async deletePhoto(id: number): Promise<void> {
+    await apiClient.delete(`${API_ENDPOINTS.PHOTOS}${id}/`);
+  },
+
+  async bulkCreatePhotos(
+    formData: FormData
+  ): Promise<{ created?: number; errors?: string[]; photos?: Photo[] }> {
+    const response = await apiClient.post<Photo[]>(
+      `${API_ENDPOINTS.PHOTOS}bulk_create/`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    // Backend returns array of photos on success, or object with errors on failure
+    if (Array.isArray(response.data)) {
+      return { photos: response.data, created: response.data.length, errors: [] };
+    }
+    return response.data;
   },
 };
 

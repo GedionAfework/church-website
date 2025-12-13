@@ -7,6 +7,7 @@ import './i18n/config';
 import HomePage from './pages/public/HomePage';
 import BlogListPage from './pages/public/BlogListPage';
 import BlogDetailPage from './pages/public/BlogDetailPage';
+import PublicPhotosPage from './pages/public/PhotosPage';
 import StaffPage from './pages/public/StaffPage';
 
 // Staff pages
@@ -23,6 +24,7 @@ import ServiceDivisionDetailPage from './pages/staff/ServiceDivisionDetailPage';
 import BlogManagementPage from './pages/staff/BlogManagementPage';
 import HeroSectionPage from './pages/staff/HeroSectionPage';
 import SocialFeedsPage from './pages/staff/SocialFeedsPage';
+import PhotosPage from './pages/staff/PhotosPage';
 import RolesPage from './pages/staff/RolesPage';
 import UsersPage from './pages/staff/UsersPage';
 
@@ -40,6 +42,7 @@ function App() {
             <Route index element={<HomePage />} />
             <Route path="blog" element={<BlogListPage />} />
             <Route path="blog/:slug" element={<BlogDetailPage />} />
+            <Route path="photos" element={<PublicPhotosPage />} />
             <Route path="staff" element={<StaffPage />} />
           </Route>
 
@@ -66,6 +69,7 @@ function App() {
                   <Route path="blog" element={<BlogManagementPage />} />
                   <Route path="hero-section" element={<HeroSectionPage />} />
                   <Route path="social-feeds" element={<SocialFeedsPage />} />
+                  <Route path="photos" element={<PhotosPage />} />
                   <Route path="roles" element={<RolesPage />} />
                   <Route path="users" element={<UsersPage />} />
           </Route>

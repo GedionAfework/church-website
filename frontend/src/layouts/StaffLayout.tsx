@@ -18,8 +18,13 @@ const StaffLayout: React.FC = () => {
 
   // Helper function to check if user has any of the required permissions
   const hasPermission = (requiredPermissions: string[]): boolean => {
-    if (!user?.permissions) return false;
+    if (!user) return false;
+    // Superusers have all permissions
     if (user.is_superuser) return true;
+    // If no permissions required, allow access
+    if (requiredPermissions.length === 0) return true;
+    // Check if user has any of the required permissions
+    if (!user.permissions) return false;
     return requiredPermissions.some(perm => user.permissions?.includes(perm));
   };
 
@@ -109,6 +114,16 @@ const StaffLayout: React.FC = () => {
         'content.add_socialfeedconfig', // Django default
         'content.change_socialfeedconfig', // Django default
         'content.manage_social_feed_config', // Custom
+      ],
+    },
+    {
+      path: '/staff/photos',
+      label: t('photos.title') || 'Photos',
+      permissions: [
+        'content.view_photo', // Django default
+        'content.add_photo', // Django default
+        'content.change_photo', // Django default
+        'content.manage_photo', // Custom
       ],
     },
     {

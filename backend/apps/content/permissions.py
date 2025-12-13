@@ -71,3 +71,20 @@ class SocialFeedConfigPermission(permissions.BasePermission):
         
         return False
 
+
+class PhotoPermission(permissions.BasePermission):
+    """Permission for Photo model"""
+    
+    def has_permission(self, request, view):
+        # Public can view active photos
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        
+        # Only authenticated users with permission can manage
+        if request.user.is_authenticated:
+            if request.user.is_superuser:
+                return True
+            return request.user.has_perm('content.manage_photo')
+        
+        return False
+

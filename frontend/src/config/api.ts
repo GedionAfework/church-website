@@ -26,6 +26,7 @@ export const API_ENDPOINTS = {
   HERO_SECTIONS: '/hero-sections/',
   SOCIAL_FEEDS: '/social-feeds/',
   ACTIVE_HERO: '/hero-sections/active/',
+  PHOTOS: '/photos/',
   
   // Roles & Permissions
   GROUPS: '/groups/',

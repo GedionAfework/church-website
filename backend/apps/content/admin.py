@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import BlogPost, HeroSection, SocialFeedConfig
+from .models import BlogPost, HeroSection, SocialFeedConfig, Photo
 
 
 @admin.register(BlogPost)
@@ -85,3 +85,32 @@ class SocialFeedConfigAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return True
         return request.user.has_perm('content.manage_social_feed_config')
+
+
+@admin.register(Photo)
+class PhotoAdmin(admin.ModelAdmin):
+    list_display = ['title', 'date', 'year', 'is_active', 'created_at']
+    list_filter = ['year', 'is_active', 'date']
+    search_fields = ['title', 'description']
+    readonly_fields = ['created_at', 'updated_at']
+    date_hierarchy = 'date'
+    
+    def has_view_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return request.user.has_perm('content.manage_photo')
+    
+    def has_add_permission(self, request):
+        if request.user.is_superuser:
+            return True
+        return request.user.has_perm('content.manage_photo')
+    
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return request.user.has_perm('content.manage_photo')
+    
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        return request.user.has_perm('content.manage_photo')

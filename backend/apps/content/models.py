@@ -169,3 +169,49 @@ class SocialFeedConfig(models.Model):
 
     def __str__(self):
         return f"{self.get_platform_display()} - {self.handle_or_page_id}"
+
+
+class Photo(models.Model):
+    """Photo gallery with date and year labels"""
+    image = models.ImageField(
+        upload_to='photos/',
+        help_text="Photo image"
+    )
+    date = models.DateField(
+        help_text="Date when the photo was taken"
+    )
+    year = models.IntegerField(
+        help_text="Year for grouping photos"
+    )
+    title = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Optional title for the photo"
+    )
+    description = models.TextField(
+        blank=True,
+        help_text="Optional description of the photo"
+    )
+    is_active = models.BooleanField(
+        default=True,
+        help_text="Whether this photo should be displayed"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-date', '-created_at']
+        permissions = [
+            ('manage_photo', 'Can manage photo'),
+        ]
+
+    def __str__(self):
+        if self.title:
+            return f"{self.title} - {self.date}"
+        return f"Photo - {self.date}"
+
+    def save(self, *args, **kwargs):
+        # Auto-populate year from date if not set
+        if self.date and not self.year:
+            self.year = self.date.year
+        super().save(*args, **kwargs)

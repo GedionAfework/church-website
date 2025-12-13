@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import BlogPost, HeroSection, SocialFeedConfig
+from .models import BlogPost, HeroSection, SocialFeedConfig, Photo
 from apps.members.serializers import MemberSerializer
 
 
@@ -78,4 +78,26 @@ class SocialFeedConfigSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'api_key_or_token': {'write_only': True}  # Don't expose API keys in responses
         }
+
+
+class PhotoSerializer(serializers.ModelSerializer):
+    """Serializer for Photo model"""
+    
+    class Meta:
+        model = Photo
+        fields = [
+            'id', 'image', 'date', 'year', 'title', 'description',
+            'is_active', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ['created_at', 'updated_at']
+    
+    def validate(self, data):
+        """Auto-populate year from date if not provided"""
+        if 'date' in data and 'year' not in data:
+            data['year'] = data['date'].year
+        elif 'date' in data and 'year' in data:
+            # Ensure year matches date year
+            if data['date'].year != data['year']:
+                data['year'] = data['date'].year
+        return data
 

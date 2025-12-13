@@ -23,6 +23,7 @@ const PublicHeader: React.FC = () => {
         <nav className="public-nav">
           <Link to="/">{t('nav.home') || 'Home'}</Link>
           <Link to="/blog">{t('nav.blog') || 'Blog'}</Link>
+          <Link to="/photos">{t('nav.photos') || 'Photos'}</Link>
           {/* <Link to="/staff">{t('nav.staff') || 'Staff'}</Link> */}
           <select
             value={i18n.language}

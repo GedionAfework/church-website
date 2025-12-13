@@ -186,7 +186,8 @@
     "title": "ይዘት",
     "blog": "ብሎግ",
     "heroSection": "የመሪ ክፍል",
-    "socialFeeds": "ማህበራዊ ሚዲያ"
+    "socialFeeds": "ማህበራዊ ሚዲያ",
+    "photos": "የፎቶ ማህደር"
   },
   "blog": {
     "title": "ብሎግ",
@@ -283,6 +284,7 @@
   "nav": {
     "home": "መነሻ",
     "blog": "ብሎግ",
+    "photos": "የፎቶ ማህደር",
     "staff": "አገልጋዮች"
   },
   "footer": {
@@ -338,6 +340,26 @@
     "selectMemberHelp": "አባል ይፈልጉ እና ይምረጡ ለእነሱ የተጠቃሚ መለያ ለመፍጠር",
     "memberRequired": "እባክዎ አባል ይምረጡ",
     "passwordRequirements": "የይለፍ ቃል ቢያንስ 8 ቁምፊዎች መሆን አለበት፣ በጣም የተለመደ ሊሆን አይችልም፣ እና ሙሉ በሙሉ ቁጥር ሊሆን አይችልም።"
+  },
+  "photos": {
+    "title": "የፎቶ ማህደር",
+    "addPhoto": "ፎቶ ጨምር",
+    "editPhoto": "ፎቶ አርም",
+    "image": "ምስል",
+    "images": "ምስሎች",
+    "date": "ቀን",
+    "year": "ዓመት",
+    "title": "ርዕስ",
+    "titlePlaceholder": "የፎቶ ርዕስ ያስገቡ (አማራጭ)",
+    "description": "መግለጫ",
+    "descriptionPlaceholder": "የፎቶ መግለጫ ያስገቡ (አማራጭ)",
+    "isActive": "ንቁ",
+    "allYears": "ሁሉም ዓመታት",
+    "noPhotos": "ፎቶዎች አልተገኙም",
+    "untitled": "ያልተሰየመ",
+    "confirmDelete": "እርግጠኛ ነዎት ይህንን ፎቶ ማስወገድ ይፈልጋሉ?",
+    "bulkUpload": "ብዙ ምስሎች ይጭኑ (Bulk Upload)",
+    "selectedImages": "የተመረጡ"
   }
 }
 
