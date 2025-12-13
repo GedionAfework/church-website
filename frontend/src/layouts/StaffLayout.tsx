@@ -137,7 +137,13 @@ const StaffLayout: React.FC = () => {
     <div className="staff-layout">
       <nav className="staff-nav">
         <div className="nav-header">
-          <h2>Church Management</h2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+            <img style={{ width: '100px'}} src="/logo.png" alt="BFGC LOGO" />
+            <div>
+              <p style={{ margin: 0, fontSize: '16px', fontWeight: 'bold' }}>በኢትዮጲያ ሙሉ ወንጌል አማኞች ቤተክርስቲያን</p>
+              <p style={{ margin: 0, fontSize: '14px' }}>የቤቴል አጥቢያ</p>
+            </div>
+          </div>
           <div className="nav-actions">
             <select
               value={i18n.language}

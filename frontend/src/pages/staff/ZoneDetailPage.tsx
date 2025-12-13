@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { structureService, type Zone } from '../../services/structureService';
+import { structureService, type Zone, type ZoneLeader } from '../../services/structureService';
 import { bibleStudyGroupService, type BibleStudyGroup } from '../../services/bibleStudyGroupService';
+import { memberService, type Member } from '../../services/memberService';
 import apiClient from '../../services/api';
 import { API_ENDPOINTS } from '../../config/api';
 
@@ -11,16 +12,22 @@ const ZoneDetailPage: React.FC = () => {
   const { t } = useTranslation();
   const [zone, setZone] = useState<Zone | null>(null);
   const [members, setMembers] = useState<any[]>([]);
+  const [allMembers, setAllMembers] = useState<Member[]>([]); // All members for dropdown
   const [bibleStudyGroups, setBibleStudyGroups] = useState<BibleStudyGroup[]>([]);
+  const [zoneLeader, setZoneLeader] = useState<ZoneLeader | null>(null);
   const [loading, setLoading] = useState(true);
   const [showBibleStudyForm, setShowBibleStudyForm] = useState(false);
   const [editingBibleStudy, setEditingBibleStudy] = useState<BibleStudyGroup | undefined>();
+  const [selectedMemberId, setSelectedMemberId] = useState<string>('');
+  const [selectedLeaderId, setSelectedLeaderId] = useState<string>('');
 
   useEffect(() => {
     if (id) {
       fetchZone();
       fetchMembers();
+      fetchAllMembers();
       fetchBibleStudyGroups();
+      fetchZoneLeader();
     }
   }, [id]);
 
@@ -55,6 +62,122 @@ const ZoneDetailPage: React.FC = () => {
       setBibleStudyGroups(data.results || []);
     } catch (error) {
       console.error('Error fetching bible study groups:', error);
+    }
+  };
+
+  const fetchAllMembers = async () => {
+    try {
+      // Fetch all members that are not in any zone or are in this zone
+      const response = await apiClient.get(API_ENDPOINTS.MEMBERS, {
+        params: { page_size: 1000, is_active: true },
+      });
+      const allMembersData = response.data.results || [];
+      // Filter to show only members without a zone or members in this zone
+      const availableMembers = allMembersData.filter((m: Member) => !m.zone || m.zone === Number(id));
+      setAllMembers(availableMembers);
+    } catch (error) {
+      console.error('Error fetching all members:', error);
+    }
+  };
+
+  const fetchZoneLeader = async () => {
+    try {
+      const response = await apiClient.get(API_ENDPOINTS.ZONE_LEADERS, {
+        params: { zone: id },
+      });
+      if (response.data.results && response.data.results.length > 0) {
+        setZoneLeader(response.data.results[0]);
+      } else {
+        setZoneLeader(null);
+      }
+    } catch (error) {
+      console.error('Error fetching zone leader:', error);
+      setZoneLeader(null);
+    }
+  };
+
+  const handleAddMember = async () => {
+    if (!selectedMemberId) return;
+    
+    try {
+      const memberId = Number(selectedMemberId);
+      // Update member to assign to this zone
+      await memberService.updateMember(memberId, { zone: Number(id) });
+      setSelectedMemberId('');
+      await fetchMembers();
+      await fetchAllMembers(); // Refresh available members list
+    } catch (error: any) {
+      console.error('Error adding member to zone:', error);
+      const errorMsg = error.response?.data?.detail || error.response?.data?.zone?.[0] || t('zones.errorAddingMember') || 'Error adding member to zone';
+      alert(errorMsg);
+    }
+  };
+
+  const handleRemoveMember = async (memberId: number) => {
+    if (!window.confirm(t('zones.confirmRemoveMember') || 'Are you sure you want to remove this member from the zone?')) {
+      return;
+    }
+    
+    try {
+      // Remove member from zone by setting zone to null
+      await memberService.updateMember(memberId, { zone: null });
+      await fetchMembers();
+      await fetchAllMembers();
+      // If this member was the leader, remove them as leader
+      if (zoneLeader && ((zoneLeader as any).member === memberId || (zoneLeader as any).member_id === memberId)) {
+        if (zoneLeader.id) {
+          await structureService.deleteZoneLeader(zoneLeader.id);
+          await fetchZoneLeader();
+        }
+      }
+    } catch (error) {
+      console.error('Error removing member from zone:', error);
+      alert(t('common.error'));
+    }
+  };
+
+  const handleSetLeader = async () => {
+    if (!selectedLeaderId) return;
+    
+    try {
+      const memberId = Number(selectedLeaderId);
+      
+      // Check if member is in this zone
+      const member = members.find(m => m.id === memberId);
+      if (!member) {
+        alert(t('zones.memberNotInZone') || 'Member must be in this zone to be a leader');
+        return;
+      }
+      
+      // If there's already a leader, update it; otherwise create new
+      if (zoneLeader?.id) {
+        await structureService.updateZoneLeader(zoneLeader.id, { member_id: memberId });
+      } else {
+        await structureService.createZoneLeader({ zone: Number(id), member_id: memberId });
+      }
+      
+      setSelectedLeaderId('');
+      await fetchZoneLeader();
+    } catch (error: any) {
+      console.error('Error setting zone leader:', error);
+      const errorMsg = error.response?.data?.detail || t('zones.errorSettingLeader') || 'Error setting zone leader';
+      alert(errorMsg);
+    }
+  };
+
+  const handleRemoveLeader = async () => {
+    if (!zoneLeader?.id) return;
+    
+    if (!window.confirm(t('zones.confirmRemoveLeader') || 'Are you sure you want to remove this leader?')) {
+      return;
+    }
+    
+    try {
+      await structureService.deleteZoneLeader(zoneLeader.id);
+      await fetchZoneLeader();
+    } catch (error) {
+      console.error('Error removing zone leader:', error);
+      alert(t('common.error'));
     }
   };
 
@@ -163,6 +286,83 @@ const ZoneDetailPage: React.FC = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
             <h2>{t('members.title')} ({members.length})</h2>
           </div>
+          
+          {/* Add Member Section */}
+          <div style={{ marginBottom: '1rem', padding: '1rem', border: '1px solid #ddd', borderRadius: '4px', backgroundColor: '#f9f9f9' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+              {t('zones.addMember') || 'Add Member'}
+            </label>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <select
+                value={selectedMemberId}
+                onChange={(e) => setSelectedMemberId(e.target.value)}
+                style={{ flex: 1 }}
+              >
+                <option value="">{t('zones.selectMemberToAdd') || 'Select a member to add...'}</option>
+                {allMembers
+                  .filter(m => !members.find(zm => zm.id === m.id)) // Only show members not already in zone
+                  .map((member) => (
+                    <option key={member.id} value={member.id}>
+                      {member.full_name || `${member.first_name} ${member.father_name || ''} ${member.last_name}`.trim()}
+                      {member.zone && member.zone !== Number(id) ? ` (${t('zones.currentlyInZone') || 'Currently in another zone'})` : ''}
+                    </option>
+                  ))}
+              </select>
+              <button
+                onClick={handleAddMember}
+                className="btn-primary"
+                disabled={!selectedMemberId}
+              >
+                {t('common.add')}
+              </button>
+            </div>
+          </div>
+
+          {/* Zone Leader Section */}
+          <div style={{ marginBottom: '1rem', padding: '1rem', border: '1px solid #ddd', borderRadius: '4px', backgroundColor: '#f0f8ff' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+              {t('zones.zoneLeader') || 'Zone Leader'}
+            </label>
+            {zoneLeader ? (
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span>
+                  {zoneLeader.member_detail?.full_name || 
+                   (zoneLeader.member_detail ? 
+                     `${zoneLeader.member_detail.first_name || ''} ${zoneLeader.member_detail.father_name || ''} ${zoneLeader.member_detail.last_name || ''}`.trim() :
+                     t('zones.loadingLeader') || 'Loading...')}
+                </span>
+                <button
+                  onClick={handleRemoveLeader}
+                  className="btn-sm btn-delete"
+                >
+                  {t('zones.removeLeader') || 'Remove Leader'}
+                </button>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <select
+                  value={selectedLeaderId}
+                  onChange={(e) => setSelectedLeaderId(e.target.value)}
+                  style={{ flex: 1 }}
+                >
+                  <option value="">{t('zones.selectLeaderFromMembers') || 'Select a leader from zone members...'}</option>
+                  {members.map((member) => (
+                    <option key={member.id} value={member.id}>
+                      {member.full_name || `${member.first_name} ${member.father_name || ''} ${member.last_name}`.trim()}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  onClick={handleSetLeader}
+                  className="btn-primary"
+                  disabled={!selectedLeaderId || members.length === 0}
+                >
+                  {t('zones.setLeader') || 'Set Leader'}
+                </button>
+              </div>
+            )}
+          </div>
+
           {members.length === 0 ? (
             <p className="empty-state">{t('zones.noMembers') || 'No members in this zone'}</p>
           ) : (
@@ -170,8 +370,7 @@ const ZoneDetailPage: React.FC = () => {
               <table className="data-table">
                 <thead>
                   <tr>
-                    <th>{t('members.firstName')}</th>
-                    <th>{t('members.lastName')}</th>
+                    <th>{t('members.name') || 'Name'}</th>
                     <th>{t('members.email')}</th>
                     <th>{t('members.phone')}</th>
                     <th>{t('common.actions')}</th>
@@ -180,17 +379,23 @@ const ZoneDetailPage: React.FC = () => {
                 <tbody>
                   {members.map((member) => (
                     <tr key={member.id}>
-                      <td>{member.first_name}</td>
-                      <td>{member.last_name}</td>
+                      <td>{member.full_name || `${member.first_name} ${member.father_name || ''} ${member.last_name}`.trim()}</td>
                       <td>{member.email || '-'}</td>
                       <td>{member.phone || '-'}</td>
                       <td>
                         <Link
                           to={`/staff/members/${member.id}`}
                           className="btn-sm btn-view"
+                          style={{ marginRight: '5px' }}
                         >
                           {t('common.view')}
                         </Link>
+                        <button
+                          onClick={() => member.id && handleRemoveMember(member.id)}
+                          className="btn-sm btn-delete"
+                        >
+                          {t('zones.remove') || 'Remove'}
+                        </button>
                       </td>
                     </tr>
                   ))}

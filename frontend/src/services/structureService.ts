@@ -30,7 +30,16 @@ export interface ServiceDivision {
 export interface ZoneLeader {
   id?: number;
   zone: number;
-  member: number;
+  member?: number; // Read-only
+  member_id?: number; // Write-only
+  member_detail?: {
+    id?: number;
+    first_name?: string;
+    father_name?: string;
+    last_name?: string;
+    full_name?: string;
+  };
+  zone_name?: string;
 }
 
 export interface ServiceLeader {

@@ -61,6 +61,7 @@ class ServiceDivisionSerializer(serializers.ModelSerializer):
 
 class ZoneLeaderSerializer(serializers.ModelSerializer):
     member = MemberSerializer(read_only=True)
+    member_detail = MemberSerializer(source='member', read_only=True)
     member_id = serializers.PrimaryKeyRelatedField(
         queryset=ZoneLeader._meta.get_field('member').related_model.objects.all(),
         source='member',
@@ -70,7 +71,7 @@ class ZoneLeaderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ZoneLeader
-        fields = ['id', 'zone', 'zone_name', 'member', 'member_id']
+        fields = ['id', 'zone', 'zone_name', 'member', 'member_detail', 'member_id']
 
 
 class ServiceLeaderSerializer(serializers.ModelSerializer):
@@ -120,16 +121,22 @@ class BibleStudyGroupSerializer(serializers.ModelSerializer):
         super().__init__(*args, **kwargs)
         
         # Set queryset for members and leaders to only include members from the zone
+        zone = None
+        
+        # Handle single instance (detail view or list view serialization)
         if self.instance:
-            zone = self.instance.zone
-        elif 'zone' in self.initial_data:
-            from .models import Zone
-            try:
-                zone = Zone.objects.get(id=self.initial_data['zone'])
-            except Zone.DoesNotExist:
-                zone = None
-        else:
-            zone = None
+            if hasattr(self.instance, 'zone'):
+                zone = self.instance.zone
+        # Handle initial_data (for create/update requests)
+        elif hasattr(self, 'initial_data') and self.initial_data:
+            if isinstance(self.initial_data, dict) and 'zone' in self.initial_data:
+                from .models import Zone
+                try:
+                    zone_id = self.initial_data['zone']
+                    if zone_id:
+                        zone = Zone.objects.get(id=zone_id)
+                except (Zone.DoesNotExist, TypeError, ValueError):
+                    zone = None
         
         if zone:
             from apps.members.models import Member

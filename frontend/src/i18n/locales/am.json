@@ -21,7 +21,15 @@
     "page": "ገጽ",
     "of": "ከ",
     "inactive": "ንቁ ያልሆነ",
-    "confirmDelete": "ይህንን ለመሰረዝ እርግጠኛ ነህ?"
+    "confirmDelete": "ይህንን ለመሰረዝ እርግጠኛ ነህ?",
+    "view": "ይመልከቱ",
+    "add": "ጨምር",
+    "createdAt": "ተፈጥሯል",
+    "back": "ተመለስ",
+    "yes": "አዎ",
+    "no": "አይ",
+    "saving": "በመቀመጥ ላይ...",
+    "remove": "አስወግድ"
   },
   "auth": {
     "username": "የተጠቃሚ ስም",
@@ -128,7 +136,41 @@
     "noZones": "ዞኖች አልተገኙም",
     "details": "የዞን ዝርዝሮች",
     "zoneNotFound": "ዞን አልተገኘም",
-    "noMembers": "በዚህ ዞን ውስጥ አባላት የሉም"
+    "noMembers": "በዚህ ዞን ውስጥ አባላት የሉም",
+    "addMember": "አባል ጨምር",
+    "selectMemberToAdd": "ለመጨመር አባል ይምረጡ...",
+    "currentlyInZone": "አሁን በሌላ ዞን ውስጥ ነው",
+    "errorAddingMember": "አባልን ወደ ዞን ማክበር ላይ ስህተት",
+    "confirmRemoveMember": "እርግጠኛ ነዎት ይህንን አባል ከዞን ማስወገድ ይፈልጋሉ?",
+    "remove": "አስወግድ",
+    "zoneLeader": "የዞን መሪ",
+    "selectLeaderFromMembers": "ከዞን አባላት መሪ ይምረጡ...",
+    "setLeader": "መሪ ያዘጋጁ",
+    "removeLeader": "መሪን አስወግድ",
+    "confirmRemoveLeader": "እርግጠኛ ነዎት ይህንን መሪ ማስወገድ ይፈልጋሉ?",
+    "errorSettingLeader": "የዞን መሪን ማዘጋጀት ላይ ስህተት",
+    "memberNotInZone": "መሪ ለመሆን አባሉ በዚህ ዞን ውስጥ መሆን አለበት",
+    "bibleStudyGroups": "የመጽሐፍ ቅዱስ ጥናት ቡድኖች",
+    "addBibleStudyGroup": "የመጽሐፍ ቅዱስ ጥናት ቡድን ጨምር",
+    "editBibleStudyGroup": "የመጽሐፍ ቅዱስ ጥናት ቡድን አርም",
+    "noBibleStudyGroups": "በዚህ ዞን ውስጥ የመጽሐፍ ቅዱስ ጥናት ቡድኖች የሉም",
+    "bibleStudyName": "ስም",
+    "placeOfStudy": "የጥናት ቦታ",
+    "members": "አባላት",
+    "leaders": "መሪዎች",
+    "leader": "መሪ",
+    "selectLeaders": "መሪዎችን ይምረጡ",
+    "selectLeader": "መሪ ይምረጡ...",
+    "noLeadersSelected": "መሪዎች አልተመረጡም",
+    "selectMembers": "አባላትን ይምረጡ",
+    "selectMember": "አባል ይምረጡ...",
+    "noMembersSelected": "አባላት አልተመረጡም",
+    "bibleStudyNamePlaceholder": "የመጽሐፍ ቅዱስ ጥናት ቡድን ስም ያስገቡ",
+    "placeOfStudyPlaceholder": "የጥናት ቦታ ያስገቡ",
+    "selectLeadersHelp": "ብዙ መሪዎችን ለመምረጥ Ctrl/Cmd ይጫኑ",
+    "selectMembersHelp": "ብዙ አባላትን ለመምረጥ Ctrl/Cmd ይጫኑ",
+    "confirmDeleteBibleStudy": "እርግጠኛ ነዎት ይህንን የመጽሐፍ ቅዱስ ጥናት ቡድን ማስወገድ ይፈልጋሉ?",
+    "loadingLeader": "መሪ በመጫን ላይ..."
   },
   "serviceDivisions": {
     "title": "የአገልግሎት ክፍሎች",
@@ -144,7 +186,7 @@
     "title": "ይዘት",
     "blog": "ብሎግ",
     "heroSection": "የመሪ ክፍል",
-    "socialFeeds": "የማህበራዊ ሚዲያ ምግቦች"
+    "socialFeeds": "ማህበራዊ ሚዲያ"
   },
   "blog": {
     "title": "ብሎግ",
@@ -197,12 +239,12 @@
     "backgroundImageRequired": "የጀርባ ምስል ያስፈልጋል"
   },
   "socialFeeds": {
-    "addFeed": "የማህበራዊ ሚዲያ ምግብ ጨምር",
-    "editFeed": "የማህበራዊ ሚዲያ ምግብ አርም",
+    "addFeed": "የማህበራዊ ሚዲያ ጨምር",
+    "editFeed": "የማህበራዊ ሚዲያ አርም",
     "platform": "መድረክ",
     "handleOrPageId": "የተጠቃሚ ስም ወይም የገጽ መለያ",
     "apiKeyOrToken": "የ API ቁልፍ ወይም ቶከን",
-    "noFeeds": "የማህበራዊ ሚዲያ ምግቦች አልተገኙም"
+    "noFeeds": "ማህበራዊ ሚዲያ አልተገኙም"
   },
   "home": {
     "welcome": "ወደ እኛ ቤተክርስቲያን እንኳን ደህና መጡ",
@@ -213,9 +255,9 @@
     "socialFeeds": "እንከተለን"
   },
   "staff": {
-    "title": "የእኛ ሰራተኞች",
+    "title": "የእኛ አገልጋዮች",
     "subtitle": "የተገለጸ ቡድናችንን ይቀላቀሉ",
-    "noStaff": "ለማሳየት ሰራተኞች የሉም"
+    "noStaff": "ለማሳየት አገልጋዮች የሉም"
   },
   "blog": {
     "title": "ብሎግ",
@@ -236,15 +278,15 @@
     "postNotFound": "ፖስት አልተገኘም"
   },
   "site": {
-    "name": "የቤተክርስቲያን ድርጅት"
+    "name": "በኢትዮጵያ ሙሉ ወንጌል አማኞች ቤተክርስቲያን የቤቴል አጥቢያ"
   },
   "nav": {
     "home": "መነሻ",
     "blog": "ብሎግ",
-    "staff": "ሰራተኞች"
+    "staff": "አገልጋዮች"
   },
   "footer": {
-    "copyright": "© 2024 የቤተክርስቲያን ድርጅት. ሁሉም መብቶች የተጠበቁ ናቸው."
+    "copyright": "© 2025 በኢትዮጵያ ሙሉ ወንጌል አማኞች ቤተክርስቲያን የቤቴል አጥቢያ. ሁሉም መብቶች የተጠበቁ ናቸው."
   },
   "roles": {
     "title": "ሚናዎች እና ፍቃዶች",

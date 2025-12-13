@@ -27,7 +27,21 @@ class ZonePermission(permissions.BasePermission):
         if request.user.has_perm('structure.manage_zone'):
             return True
         
-        # Check if user is the zone leader
+        # Handle BibleStudyGroup objects (they have a zone attribute, not zone_leader)
+        if hasattr(obj, 'zone') and not hasattr(obj, 'zone_leader'):
+            # For BibleStudyGroup, check permissions on the associated zone
+            from apps.structure.models import ZoneLeader
+            try:
+                zone_leader = ZoneLeader.objects.get(zone=obj.zone)
+                if zone_leader.member.user == request.user:
+                    if request.method in permissions.SAFE_METHODS:
+                        return request.user.has_perm('structure.view_own_zone')
+                    else:
+                        return request.user.has_perm('structure.manage_own_zone')
+            except ZoneLeader.DoesNotExist:
+                pass
+        
+        # Check if user is the zone leader (for Zone objects)
         if hasattr(obj, 'zone_leader') and obj.zone_leader:
             if obj.zone_leader.member.user == request.user:
                 if request.method in permissions.SAFE_METHODS:

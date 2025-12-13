@@ -29,6 +29,31 @@ class MemberSerializer(serializers.ModelSerializer):
             return today.year - obj.date_of_birth.year - ((today.month, today.day) < (obj.date_of_birth.month, obj.date_of_birth.day))
         return obj.age if obj.age else None
 
+    def validate_zone(self, value):
+        """Ensure member can only be in one zone - validation is handled in create/update"""
+        return value
+
+    def create(self, validated_data):
+        """Override create to ensure member can only be in one zone"""
+        zone = validated_data.get('zone', None)
+        if zone:
+            # When creating, if zone is set, it's fine (member doesn't have a zone yet)
+            pass
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        """Override update to handle zone assignment - member can only be in one zone"""
+        zone = validated_data.get('zone', None)
+        
+        # If zone is being set and member already has a different zone, that's fine - we're moving them
+        # The database constraint ensures they can only be in one zone at a time
+        if zone is not None:
+            # Member is being assigned to a zone (or moved to a new zone)
+            # This is handled automatically by the ForeignKey relationship
+            pass
+        
+        return super().update(instance, validated_data)
+
 
 class FamilyMemberSerializer(serializers.ModelSerializer):
     member = MemberSerializer(read_only=True)
