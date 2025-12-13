@@ -3,6 +3,7 @@ import { API_ENDPOINTS } from '../config/api';
 
 export interface Member {
   id?: number;
+  user?: number; // User ID if linked
   first_name: string;
   father_name?: string;
   last_name: string;

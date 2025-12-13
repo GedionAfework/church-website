@@ -1,13 +1,17 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
-from .views import CustomTokenObtainPairView, check_auth, dashboard_stats, GroupViewSet, PermissionViewSet
+from .views import (
+    CustomTokenObtainPairView, check_auth, dashboard_stats,
+    GroupViewSet, PermissionViewSet, UserViewSet
+)
 
 app_name = 'accounts'
 
 router = DefaultRouter()
 router.register(r'groups', GroupViewSet, basename='group')
 router.register(r'permissions', PermissionViewSet, basename='permission')
+router.register(r'users', UserViewSet, basename='user')
 
 urlpatterns = [
     path('auth/login/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),

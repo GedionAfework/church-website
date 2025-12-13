@@ -24,6 +24,7 @@ import BlogManagementPage from './pages/staff/BlogManagementPage';
 import HeroSectionPage from './pages/staff/HeroSectionPage';
 import SocialFeedsPage from './pages/staff/SocialFeedsPage';
 import RolesPage from './pages/staff/RolesPage';
+import UsersPage from './pages/staff/UsersPage';
 
 // Layouts
 import StaffLayout from './layouts/StaffLayout';
@@ -66,6 +67,7 @@ function App() {
                   <Route path="hero-section" element={<HeroSectionPage />} />
                   <Route path="social-feeds" element={<SocialFeedsPage />} />
                   <Route path="roles" element={<RolesPage />} />
+                  <Route path="users" element={<UsersPage />} />
           </Route>
 
           {/* 404 */}

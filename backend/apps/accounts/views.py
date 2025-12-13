@@ -1,11 +1,14 @@
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django_filters.rest_framework import DjangoFilterBackend
-from .serializers import GroupSerializer, GroupListSerializer, PermissionSerializer
-from .permissions import RolePermission
+from .serializers import (
+    GroupSerializer, GroupListSerializer, PermissionSerializer,
+    UserSerializer, UserListSerializer
+)
+from .permissions import RolePermission, UserPermission
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -113,6 +116,43 @@ class PermissionViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ['name', 'codename']
 
 
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for managing Users
+    """
+    queryset = User.objects.prefetch_related('groups').all()
+    permission_classes = [UserPermission]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['username', 'email', 'first_name', 'last_name']
+    ordering_fields = ['username', 'date_joined', 'last_login']
+    ordering = ['-date_joined']
+    
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return UserListSerializer
+        return UserSerializer
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        
+        # Filter by is_staff if requested
+        is_staff = self.request.query_params.get('is_staff', None)
+        if is_staff is not None:
+            queryset = queryset.filter(is_staff=is_staff.lower() == 'true')
+        
+        # Filter by is_active if requested
+        is_active = self.request.query_params.get('is_active', None)
+        if is_active is not None:
+            queryset = queryset.filter(is_active=is_active.lower() == 'true')
+        
+        # Filter by group if requested
+        group = self.request.query_params.get('group', None)
+        if group is not None:
+            queryset = queryset.filter(groups__id=group)
+        
+        return queryset.distinct()
+
+
 # Keep the original auth views
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -139,13 +179,23 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def check_auth(request):
-    """Check if user is authenticated"""
+    """Check if user is authenticated and return permissions"""
     if request.user.is_authenticated:
+        # Get all user permissions (from groups and direct permissions)
+        user_permissions = set()
+        for group in request.user.groups.all():
+            for perm in group.permissions.all():
+                user_permissions.add(f"{perm.content_type.app_label}.{perm.codename}")
+        # Add direct user permissions
+        for perm in request.user.user_permissions.all():
+            user_permissions.add(f"{perm.content_type.app_label}.{perm.codename}")
+        
         return Response({
             'authenticated': True,
             'username': request.user.username,
             'is_staff': request.user.is_staff,
             'is_superuser': request.user.is_superuser,
+            'permissions': list(user_permissions),
         })
     return Response({'authenticated': False})
 

@@ -29,5 +29,6 @@ export const API_ENDPOINTS = {
   // Roles & Permissions
   GROUPS: '/groups/',
   PERMISSIONS: '/permissions/',
+  USERS: '/users/',
 } as const;
 
