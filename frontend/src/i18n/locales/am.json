@@ -1,0 +1,74 @@
+{
+  "common": {
+    "welcome": "እንኳን ደህና መጡ",
+    "login": "ግባ",
+    "logout": "ውጣ",
+    "save": "አስቀምጥ",
+    "cancel": "ተወው",
+    "delete": "ሰርዝ",
+    "edit": "አርም",
+    "create": "ፍጠር",
+    "search": "ፈልግ",
+    "filter": "አጣራ",
+    "loading": "በመጫን ላይ...",
+    "error": "ስህተት",
+    "success": "በትክክል"
+  },
+  "auth": {
+    "username": "የተጠቃሚ ስም",
+    "password": "የይለፍ ቃል",
+    "loginTitle": "የሰራተኛ መግቢያ",
+    "loginSubtitle": "የአስተዳዳሪ ፓነል ለመድረስ እባክዎ ይግቡ",
+    "invalidCredentials": "የተሳሳተ የተጠቃሚ ስም ወይም የይለፍ ቃል"
+  },
+  "dashboard": {
+    "title": "ዳሽቦርድ",
+    "members": "አባላት",
+    "families": "ቤተሰቦች",
+    "zones": "ዞኖች",
+    "serviceDivisions": "የአገልግሎት ክፍሎች",
+    "total": "ጠቅላላ",
+    "active": "ንቁ",
+    "recent": "የቅርብ ጊዜ"
+  },
+  "members": {
+    "title": "አባላት",
+    "addMember": "አባል ጨምር",
+    "editMember": "አባል አርም",
+    "firstName": "የመጀመሪያ ስም",
+    "lastName": "የአያት ስም",
+    "gender": "ጾታ",
+    "dateOfBirth": "የትውልድ ቀን",
+    "phone": "ስልክ",
+    "email": "ኢሜይል",
+    "address": "አድራሻ",
+    "zone": "ዞን",
+    "serviceDivision": "የአገልግሎት ክፍል",
+    "photo": "ፎቶ",
+    "isActive": "ንቁ",
+    "isStaffMember": "የሰራተኛ አባል"
+  },
+  "families": {
+    "title": "ቤተሰቦች",
+    "addFamily": "ቤተሰብ ጨምር",
+    "editFamily": "ቤተሰብ አርም",
+    "headMember": "የቤተሰብ አለቃ",
+    "familyMembers": "የቤተሰብ አባላት",
+    "relationship": "ዝምድና"
+  },
+  "zones": {
+    "title": "ዞኖች",
+    "addZone": "ዞን ጨምር",
+    "editZone": "ዞን አርም",
+    "name": "ስም",
+    "description": "መግለጫ",
+    "locationHint": "የአካባቢ ማስታወሻ"
+  },
+  "content": {
+    "title": "ይዘት",
+    "blog": "ብሎግ",
+    "heroSection": "የመሪ ክፍል",
+    "socialFeeds": "የማህበራዊ ሚዲያ ምግቦች"
+  }
+}
+

@@ -1,35 +1,66 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import './i18n/config';
+
+// Public pages
+import HomePage from './pages/public/HomePage';
+import BlogListPage from './pages/public/BlogListPage';
+import BlogDetailPage from './pages/public/BlogDetailPage';
+import StaffPage from './pages/public/StaffPage';
+
+// Staff pages
+import LoginPage from './pages/staff/LoginPage';
+import DashboardPage from './pages/staff/DashboardPage';
+import MembersPage from './pages/staff/MembersPage';
+import FamiliesPage from './pages/staff/FamiliesPage';
+import ZonesPage from './pages/staff/ZonesPage';
+import ServiceDivisionsPage from './pages/staff/ServiceDivisionsPage';
+import BlogManagementPage from './pages/staff/BlogManagementPage';
+import HeroSectionPage from './pages/staff/HeroSectionPage';
+import SocialFeedsPage from './pages/staff/SocialFeedsPage';
+
+// Layout
+import StaffLayout from './layouts/StaffLayout';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/blog" element={<BlogListPage />} />
+          <Route path="/blog/:slug" element={<BlogDetailPage />} />
+          <Route path="/staff" element={<StaffPage />} />
+
+          {/* Staff routes */}
+          <Route path="/staff/login" element={<LoginPage />} />
+          <Route
+            path="/staff"
+            element={
+              <ProtectedRoute>
+                <StaffLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<Navigate to="/staff/dashboard" replace />} />
+            <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="members" element={<MembersPage />} />
+            <Route path="families" element={<FamiliesPage />} />
+            <Route path="zones" element={<ZonesPage />} />
+            <Route path="service-divisions" element={<ServiceDivisionsPage />} />
+            <Route path="blog" element={<BlogManagementPage />} />
+            <Route path="hero-section" element={<HeroSectionPage />} />
+            <Route path="social-feeds" element={<SocialFeedsPage />} />
+          </Route>
+
+          {/* 404 */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;

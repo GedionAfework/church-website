@@ -1,0 +1,74 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "login": "Login",
+    "logout": "Logout",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  },
+  "auth": {
+    "username": "Username",
+    "password": "Password",
+    "loginTitle": "Staff Login",
+    "loginSubtitle": "Please login to access the admin panel",
+    "invalidCredentials": "Invalid username or password"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "members": "Members",
+    "families": "Families",
+    "zones": "Zones",
+    "serviceDivisions": "Service Divisions",
+    "total": "Total",
+    "active": "Active",
+    "recent": "Recent"
+  },
+  "members": {
+    "title": "Members",
+    "addMember": "Add Member",
+    "editMember": "Edit Member",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "gender": "Gender",
+    "dateOfBirth": "Date of Birth",
+    "phone": "Phone",
+    "email": "Email",
+    "address": "Address",
+    "zone": "Zone",
+    "serviceDivision": "Service Division",
+    "photo": "Photo",
+    "isActive": "Active",
+    "isStaffMember": "Staff Member"
+  },
+  "families": {
+    "title": "Families",
+    "addFamily": "Add Family",
+    "editFamily": "Edit Family",
+    "headMember": "Head Member",
+    "familyMembers": "Family Members",
+    "relationship": "Relationship"
+  },
+  "zones": {
+    "title": "Zones",
+    "addZone": "Add Zone",
+    "editZone": "Edit Zone",
+    "name": "Name",
+    "description": "Description",
+    "locationHint": "Location Hint"
+  },
+  "content": {
+    "title": "Content",
+    "blog": "Blog",
+    "heroSection": "Hero Section",
+    "socialFeeds": "Social Feeds"
+  }
+}
+
