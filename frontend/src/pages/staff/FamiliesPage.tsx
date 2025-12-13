@@ -130,7 +130,6 @@ const FamiliesPage: React.FC = () => {
                   <th>{t('families.displayName') || 'Family Name'}</th>
                   <th>{t('families.headMember')}</th>
                   <th>{t('families.memberCount') || 'Members'}</th>
-                  <th>{t('common.createdAt') || 'Created'}</th>
                   <th>{t('common.actions')}</th>
                 </tr>
               </thead>
@@ -159,11 +158,6 @@ const FamiliesPage: React.FC = () => {
                         {family.head_member_name || '-'}
                       </td>
                       <td>{family.family_members?.length || 0}</td>
-                      <td>
-                        {family.created_at
-                          ? formatToEthiopian(family.created_at, i18n.language)
-                          : '-'}
-                      </td>
                       <td onClick={(e) => e.stopPropagation()}>
                         <button
                           onClick={() => handleEdit(family)}
