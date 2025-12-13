@@ -17,6 +17,7 @@ export type UserInfo = {
   is_staff?: boolean;
   is_superuser?: boolean;
   permissions?: string[];
+  member_id?: number;
 };
 
 export const authService = {

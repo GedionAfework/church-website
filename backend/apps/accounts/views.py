@@ -190,12 +190,18 @@ def check_auth(request):
         for perm in request.user.user_permissions.all():
             user_permissions.add(f"{perm.content_type.app_label}.{perm.codename}")
         
+        # Get member_id if user is linked to a member
+        member_id = None
+        if hasattr(request.user, 'member_profile') and request.user.member_profile:
+            member_id = request.user.member_profile.id
+        
         return Response({
             'authenticated': True,
             'username': request.user.username,
             'is_staff': request.user.is_staff,
             'is_superuser': request.user.is_superuser,
             'permissions': list(user_permissions),
+            'member_id': member_id,
         })
     return Response({'authenticated': False})
 

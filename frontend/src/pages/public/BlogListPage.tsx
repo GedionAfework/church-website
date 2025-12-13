@@ -87,7 +87,7 @@ const BlogListPage: React.FC = () => {
                       )}
                     </div>
                     <p className="blog-post-excerpt">
-                      {post.content.substring(0, 200)}...
+                      {post.content ? (post.content.length > 200 ? post.content.substring(0, 200) + '...' : post.content) : ''}
                     </p>
                     <Link to={`/blog/${post.slug}`} className="blog-read-more">
                       {t('blog.readMore') || 'Read More'} →

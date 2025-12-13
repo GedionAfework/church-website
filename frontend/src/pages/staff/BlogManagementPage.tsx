@@ -1,13 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import Quill from 'quill';
+import 'quill/dist/quill.snow.css';
 import { contentService, type BlogPost } from '../../services/contentService';
 import apiClient from '../../services/api';
 import { API_ENDPOINTS } from '../../config/api';
 import { formatToEthiopian } from '../../utils/dateFormatter';
-import EthiopianDateInput from '../../components/EthiopianDateInput';
+import { useAuth } from '../../contexts/AuthContext';
 
 const BlogManagementPage: React.FC = () => {
   const { t, i18n } = useTranslation();
+  const { user } = useAuth();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -22,30 +25,58 @@ const BlogManagementPage: React.FC = () => {
     published_at: '',
   });
   const [thumbnail, setThumbnail] = useState<File | null>(null);
-  const [authors, setAuthors] = useState<Array<{ id: number; full_name: string }>>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const quillRef = useRef<HTMLDivElement>(null);
+  const quillInstanceRef = useRef<Quill | null>(null);
 
   useEffect(() => {
-    fetchAuthors();
     fetchPosts();
   }, [page, searchTerm, statusFilter]);
 
-  const fetchAuthors = async () => {
-    try {
-      const response = await apiClient.get(API_ENDPOINTS.MEMBERS, {
-        params: { is_staff_member: true, page_size: 100 },
+  // Initialize Quill editor
+  useEffect(() => {
+    if (showForm && quillRef.current && !quillInstanceRef.current) {
+      const quill = new Quill(quillRef.current, {
+        theme: 'snow',
+        modules: {
+          toolbar: [
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            [{ 'font': [] }],
+            [{ 'size': ['small', false, 'large', 'huge'] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            [{ 'align': [] }],
+            ['link', 'image'],
+            ['clean']
+          ],
+        },
       });
-      setAuthors(
-        (response.data.results || []).map((m: any) => ({
-          id: m.id,
-          full_name: `${m.first_name} ${m.last_name}`,
-        }))
-      );
-    } catch (error) {
-      console.error('Error fetching authors:', error);
+
+      // Set initial content if editing
+      if (editingPost?.content) {
+        quill.root.innerHTML = editingPost.content;
+      } else if (formData.content) {
+        quill.root.innerHTML = formData.content;
+      }
+
+      // Update formData when content changes
+      quill.on('text-change', () => {
+        const content = quill.root.innerHTML;
+        setFormData(prev => ({ ...prev, content }));
+      });
+
+      quillInstanceRef.current = quill;
     }
-  };
+
+    // Cleanup
+    return () => {
+      if (quillInstanceRef.current && !showForm) {
+        quillInstanceRef.current = null;
+      }
+    };
+  }, [showForm, editingPost?.id]);
 
   const fetchPosts = async () => {
     setLoading(true);
@@ -66,12 +97,15 @@ const BlogManagementPage: React.FC = () => {
 
   const handleCreate = () => {
     setEditingPost(undefined);
+    quillInstanceRef.current = null; // Reset Quill instance
+    // Auto-set author from logged-in user's member_id
+    const authorId = user?.member_id ? user.member_id.toString() : '';
     setFormData({
       title: '',
       content: '',
-      status: 'draft',
-      author: '',
-      published_at: '',
+      status: 'published',
+      author: authorId,
+      published_at: new Date().toISOString(),
     });
     setThumbnail(null);
     setShowForm(true);
@@ -79,12 +113,15 @@ const BlogManagementPage: React.FC = () => {
 
   const handleEdit = (post: BlogPost) => {
     setEditingPost(post);
+    quillInstanceRef.current = null; // Reset Quill instance to reinitialize
+    // Auto-set author from logged-in user's member_id
+    const authorId = user?.member_id ? user.member_id.toString() : '';
     setFormData({
       title: post.title,
       content: post.content,
-      status: post.status,
-      author: post.author?.toString() || '',
-      published_at: post.published_at ? post.published_at.split('T')[0] : '',
+      status: 'published', // Always published
+      author: authorId,
+      published_at: post.published_at || new Date().toISOString(),
     });
     setThumbnail(null);
     setShowForm(true);
@@ -108,10 +145,13 @@ const BlogManagementPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // Get content from Quill editor
+      const quillContent = quillInstanceRef.current?.root.innerHTML || formData.content;
+      
       const formDataToSend = new FormData();
       formDataToSend.append('title', formData.title);
-      formDataToSend.append('content', formData.content);
-      formDataToSend.append('status', formData.status);
+      formDataToSend.append('content', quillContent);
+      formDataToSend.append('status', 'published'); // Always published
       if (formData.author) formDataToSend.append('author', formData.author);
       if (formData.published_at) formDataToSend.append('published_at', formData.published_at);
       if (thumbnail) formDataToSend.append('thumbnail_image', thumbnail);
@@ -123,6 +163,7 @@ const BlogManagementPage: React.FC = () => {
       }
       setShowForm(false);
       setEditingPost(undefined);
+      quillInstanceRef.current = null;
       fetchPosts();
     } catch (error) {
       console.error('Error saving post:', error);
@@ -133,6 +174,7 @@ const BlogManagementPage: React.FC = () => {
   const handleCancel = () => {
     setShowForm(false);
     setEditingPost(undefined);
+    quillInstanceRef.current = null; // Reset Quill instance
   };
 
   if (showForm) {
@@ -155,50 +197,15 @@ const BlogManagementPage: React.FC = () => {
           </div>
           <div className="form-group">
             <label>{t('blog.content') || 'Content'} *</label>
-            <textarea
-              value={formData.content}
-              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-              rows={15}
-              required
+            <div 
+              ref={quillRef}
+              style={{ 
+                backgroundColor: 'white',
+                minHeight: '300px',
+                marginBottom: '50px'
+              }}
             />
           </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label>{t('blog.author') || 'Author'}</label>
-              <select
-                value={formData.author}
-                onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-              >
-                <option value="">{t('common.select')}</option>
-                {authors.map((author) => (
-                  <option key={author.id} value={author.id}>
-                    {author.full_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label>{t('blog.status') || 'Status'} *</label>
-              <select
-                value={formData.status}
-                onChange={(e) => setFormData({ ...formData, status: e.target.value as 'draft' | 'published' })}
-                required
-              >
-                <option value="draft">{t('blog.statusDraft') || 'Draft'}</option>
-                <option value="published">{t('blog.statusPublished') || 'Published'}</option>
-              </select>
-            </div>
-          </div>
-          {formData.status === 'published' && (
-            <div className="form-group">
-              <label>{t('blog.publishedAt') || 'Published Date'}</label>
-              <EthiopianDateInput
-                value={formData.published_at || ''}
-                onChange={(value) => setFormData({ ...formData, published_at: value })}
-                type="datetime-local"
-              />
-            </div>
-          )}
           <div className="form-group">
             <label>{t('blog.thumbnail') || 'Thumbnail Image'}</label>
             <input

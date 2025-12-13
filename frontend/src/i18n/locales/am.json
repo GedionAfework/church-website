@@ -204,9 +204,10 @@
     "noPosts": "ፖስቶች አልተገኙም",
     "by": "በ",
     "readMore": "ተጨማሪ ያንብቡ",
-    "backToBlog": "ወደ ብሎግ ተመለስ",
-    "postNotFound": "ፖስት አልተገኘም",
-    "searchPlaceholder": "ልጥፎችን ይፈልጉ..."
+        "backToBlog": "ወደ ብሎግ ተመለስ",
+        "postNotFound": "ፖስት አልተገኘም",
+        "searchPlaceholder": "ልጥፎችን ይፈልጉ...",
+        "authorAutoSet": "ደራሲ በራስ-ሰር ወደ የተጠቃሚው ስም ተቀምጧል"
   },
   "hero": {
     "title": "ርዕስ",
@@ -349,7 +350,6 @@
     "images": "ምስሎች",
     "date": "ቀን",
     "year": "ዓመት",
-    "title": "ርዕስ",
     "titlePlaceholder": "የፎቶ ርዕስ ያስገቡ (አማራጭ)",
     "description": "መግለጫ",
     "descriptionPlaceholder": "የፎቶ መግለጫ ያስገቡ (አማራጭ)",

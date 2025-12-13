@@ -204,9 +204,10 @@
     "noPosts": "No posts found",
     "by": "By",
     "readMore": "Read More",
-    "backToBlog": "Back to Blog",
-    "postNotFound": "Post not found",
-    "searchPlaceholder": "Search posts..."
+        "backToBlog": "Back to Blog",
+        "postNotFound": "Post not found",
+        "searchPlaceholder": "Search posts...",
+        "authorAutoSet": "Author is automatically set to the logged-in user"
   },
   "hero": {
     "title": "Title",
