@@ -35,7 +35,7 @@ const StaffLayout: React.FC = () => {
     {
       path: '/staff/dashboard',
       label: t('dashboard.title'),
-      permissions: [], // Dashboard is always accessible
+      permissions: ['accounts.view_dashboard'], // Dashboard requires permission
     },
     {
       path: '/staff/members',

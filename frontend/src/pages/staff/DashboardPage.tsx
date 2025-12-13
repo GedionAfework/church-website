@@ -60,7 +60,12 @@ const DashboardPage: React.FC = () => {
       setError(null);
     } catch (err: any) {
       console.error('Error fetching stats:', err);
-      setError(err.response?.data?.detail || t('common.error'));
+      // If 403 Forbidden, it's a permission issue
+      if (err.response?.status === 403) {
+        setError(err.response?.data?.detail || t('dashboard.noPermission') || 'You do not have permission to view the dashboard.');
+      } else {
+        setError(err.response?.data?.detail || t('common.error'));
+      }
     } finally {
       setLoading(false);
     }

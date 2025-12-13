@@ -47,7 +47,8 @@
     "total": "ጠቅላላ",
     "active": "ንቁ",
     "recent": "የቅርብ ጊዜ",
-    "upcoming": "የሚመጣ"
+    "upcoming": "የሚመጣ",
+    "noPermission": "ዳሽቦርድን ለመመልከት ፍቃድ የለዎትም።"
   },
   "members": {
     "title": "አባላት",
@@ -302,7 +303,8 @@
     "permissionCount": "ፍቃዶች",
     "userCount": "ተጠቃሚዎች",
     "noRoles": "ምንም ሚናዎች አልተገኙም",
-    "confirmDelete": "እርግጠኛ ነዎት ይህንን ሚና ማስወገድ ይፈልጋሉ?"
+    "confirmDelete": "እርግጠኛ ነዎት ይህንን ሚና ማስወገድ ይፈልጋሉ?",
+    "searchPermissions": "ፍቃዶችን ይፈልጉ (ለምሳሌ: \"dashboard\", \"view_dashboard\")..."
   },
   "users": {
     "title": "ተጠቃሚዎች",

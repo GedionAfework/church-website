@@ -23,6 +23,9 @@ class UserProfile(models.Model):
         verbose_name = 'User Profile'
         verbose_name_plural = 'User Profiles'
         ordering = ['user__username']
+        permissions = [
+            ('view_dashboard', 'Can view dashboard'),
+        ]
 
     def __str__(self):
         return f"{self.user.username}'s profile"

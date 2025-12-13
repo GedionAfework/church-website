@@ -205,7 +205,13 @@ def check_auth(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def dashboard_stats(request):
-    """Get dashboard statistics"""
+    """Get dashboard statistics - requires accounts.view_dashboard permission"""
+    # Check if user has permission to view dashboard
+    if not (request.user.is_superuser or request.user.has_perm('accounts.view_dashboard')):
+        return Response(
+            {'detail': 'You do not have permission to view the dashboard.'},
+            status=status.HTTP_403_FORBIDDEN
+        )
     from apps.members.models import Member, Family
     from apps.members.serializers import MemberSerializer
     from apps.structure.models import Zone, ServiceDivision

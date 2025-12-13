@@ -14,6 +14,7 @@ const RolesPage: React.FC = () => {
   });
   const [availablePermissions, setAvailablePermissions] = useState<Record<string, GroupedPermission>>({});
   const [selectedPermissions, setSelectedPermissions] = useState<Record<number, boolean>>({});
+  const [permissionSearchTerm, setPermissionSearchTerm] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -176,26 +177,53 @@ const RolesPage: React.FC = () => {
 
               <div className="form-group">
                 <label>{t('roles.permissions') || 'Permissions'}</label>
-                <div className="permissions-container">
-                  {Object.entries(availablePermissions).map(([key, group]) => (
-                    <div key={key} className="permission-group">
-                      <h4>
-                        {group.app_label}.{group.model_name}
-                      </h4>
-                      <div className="permission-list">
-                        {group.permissions.map((perm) => (
-                          <label key={perm.id} className="permission-item">
-                            <input
-                              type="checkbox"
-                              checked={!!selectedPermissions[perm.id]}
-                              onChange={() => handlePermissionToggle(perm.id)}
-                            />
-                            <span>{perm.name}</span>
-                          </label>
-                        ))}
+                <input
+                  type="text"
+                  placeholder={t('roles.searchPermissions') || 'Search permissions (e.g., "dashboard", "view_dashboard")...'}
+                  value={permissionSearchTerm}
+                  onChange={(e) => setPermissionSearchTerm(e.target.value)}
+                  style={{ marginBottom: '15px', padding: '8px', width: '100%' }}
+                />
+                <div className="permissions-container" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                  {Object.entries(availablePermissions)
+                    .filter(([key, group]) => {
+                      if (!permissionSearchTerm) return true;
+                      const searchLower = permissionSearchTerm.toLowerCase();
+                      // Search in app_label, model_name, and permission names
+                      return (
+                        group.app_label.toLowerCase().includes(searchLower) ||
+                        group.model_name.toLowerCase().includes(searchLower) ||
+                        group.permissions.some(perm => 
+                          perm.name.toLowerCase().includes(searchLower) ||
+                          perm.codename.toLowerCase().includes(searchLower) ||
+                          perm.full_codename.toLowerCase().includes(searchLower)
+                        )
+                      );
+                    })
+                    .map(([key, group]) => (
+                      <div key={key} className="permission-group">
+                        <h4>
+                          {group.app_label}.{group.model_name}
+                        </h4>
+                        <div className="permission-list">
+                          {group.permissions.map((perm) => (
+                            <label key={perm.id} className="permission-item">
+                              <input
+                                type="checkbox"
+                                checked={!!selectedPermissions[perm.id]}
+                                onChange={() => handlePermissionToggle(perm.id)}
+                              />
+                              <span>
+                                {perm.name}
+                                <small style={{ color: '#666', marginLeft: '8px' }}>
+                                  ({perm.full_codename})
+                                </small>
+                              </span>
+                            </label>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </div>
 

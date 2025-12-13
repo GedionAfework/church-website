@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { PermissionProtectedRoute } from './components/PermissionProtectedRoute';
 import './i18n/config';
 
 // Public pages
@@ -57,7 +58,14 @@ function App() {
             }
           >
             <Route index element={<Navigate to="/staff/dashboard" replace />} />
-            <Route path="dashboard" element={<DashboardPage />} />
+            <Route 
+              path="dashboard" 
+              element={
+                <PermissionProtectedRoute requiredPermissions={['accounts.view_dashboard']}>
+                  <DashboardPage />
+                </PermissionProtectedRoute>
+              } 
+            />
             <Route path="members" element={<MembersPage />} />
             <Route path="members/:id" element={<MemberDetailPage />} />
             <Route path="families" element={<FamiliesPage />} />
