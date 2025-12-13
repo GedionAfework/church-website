@@ -12,7 +12,16 @@
     "filter": "Filter",
     "loading": "Loading...",
     "error": "Error",
-    "success": "Success"
+    "success": "Success",
+    "retry": "Retry",
+    "select": "Select...",
+    "actions": "Actions",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page",
+    "of": "of",
+    "inactive": "Inactive",
+    "confirmDelete": "Are you sure you want to delete this item?"
   },
   "auth": {
     "username": "Username",
@@ -29,7 +38,8 @@
     "serviceDivisions": "Service Divisions",
     "total": "Total",
     "active": "Active",
-    "recent": "Recent"
+    "recent": "Recent",
+    "upcoming": "Upcoming"
   },
   "members": {
     "title": "Members",
@@ -38,6 +48,9 @@
     "firstName": "First Name",
     "lastName": "Last Name",
     "gender": "Gender",
+    "genderM": "Male",
+    "genderF": "Female",
+    "genderO": "Other",
     "dateOfBirth": "Date of Birth",
     "phone": "Phone",
     "email": "Email",
@@ -46,7 +59,13 @@
     "serviceDivision": "Service Division",
     "photo": "Photo",
     "isActive": "Active",
-    "isStaffMember": "Staff Member"
+    "isStaffMember": "Staff Member",
+    "staffTitle": "Staff Title",
+    "staffBio": "Staff Bio",
+    "showInStaffPage": "Show in Staff Page",
+    "allZones": "All Zones",
+    "allServices": "All Services",
+    "noMembers": "No members found"
   },
   "families": {
     "title": "Families",

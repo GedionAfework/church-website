@@ -11,12 +11,12 @@ export interface AuthResponse {
   refresh: string;
 }
 
-export interface UserInfo {
+export type UserInfo = {
   authenticated: boolean;
   username?: string;
   is_staff?: boolean;
   is_superuser?: boolean;
-}
+};
 
 export const authService = {
   async login(credentials: LoginCredentials): Promise<AuthResponse> {

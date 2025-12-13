@@ -12,7 +12,16 @@
     "filter": "አጣራ",
     "loading": "በመጫን ላይ...",
     "error": "ስህተት",
-    "success": "በትክክል"
+    "success": "በትክክል",
+    "retry": "እንደገና ሞክር",
+    "select": "መርጠህ...",
+    "actions": "ድርጊቶች",
+    "previous": "ያለፈ",
+    "next": "ቀጣይ",
+    "page": "ገጽ",
+    "of": "ከ",
+    "inactive": "ንቁ ያልሆነ",
+    "confirmDelete": "ይህንን ለመሰረዝ እርግጠኛ ነህ?"
   },
   "auth": {
     "username": "የተጠቃሚ ስም",
@@ -29,7 +38,8 @@
     "serviceDivisions": "የአገልግሎት ክፍሎች",
     "total": "ጠቅላላ",
     "active": "ንቁ",
-    "recent": "የቅርብ ጊዜ"
+    "recent": "የቅርብ ጊዜ",
+    "upcoming": "የሚመጣ"
   },
   "members": {
     "title": "አባላት",
@@ -38,6 +48,9 @@
     "firstName": "የመጀመሪያ ስም",
     "lastName": "የአያት ስም",
     "gender": "ጾታ",
+    "genderM": "ወንድ",
+    "genderF": "ሴት",
+    "genderO": "ሌላ",
     "dateOfBirth": "የትውልድ ቀን",
     "phone": "ስልክ",
     "email": "ኢሜይል",
@@ -46,7 +59,13 @@
     "serviceDivision": "የአገልግሎት ክፍል",
     "photo": "ፎቶ",
     "isActive": "ንቁ",
-    "isStaffMember": "የሰራተኛ አባል"
+    "isStaffMember": "የሰራተኛ አባል",
+    "staffTitle": "የሰራተኛ ስም",
+    "staffBio": "የሰራተኛ ታሪክ",
+    "showInStaffPage": "በሰራተኛ ገጽ ላይ አሳይ",
+    "allZones": "ሁሉም ዞኖች",
+    "allServices": "ሁሉም አገልግሎቶች",
+    "noMembers": "አባላት አልተገኙም"
   },
   "families": {
     "title": "ቤተሰቦች",
