@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
     ZoneViewSet, ZoneGroupViewSet, ServiceDivisionViewSet,
-    ZoneLeaderViewSet, ServiceLeaderViewSet
+    ZoneLeaderViewSet, ServiceLeaderViewSet, BibleStudyGroupViewSet
 )
 
 router = DefaultRouter()
@@ -11,6 +11,7 @@ router.register(r'zone-groups', ZoneGroupViewSet, basename='zone-group')
 router.register(r'service-divisions', ServiceDivisionViewSet, basename='service-division')
 router.register(r'zone-leaders', ZoneLeaderViewSet, basename='zone-leader')
 router.register(r'service-leaders', ServiceLeaderViewSet, basename='service-leader')
+router.register(r'bible-study-groups', BibleStudyGroupViewSet, basename='bible-study-group')
 
 app_name = 'structure'
 

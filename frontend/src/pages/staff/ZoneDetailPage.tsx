@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { structureService, type Zone } from '../../services/structureService';
+import { bibleStudyGroupService, type BibleStudyGroup } from '../../services/bibleStudyGroupService';
 import apiClient from '../../services/api';
 import { API_ENDPOINTS } from '../../config/api';
 
@@ -10,12 +11,16 @@ const ZoneDetailPage: React.FC = () => {
   const { t } = useTranslation();
   const [zone, setZone] = useState<Zone | null>(null);
   const [members, setMembers] = useState<any[]>([]);
+  const [bibleStudyGroups, setBibleStudyGroups] = useState<BibleStudyGroup[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showBibleStudyForm, setShowBibleStudyForm] = useState(false);
+  const [editingBibleStudy, setEditingBibleStudy] = useState<BibleStudyGroup | undefined>();
 
   useEffect(() => {
     if (id) {
       fetchZone();
       fetchMembers();
+      fetchBibleStudyGroups();
     }
   }, [id]);
 
@@ -38,6 +43,60 @@ const ZoneDetailPage: React.FC = () => {
       setMembers(response.data.results || []);
     } catch (error) {
       console.error('Error fetching members:', error);
+    }
+  };
+
+  const fetchBibleStudyGroups = async () => {
+    try {
+      const data = await bibleStudyGroupService.getBibleStudyGroups({
+        zone: Number(id),
+        page_size: 100,
+      });
+      setBibleStudyGroups(data.results || []);
+    } catch (error) {
+      console.error('Error fetching bible study groups:', error);
+    }
+  };
+
+  const handleCreateBibleStudy = () => {
+    setEditingBibleStudy(undefined);
+    setShowBibleStudyForm(true);
+  };
+
+  const handleEditBibleStudy = (group: BibleStudyGroup) => {
+    setEditingBibleStudy(group);
+    setShowBibleStudyForm(true);
+  };
+
+  const handleDeleteBibleStudy = async (groupId: number) => {
+    if (!window.confirm(t('zones.confirmDeleteBibleStudy') || 'Are you sure you want to delete this Bible Study Group?')) {
+      return;
+    }
+    try {
+      await bibleStudyGroupService.deleteBibleStudyGroup(groupId);
+      fetchBibleStudyGroups();
+    } catch (error) {
+      console.error('Error deleting bible study group:', error);
+      alert(t('common.error'));
+    }
+  };
+
+  const handleBibleStudySubmit = async (formData: Partial<BibleStudyGroup>) => {
+    try {
+      if (editingBibleStudy?.id) {
+        await bibleStudyGroupService.updateBibleStudyGroup(editingBibleStudy.id, formData);
+      } else {
+        await bibleStudyGroupService.createBibleStudyGroup({
+          ...formData,
+          zone: Number(id),
+        });
+      }
+      setShowBibleStudyForm(false);
+      setEditingBibleStudy(undefined);
+      fetchBibleStudyGroups();
+    } catch (error) {
+      console.error('Error saving bible study group:', error);
+      alert(t('common.error'));
     }
   };
 
@@ -101,7 +160,9 @@ const ZoneDetailPage: React.FC = () => {
         </div>
 
         <div className="detail-section">
-          <h2>{t('members.title')} ({members.length})</h2>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <h2>{t('members.title')} ({members.length})</h2>
+          </div>
           {members.length === 0 ? (
             <p className="empty-state">{t('zones.noMembers') || 'No members in this zone'}</p>
           ) : (
@@ -138,6 +199,287 @@ const ZoneDetailPage: React.FC = () => {
             </div>
           )}
         </div>
+
+        <div className="detail-section">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <h2>{t('zones.bibleStudyGroups') || 'Bible Study Groups'}</h2>
+            <button onClick={handleCreateBibleStudy} className="btn-primary">
+              {t('zones.addBibleStudyGroup') || 'Add Bible Study Group'}
+            </button>
+          </div>
+          {bibleStudyGroups.length === 0 ? (
+            <p className="empty-state">{t('zones.noBibleStudyGroups') || 'No Bible Study Groups in this zone'}</p>
+          ) : (
+            <div className="table-container">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>{t('zones.bibleStudyName') || 'Name'}</th>
+                    <th>{t('zones.placeOfStudy') || 'Place of Study'}</th>
+                    <th>{t('zones.members') || 'Members'}</th>
+                    <th>{t('zones.leaders') || 'Leaders'}</th>
+                    <th>{t('common.actions')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {bibleStudyGroups.map((group) => (
+                    <tr key={group.id}>
+                      <td>{group.name}</td>
+                      <td>{group.place_of_study || '-'}</td>
+                      <td>
+                        {group.members_count || 0} {group.members_count === 1 ? t('zones.member') || 'member' : t('zones.members') || 'members'}
+                      </td>
+                      <td>
+                        {group.leaders_count || 0} {group.leaders_count === 1 ? t('zones.leader') || 'leader' : t('zones.leaders') || 'leaders'}
+                      </td>
+                      <td>
+                        <button
+                          onClick={() => group.id && handleEditBibleStudy(group)}
+                          className="btn-sm btn-edit"
+                        >
+                          {t('common.edit')}
+                        </button>
+                        <button
+                          onClick={() => group.id && handleDeleteBibleStudy(group.id)}
+                          className="btn-sm btn-delete"
+                        >
+                          {t('common.delete')}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {showBibleStudyForm && (
+        <BibleStudyGroupForm
+          zoneId={Number(id)}
+          group={editingBibleStudy}
+          members={members}
+          onSubmit={handleBibleStudySubmit}
+          onCancel={() => {
+            setShowBibleStudyForm(false);
+            setEditingBibleStudy(undefined);
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
+// Bible Study Group Form Component
+interface BibleStudyGroupFormProps {
+  zoneId: number;
+  group?: BibleStudyGroup;
+  members: any[];
+  onSubmit: (data: Partial<BibleStudyGroup>) => Promise<void>;
+  onCancel: () => void;
+}
+
+const BibleStudyGroupForm: React.FC<BibleStudyGroupFormProps> = ({
+  group,
+  members,
+  onSubmit,
+  onCancel,
+}) => {
+  const { t } = useTranslation();
+  const [formData, setFormData] = useState({
+    name: group?.name || '',
+    place_of_study: group?.place_of_study || '',
+    members: group?.members || [],
+    leaders: group?.leaders || [],
+  });
+  const [selectedLeaderId, setSelectedLeaderId] = useState<string>('');
+  const [selectedMemberId, setSelectedMemberId] = useState<string>('');
+  const [loading, setLoading] = useState(false);
+
+  // Get selected members and leaders details
+  const selectedMembers = members.filter(m => formData.members.includes(m.id));
+  const selectedLeaders = members.filter(m => formData.leaders.includes(m.id));
+  
+  // Get available members (not already selected)
+  const availableMembers = members.filter(m => !formData.members.includes(m.id));
+  const availableLeaders = members.filter(m => !formData.leaders.includes(m.id));
+
+  const handleAddLeader = () => {
+    if (selectedLeaderId && !formData.leaders.includes(Number(selectedLeaderId))) {
+      setFormData({
+        ...formData,
+        leaders: [...formData.leaders, Number(selectedLeaderId)],
+      });
+      setSelectedLeaderId('');
+    }
+  };
+
+  const handleRemoveLeader = (leaderId: number) => {
+    setFormData({
+      ...formData,
+      leaders: formData.leaders.filter(id => id !== leaderId),
+    });
+  };
+
+  const handleAddMember = () => {
+    if (selectedMemberId && !formData.members.includes(Number(selectedMemberId))) {
+      setFormData({
+        ...formData,
+        members: [...formData.members, Number(selectedMemberId)],
+      });
+      setSelectedMemberId('');
+    }
+  };
+
+  const handleRemoveMember = (memberId: number) => {
+    setFormData({
+      ...formData,
+      members: formData.members.filter(id => id !== memberId),
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await onSubmit(formData);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onCancel}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '700px', maxHeight: '90vh', overflowY: 'auto' }}>
+        <h2>{group ? t('zones.editBibleStudyGroup') || 'Edit Bible Study Group' : t('zones.addBibleStudyGroup') || 'Add Bible Study Group'}</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>{t('zones.bibleStudyName') || 'Name'} *</label>
+            <input
+              type="text"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              required
+              placeholder={t('zones.bibleStudyNamePlaceholder') || 'Enter Bible Study Group name'}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>{t('zones.placeOfStudy') || 'Place of Study'}</label>
+            <input
+              type="text"
+              value={formData.place_of_study}
+              onChange={(e) => setFormData({ ...formData, place_of_study: e.target.value })}
+              placeholder={t('zones.placeOfStudyPlaceholder') || 'Enter place of study'}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>{t('zones.selectLeaders') || 'Select Leaders'}</label>
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+              <select
+                value={selectedLeaderId}
+                onChange={(e) => setSelectedLeaderId(e.target.value)}
+                style={{ flex: 1 }}
+              >
+                <option value="">{t('zones.selectLeader') || 'Select a leader...'}</option>
+                {availableLeaders.map((member) => (
+                  <option key={member.id} value={member.id}>
+                    {member.full_name || `${member.first_name} ${member.father_name || ''} ${member.last_name}`.trim()}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                onClick={handleAddLeader}
+                className="btn-primary"
+                disabled={!selectedLeaderId}
+              >
+                {t('common.add') || 'Add'}
+              </button>
+            </div>
+            {selectedLeaders.length > 0 && (
+              <div style={{ border: '1px solid #ddd', borderRadius: '4px', padding: '10px', maxHeight: '150px', overflowY: 'auto' }}>
+                {selectedLeaders.map((leader) => (
+                  <div key={leader.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 0', borderBottom: '1px solid #eee' }}>
+                    <span>{leader.full_name || `${leader.first_name} ${leader.father_name || ''} ${leader.last_name}`.trim()}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveLeader(leader.id!)}
+                      className="btn-sm btn-delete"
+                    >
+                      {t('common.remove') || 'Remove'}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {selectedLeaders.length === 0 && (
+              <p className="form-help-text" style={{ color: '#999', fontStyle: 'italic' }}>
+                {t('zones.noLeadersSelected') || 'No leaders selected'}
+              </p>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label>{t('zones.selectMembers') || 'Select Members'}</label>
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+              <select
+                value={selectedMemberId}
+                onChange={(e) => setSelectedMemberId(e.target.value)}
+                style={{ flex: 1 }}
+              >
+                <option value="">{t('zones.selectMember') || 'Select a member...'}</option>
+                {availableMembers.map((member) => (
+                  <option key={member.id} value={member.id}>
+                    {member.full_name || `${member.first_name} ${member.father_name || ''} ${member.last_name}`.trim()}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                onClick={handleAddMember}
+                className="btn-primary"
+                disabled={!selectedMemberId}
+              >
+                {t('common.add') || 'Add'}
+              </button>
+            </div>
+            {selectedMembers.length > 0 && (
+              <div style={{ border: '1px solid #ddd', borderRadius: '4px', padding: '10px', maxHeight: '200px', overflowY: 'auto' }}>
+                {selectedMembers.map((member) => (
+                  <div key={member.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 0', borderBottom: '1px solid #eee' }}>
+                    <span>{member.full_name || `${member.first_name} ${member.father_name || ''} ${member.last_name}`.trim()}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveMember(member.id!)}
+                      className="btn-sm btn-delete"
+                    >
+                      {t('common.remove') || 'Remove'}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {selectedMembers.length === 0 && (
+              <p className="form-help-text" style={{ color: '#999', fontStyle: 'italic' }}>
+                {t('zones.noMembersSelected') || 'No members selected'}
+              </p>
+            )}
+          </div>
+
+          <div className="form-actions">
+            <button type="submit" className="btn-primary" disabled={loading}>
+              {loading ? t('common.saving') || 'Saving...' : t('common.save')}
+            </button>
+            <button type="button" className="btn-secondary" onClick={onCancel} disabled={loading}>
+              {t('common.cancel')}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

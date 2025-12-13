@@ -112,3 +112,43 @@ class ServiceLeader(models.Model):
 
     def __str__(self):
         return f"{self.member.full_name} - {self.service_division.name} Leader"
+
+
+class BibleStudyGroup(models.Model):
+    """Bible Study Groups within a Zone"""
+    zone = models.ForeignKey(
+        Zone,
+        on_delete=models.CASCADE,
+        related_name='bible_study_groups'
+    )
+    name = models.CharField(max_length=150, help_text="Name of the Bible Study Group")
+    place_of_study = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Location or place where the study takes place"
+    )
+    members = models.ManyToManyField(
+        'members.Member',
+        related_name='bible_study_groups',
+        blank=True,
+        help_text="Members participating in this Bible Study Group"
+    )
+    leaders = models.ManyToManyField(
+        'members.Member',
+        related_name='led_bible_study_groups',
+        blank=True,
+        help_text="Leaders of this Bible Study Group"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['zone', 'name']
+        verbose_name = 'Bible Study Group'
+        verbose_name_plural = 'Bible Study Groups'
+        permissions = [
+            ('manage_bible_study_group', 'Can manage bible study group'),
+        ]
+
+    def __str__(self):
+        return f"{self.zone.name} - {self.name}"

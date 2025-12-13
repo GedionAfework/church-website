@@ -19,6 +19,7 @@ export const API_ENDPOINTS = {
   SERVICE_DIVISIONS: '/service-divisions/',
   ZONE_LEADERS: '/zone-leaders/',
   SERVICE_LEADERS: '/service-leaders/',
+  BIBLE_STUDY_GROUPS: '/bible-study-groups/',
   
   // Content
   BLOG_POSTS: '/blog-posts/',

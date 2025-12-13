@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Zone, ZoneGroup, ServiceDivision, ZoneLeader, ServiceLeader
+from .models import Zone, ZoneGroup, ServiceDivision, ZoneLeader, ServiceLeader, BibleStudyGroup
 from apps.members.serializers import MemberSerializer
 
 
@@ -86,3 +86,59 @@ class ServiceLeaderSerializer(serializers.ModelSerializer):
         model = ServiceLeader
         fields = ['id', 'service_division', 'service_division_name', 'member', 'member_id']
 
+
+class BibleStudyGroupSerializer(serializers.ModelSerializer):
+    from apps.members.models import Member
+    
+    zone_name = serializers.CharField(source='zone.name', read_only=True)
+    members_detail = MemberSerializer(source='members', many=True, read_only=True)
+    members = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=Member.objects.filter(is_active=True),
+        required=False
+    )
+    leaders_detail = MemberSerializer(source='leaders', many=True, read_only=True)
+    leaders = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=Member.objects.filter(is_active=True),
+        required=False
+    )
+    members_count = serializers.SerializerMethodField()
+    leaders_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = BibleStudyGroup
+        fields = [
+            'id', 'zone', 'zone_name', 'name', 'place_of_study',
+            'members', 'members_detail', 'members_count',
+            'leaders', 'leaders_detail', 'leaders_count',
+            'created_at', 'updated_at'
+        ]
+        read_only_fields = ['created_at', 'updated_at']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Set queryset for members and leaders to only include members from the zone
+        if self.instance:
+            zone = self.instance.zone
+        elif 'zone' in self.initial_data:
+            from .models import Zone
+            try:
+                zone = Zone.objects.get(id=self.initial_data['zone'])
+            except Zone.DoesNotExist:
+                zone = None
+        else:
+            zone = None
+        
+        if zone:
+            from apps.members.models import Member
+            zone_members = Member.objects.filter(zone=zone, is_active=True)
+            self.fields['members'].queryset = zone_members
+            self.fields['leaders'].queryset = zone_members
+
+    def get_members_count(self, obj):
+        return obj.members.count()
+
+    def get_leaders_count(self, obj):
+        return obj.leaders.count()

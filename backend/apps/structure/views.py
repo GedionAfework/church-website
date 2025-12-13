@@ -2,10 +2,10 @@ from rest_framework import viewsets, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import Zone, ZoneGroup, ServiceDivision, ZoneLeader, ServiceLeader
+from .models import Zone, ZoneGroup, ServiceDivision, ZoneLeader, ServiceLeader, BibleStudyGroup
 from .serializers import (
     ZoneSerializer, ZoneGroupSerializer, ServiceDivisionSerializer,
-    ZoneLeaderSerializer, ServiceLeaderSerializer
+    ZoneLeaderSerializer, ServiceLeaderSerializer, BibleStudyGroupSerializer
 )
 from .permissions import ZonePermission, ServiceDivisionPermission
 
@@ -116,3 +116,14 @@ class ServiceLeaderViewSet(viewsets.ModelViewSet):
     filterset_fields = ['service_division', 'member']
     ordering_fields = ['service_division', 'member']
     ordering = ['service_division', 'member']
+
+
+class BibleStudyGroupViewSet(viewsets.ModelViewSet):
+    queryset = BibleStudyGroup.objects.select_related('zone').prefetch_related('members', 'leaders').all()
+    serializer_class = BibleStudyGroupSerializer
+    permission_classes = [ZonePermission]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['zone']
+    search_fields = ['name', 'place_of_study']
+    ordering_fields = ['zone', 'name', 'created_at']
+    ordering = ['zone', 'name']
