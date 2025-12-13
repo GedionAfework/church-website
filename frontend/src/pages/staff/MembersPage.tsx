@@ -183,6 +183,7 @@ const MembersPage: React.FC = () => {
               <thead>
                 <tr>
                   <th>{t('members.name') || 'Name'}</th>
+                  <th>{t('members.fatherName') || "Father's Name"}</th>
                   <th>{t('members.email')}</th>
                   <th>{t('members.phone')}</th>
                   <th>{t('members.zone')}</th>
@@ -194,7 +195,7 @@ const MembersPage: React.FC = () => {
               <tbody>
                 {members.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="empty-state">
+                    <td colSpan={8} className="empty-state">
                       {t('members.noMembers') || 'No members found'}
                     </td>
                   </tr>
@@ -210,6 +211,7 @@ const MembersPage: React.FC = () => {
                       style={{ cursor: 'pointer' }}
                     >
                       <td>{member.full_name || `${member.first_name} ${member.father_name || ''} ${member.last_name}`.trim()}</td>
+                      <td>{member.father_name || '-'}</td>
                       <td>{member.email || '-'}</td>
                       <td>{member.phone || '-'}</td>
                       <td>

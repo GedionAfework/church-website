@@ -7,7 +7,6 @@ class Member(models.Model):
     GENDER_CHOICES = [
         ('M', 'Male'),
         ('F', 'Female'),
-        ('O', 'Other'),
     ]
 
     user = models.OneToOneField(

@@ -137,7 +137,6 @@ const MemberForm: React.FC<MemberFormProps> = ({
           <select name="gender" value={formData.gender} onChange={handleChange} required>
             <option value="M">{t('members.genderM') || 'Male'}</option>
             <option value="F">{t('members.genderF') || 'Female'}</option>
-            <option value="O">{t('members.genderO') || 'Other'}</option>
           </select>
         </div>
 

@@ -5,7 +5,25 @@ from .models import UserProfile
 
 
 # Customize User admin to respect permissions
+class UserProfileInline(admin.StackedInline):
+    """Inline admin for UserProfile"""
+    model = UserProfile
+    can_delete = False
+    verbose_name_plural = 'Profile'
+    fields = ('father_name',)
+
+
 class UserAdmin(BaseUserAdmin):
+    inlines = (UserProfileInline,)
+    list_display = ('username', 'email', 'first_name', 'get_father_name', 'last_name', 'is_staff', 'is_active', 'is_superuser')
+    
+    def get_father_name(self, obj):
+        """Get father's name from user profile"""
+        if hasattr(obj, 'profile') and obj.profile:
+            return obj.profile.father_name or '-'
+        return '-'
+    get_father_name.short_description = "Father's Name"
+    
     def has_view_permission(self, request, obj=None):
         if request.user.is_superuser:
             return True

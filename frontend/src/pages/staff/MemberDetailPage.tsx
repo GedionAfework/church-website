@@ -111,7 +111,7 @@ const MemberDetailPage: React.FC = () => {
               <p>
                 {member.gender === 'M' ? t('members.genderM') || 'Male' :
                  member.gender === 'F' ? t('members.genderF') || 'Female' :
-                 t('members.genderO') || 'Other'}
+                 '-'}
               </p>
             </div>
             <div className="detail-item">

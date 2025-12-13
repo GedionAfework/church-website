@@ -8,7 +8,7 @@ export interface Member {
   father_name?: string;
   last_name: string;
   full_name?: string;
-  gender: 'M' | 'F' | 'O';
+  gender: 'M' | 'F';
   date_of_birth?: string;
   age?: number;
   use_age_instead_of_birthdate?: boolean;

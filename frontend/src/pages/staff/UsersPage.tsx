@@ -575,16 +575,17 @@ const UsersPage: React.FC = () => {
       ) : (
         <div className="table-container">
           <table className="data-table">
-            <thead>
-              <tr>
-                <th>{t('users.username') || 'Username'}</th>
-                <th>{t('users.email') || 'Email'}</th>
-                <th>{t('users.name') || 'Name'}</th>
-                <th>{t('users.roles') || 'Roles'}</th>
-                <th>{t('users.status') || 'Status'}</th>
-                <th>{t('common.actions')}</th>
-              </tr>
-            </thead>
+              <thead>
+                <tr>
+                  <th>{t('users.username') || 'Username'}</th>
+                  <th>{t('users.email') || 'Email'}</th>
+                  <th>{t('users.name') || 'Name'}</th>
+                  <th>{t('users.fatherName') || "Father's Name"}</th>
+                  <th>{t('users.roles') || 'Roles'}</th>
+                  <th>{t('users.status') || 'Status'}</th>
+                  <th>{t('common.actions')}</th>
+                </tr>
+              </thead>
             <tbody>
               {users.map((user) => (
                 <tr key={user.id}>
@@ -606,7 +607,8 @@ const UsersPage: React.FC = () => {
                     return parts.length > 0 ? parts.join(' ') : '-';
                   })()}
                 </td>
-                  <td>
+                <td>{(user as any).father_name || '-'}</td>
+                <td>
                     {user.groups_names && user.groups_names.length > 0
                       ? user.groups_names.join(', ')
                       : '-'}
