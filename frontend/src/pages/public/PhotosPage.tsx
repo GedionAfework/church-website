@@ -22,7 +22,7 @@ const PhotosPage: React.FC = () => {
 
   const fetchAvailableYears = async () => {
     try {
-      const response = await contentService.getPhotos({ page_size: 1000, is_active: true });
+      const response = await contentService.getPhotos({ page_size: 1000 });
       const years = new Set<number>();
       response.results.forEach((photo) => {
         if (photo.year) {
@@ -38,7 +38,7 @@ const PhotosPage: React.FC = () => {
   const fetchPhotos = async () => {
     setLoading(true);
     try {
-      const params: any = { page, is_active: true };
+      const params: any = { page };
       if (yearFilter) params.year = Number(yearFilter);
 
       const data = await contentService.getPhotos(params);

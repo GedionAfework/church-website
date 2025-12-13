@@ -32,7 +32,6 @@ const MemberForm: React.FC<MemberFormProps> = ({
     address: member?.address || '',
     zone: member?.zone || '',
     service_division: member?.service_division || '',
-    is_active: member?.is_active ?? true,
     is_staff_member: member?.is_staff_member ?? false,
     staff_title: member?.staff_title || '',
     staff_bio: member?.staff_bio || '',
@@ -251,18 +250,6 @@ const MemberForm: React.FC<MemberFormProps> = ({
       </div>
 
       <div className="form-row">
-        <div className="form-group checkbox">
-          <label>
-            <input
-              type="checkbox"
-              name="is_active"
-              checked={formData.is_active}
-              onChange={handleChange}
-            />
-            {t('members.isActive')}
-          </label>
-        </div>
-
         <div className="form-group checkbox">
           <label>
             <input

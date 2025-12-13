@@ -15,7 +15,7 @@ class ZoneViewSet(viewsets.ModelViewSet):
     serializer_class = ZoneSerializer
     permission_classes = [ZonePermission]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['is_active']
+    filterset_fields = []
     search_fields = ['name', 'description', 'location_hint']
     ordering_fields = ['name', 'created_at']
     ordering = ['name']
@@ -40,7 +40,7 @@ class ZoneViewSet(viewsets.ModelViewSet):
         """Get all members in a zone"""
         zone = self.get_object()
         from apps.members.serializers import MemberSerializer
-        members = zone.members.filter(is_active=True)
+        members = zone.members.all()
         serializer = MemberSerializer(members, many=True)
         return Response(serializer.data)
 
@@ -68,7 +68,7 @@ class ServiceDivisionViewSet(viewsets.ModelViewSet):
     serializer_class = ServiceDivisionSerializer
     permission_classes = [ServiceDivisionPermission]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['is_active']
+    filterset_fields = []
     search_fields = ['name', 'description']
     ordering_fields = ['name', 'created_at']
     ordering = ['name']
@@ -93,7 +93,7 @@ class ServiceDivisionViewSet(viewsets.ModelViewSet):
         """Get all members in a service division"""
         service_division = self.get_object()
         from apps.members.serializers import MemberSerializer
-        members = service_division.members.filter(is_active=True)
+        members = service_division.members.all()
         serializer = MemberSerializer(members, many=True)
         return Response(serializer.data)
 

@@ -183,12 +183,9 @@ const MembersPage: React.FC = () => {
               <thead>
                 <tr>
                   <th>{t('members.name') || 'Name'}</th>
-                  <th>{t('members.fatherName') || "Father's Name"}</th>
-                  <th>{t('members.email')}</th>
                   <th>{t('members.phone')}</th>
                   <th>{t('members.zone')}</th>
                   <th>{t('members.serviceDivision')}</th>
-                  <th>{t('members.isActive')}</th>
                   <th>{t('common.actions') || 'Actions'}</th>
                 </tr>
               </thead>
@@ -211,19 +208,12 @@ const MembersPage: React.FC = () => {
                       style={{ cursor: 'pointer' }}
                     >
                       <td>{member.full_name || `${member.first_name} ${member.father_name || ''} ${member.last_name}`.trim()}</td>
-                      <td>{member.father_name || '-'}</td>
-                      <td>{member.email || '-'}</td>
                       <td>{member.phone || '-'}</td>
                       <td>
                         {zones.find((z) => z.id === member.zone)?.name || '-'}
                       </td>
                       <td>
                         {serviceDivisions.find((s) => s.id === member.service_division)?.name || '-'}
-                      </td>
-                      <td>
-                        <span className={`badge ${member.is_active ? 'active' : 'inactive'}`}>
-                          {member.is_active ? t('dashboard.active') : t('common.inactive') || 'Inactive'}
-                        </span>
                       </td>
                       <td onClick={(e) => e.stopPropagation()}>
                         <button

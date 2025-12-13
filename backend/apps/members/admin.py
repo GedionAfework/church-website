@@ -4,8 +4,8 @@ from .models import Member, Family, FamilyMember
 
 @admin.register(Member)
 class MemberAdmin(admin.ModelAdmin):
-    list_display = ['full_name', 'email', 'phone', 'zone', 'service_division', 'is_active', 'is_staff_member']
-    list_filter = ['is_active', 'is_staff_member', 'zone', 'service_division', 'gender']
+    list_display = ['full_name', 'email', 'phone', 'zone', 'service_division', 'is_staff_member']
+    list_filter = ['is_staff_member', 'zone', 'service_division', 'gender']
     search_fields = ['first_name', 'last_name', 'father_name', 'email', 'phone']
     readonly_fields = ['created_at', 'updated_at']
     

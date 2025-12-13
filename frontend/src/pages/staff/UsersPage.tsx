@@ -25,9 +25,7 @@ const UsersPage: React.FC = () => {
     father_name: '',
     last_name: '',
     password: '',
-    is_staff: false,
     is_superuser: false,
-    is_active: true,
     groups: null as number | null,
   });
   const [error, setError] = useState<string | null>(null);
@@ -119,9 +117,7 @@ const UsersPage: React.FC = () => {
       father_name: '',
       last_name: '',
       password: '',
-      is_staff: false,
       is_superuser: false,
-      is_active: true,
       groups: null,
     });
     setMemberSearchTerm('');
@@ -157,9 +153,7 @@ const UsersPage: React.FC = () => {
         father_name: (fullUser as any).father_name || '',
         last_name: fullUser.last_name || '',
         password: '', // Don't populate password
-        is_staff: fullUser.is_staff,
         is_superuser: fullUser.is_superuser,
-        is_active: fullUser.is_active,
         groups: fullUser.groups && fullUser.groups.length > 0 ? fullUser.groups[0] : null,
       });
       setMemberSearchTerm(memberName);
@@ -205,9 +199,7 @@ const UsersPage: React.FC = () => {
 
     const userData: any = {
       username: formData.username.trim(),
-      is_staff: formData.is_staff,
       is_superuser: formData.is_superuser,
-      is_active: formData.is_active,
     };
 
     // Only include optional fields if they have values
@@ -309,9 +301,7 @@ const UsersPage: React.FC = () => {
       father_name: '',
       last_name: '',
       password: '',
-      is_staff: false,
       is_superuser: false,
-      is_active: true,
       groups: null,
     });
     setMemberSearchTerm('');
@@ -518,41 +508,17 @@ const UsersPage: React.FC = () => {
                 </select>
               </div>
 
-              <div className="form-row">
-                <div className="form-group checkbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={formData.is_staff}
-                      onChange={(e) => setFormData({ ...formData, is_staff: e.target.checked })}
-                    />
-                    {t('users.isStaff') || 'Staff Member'}
-                  </label>
-                </div>
-
-                <div className="form-group checkbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={formData.is_superuser}
-                      onChange={(e) =>
-                        setFormData({ ...formData, is_superuser: e.target.checked })
-                      }
-                    />
-                    {t('users.isSuperuser') || 'Superuser'}
-                  </label>
-                </div>
-
-                <div className="form-group checkbox">
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={formData.is_active}
-                      onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-                    />
-                    {t('users.isActive') || 'Active'}
-                  </label>
-                </div>
+              <div className="form-group checkbox">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={formData.is_superuser}
+                    onChange={(e) =>
+                      setFormData({ ...formData, is_superuser: e.target.checked })
+                    }
+                  />
+                  {t('users.isSuperuser') || 'Superuser'}
+                </label>
               </div>
 
               <div className="form-actions">
@@ -580,9 +546,8 @@ const UsersPage: React.FC = () => {
                   <th>{t('users.username') || 'Username'}</th>
                   <th>{t('users.email') || 'Email'}</th>
                   <th>{t('users.name') || 'Name'}</th>
-                  <th>{t('users.fatherName') || "Father's Name"}</th>
                   <th>{t('users.roles') || 'Roles'}</th>
-                  <th>{t('users.status') || 'Status'}</th>
+          
                   <th>{t('common.actions')}</th>
                 </tr>
               </thead>
@@ -607,22 +572,12 @@ const UsersPage: React.FC = () => {
                     return parts.length > 0 ? parts.join(' ') : '-';
                   })()}
                 </td>
-                <td>{(user as any).father_name || '-'}</td>
                 <td>
                     {user.groups_names && user.groups_names.length > 0
                       ? user.groups_names.join(', ')
                       : '-'}
                   </td>
-                  <td>
-                    <span className={`badge ${user.is_active ? 'active' : 'inactive'}`}>
-                      {user.is_active ? t('common.yes') : t('common.no')}
-                    </span>
-                    {user.is_staff && (
-                      <span className="badge" style={{ marginLeft: '5px', background: '#3498db' }}>
-                        {t('users.staff') || 'Staff'}
-                      </span>
-                    )}
-                  </td>
+                  
                   <td>
                     <button
                       onClick={() => handleEdit(user)}

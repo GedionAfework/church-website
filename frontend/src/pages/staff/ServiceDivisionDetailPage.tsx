@@ -85,14 +85,6 @@ const ServiceDivisionDetailPage: React.FC = () => {
               <label>{t('zones.description')}</label>
               <p>{division.description || '-'}</p>
             </div>
-            <div className="detail-item">
-              <label>{t('dashboard.active')}</label>
-              <p>
-                <span className={`badge ${division.is_active ? 'active' : 'inactive'}`}>
-                  {division.is_active ? t('dashboard.active') : t('common.inactive')}
-                </span>
-              </p>
-            </div>
           </div>
         </div>
 

@@ -45,7 +45,7 @@ class HeroSectionViewSet(viewsets.ModelViewSet):
     serializer_class = HeroSectionSerializer
     permission_classes = [HeroSectionPermission]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['is_active', 'layout']
+    filterset_fields = ['layout']
     search_fields = ['title', 'subtitle']
     ordering_fields = ['created_at', 'start_date']
     ordering = ['-created_at']
@@ -65,17 +65,13 @@ class SocialFeedConfigViewSet(viewsets.ModelViewSet):
     serializer_class = SocialFeedConfigSerializer
     permission_classes = [SocialFeedConfigPermission]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['platform', 'is_active']
+    filterset_fields = ['platform']
     search_fields = ['handle_or_page_id']
     ordering_fields = ['platform', 'created_at']
     ordering = ['platform', 'created_at']
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        
-        # For public access, only show active configs
-        if not self.request.user.is_authenticated:
-            queryset = queryset.filter(is_active=True)
         
         return queryset
 
@@ -85,21 +81,13 @@ class PhotoViewSet(viewsets.ModelViewSet):
     serializer_class = PhotoSerializer
     permission_classes = [PhotoPermission]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['year', 'is_active']
+    filterset_fields = ['year']
     search_fields = ['title', 'description']
     ordering_fields = ['date', 'year', 'created_at']
     ordering = ['-date', '-created_at']
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        
-        # For public access, only show active photos
-        if not self.request.user.is_authenticated:
-            queryset = queryset.filter(is_active=True)
-        elif not (self.request.user.is_superuser or 
-                  self.request.user.has_perm('content.manage_photo')):
-            # Non-admin users only see active photos
-            queryset = queryset.filter(is_active=True)
         
         return queryset
 
@@ -123,8 +111,6 @@ class PhotoViewSet(viewsets.ModelViewSet):
         year = request.data.get('year')
         title = request.data.get('title', '')
         description = request.data.get('description', '')
-        is_active = request.data.get('is_active', 'true').lower() == 'true'
-        
         if not images:
             return Response(
                 {'detail': 'No images provided'},
@@ -160,7 +146,6 @@ class PhotoViewSet(viewsets.ModelViewSet):
                     'year': year,
                     'title': f"{title} {idx + 1}" if title else f"Photo {idx + 1}",
                     'description': description,
-                    'is_active': is_active,
                 }
                 serializer = self.get_serializer(data=photo_data)
                 serializer.is_valid(raise_exception=True)

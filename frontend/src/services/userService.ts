@@ -8,9 +8,7 @@ export interface User {
   first_name?: string;
   father_name?: string;
   last_name?: string;
-  is_staff: boolean;
   is_superuser: boolean;
-  is_active: boolean;
   groups?: number[];
   groups_detail?: Array<{
     id: number;
@@ -35,9 +33,8 @@ export interface UserListResponse {
 export const userService = {
   async getUsers(params?: {
     page?: number;
+    page_size?: number;
     search?: string;
-    is_staff?: boolean;
-    is_active?: boolean;
     group?: number;
   }): Promise<UserListResponse> {
     const response = await apiClient.get<UserListResponse>(API_ENDPOINTS.USERS, { params });
@@ -56,9 +53,7 @@ export const userService = {
     father_name?: string;
     last_name?: string;
     password: string;
-    is_staff?: boolean;
     is_superuser?: boolean;
-    is_active?: boolean;
     groups?: number[];
   }): Promise<User> {
     const response = await apiClient.post<User>(API_ENDPOINTS.USERS, user);

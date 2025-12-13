@@ -15,7 +15,7 @@ class UserProfileInline(admin.StackedInline):
 
 class UserAdmin(BaseUserAdmin):
     inlines = (UserProfileInline,)
-    list_display = ('username', 'email', 'first_name', 'get_father_name', 'last_name', 'is_staff', 'is_active', 'is_superuser')
+    list_display = ('username', 'email', 'first_name', 'get_father_name', 'last_name', 'is_superuser')
     
     def get_father_name(self, obj):
         """Get father's name from user profile"""

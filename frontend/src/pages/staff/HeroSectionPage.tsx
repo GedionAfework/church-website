@@ -17,7 +17,6 @@ const HeroSectionPage: React.FC = () => {
     button_link: '',
     start_date: '',
     end_date: '',
-    is_active: true,
     layout: 'classic',
     text_alignment: 'center',
     button_variant: 'primary',
@@ -56,7 +55,6 @@ const HeroSectionPage: React.FC = () => {
       button_link: '',
       start_date: '',
       end_date: '',
-      is_active: true,
       layout: 'classic',
       text_alignment: 'center',
       button_variant: 'primary',
@@ -78,7 +76,6 @@ const HeroSectionPage: React.FC = () => {
       button_link: hero.button_link || '',
       start_date: hero.start_date ? hero.start_date.split('T')[0] + 'T' + hero.start_date.split('T')[1]?.substring(0, 5) : '',
       end_date: hero.end_date ? hero.end_date.split('T')[0] + 'T' + hero.end_date.split('T')[1]?.substring(0, 5) : '',
-      is_active: hero.is_active,
       layout: hero.layout,
       text_alignment: hero.text_alignment,
       button_variant: hero.button_variant,
@@ -316,16 +313,6 @@ const HeroSectionPage: React.FC = () => {
               placeholder="e.g., custom-class another-class"
             />
           </div>
-          <div className="form-group checkbox">
-            <label>
-              <input
-                type="checkbox"
-                checked={formData.is_active}
-                onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-              />
-              {t('dashboard.active')}
-            </label>
-          </div>
           <div className="form-actions">
             <button type="submit">{t('common.save')}</button>
             <button type="button" onClick={handleCancel}>
@@ -358,7 +345,6 @@ const HeroSectionPage: React.FC = () => {
                   <th>{t('hero.layout') || 'Layout'}</th>
                   <th>{t('hero.startDate') || 'Start Date'}</th>
                   <th>{t('hero.endDate') || 'End Date'}</th>
-                  <th>{t('dashboard.active')}</th>
                   <th>{t('common.actions')}</th>
                 </tr>
               </thead>
@@ -385,9 +371,6 @@ const HeroSectionPage: React.FC = () => {
                           : '-'}
                       </td>
                       <td>
-                        <span className={`badge ${hero.is_active ? 'active' : 'inactive'}`}>
-                          {hero.is_active ? t('dashboard.active') : t('common.inactive')}
-                        </span>
                       </td>
                       <td>
                         <button

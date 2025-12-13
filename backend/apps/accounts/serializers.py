@@ -71,7 +71,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 'username', 'email', 'first_name', 'father_name', 'father_name_input', 'last_name',
-            'is_staff', 'is_superuser', 'is_active', 'date_joined',
+            'is_superuser', 'date_joined',
             'last_login', 'groups', 'groups_detail', 'password', 'member_id', 'member_name'
         ]
         read_only_fields = ['id', 'date_joined', 'last_login']
@@ -139,8 +139,14 @@ class UserSerializer(serializers.ModelSerializer):
             except Member.DoesNotExist:
                 raise serializers.ValidationError({'member_id': 'Member not found'})
         
+        # Remove is_staff and is_active from validated_data before creating user
+        validated_data.pop('is_staff', None)
+        validated_data.pop('is_active', None)
+        
         user = User.objects.create_user(**validated_data)
         user.set_password(password)
+        user.is_staff = False  # Always False
+        user.is_active = True  # Always True
         user.save()
         
         # Create user profile with father_name
@@ -166,10 +172,14 @@ class UserSerializer(serializers.ModelSerializer):
         father_name = self.initial_data.get('father_name', None) or self.initial_data.get('father_name_input', None)  # Get from initial_data
         member_id = validated_data.pop('member_id', None)
         
-        # Update user fields (exclude member_id)
+        # Update user fields (exclude member_id, is_staff, is_active)
         for attr, value in validated_data.items():
-            if attr != 'member_id':
+            if attr not in ['member_id', 'is_staff', 'is_active']:
                 setattr(instance, attr, value)
+        
+        # Always set is_staff=False and is_active=True
+        instance.is_staff = False
+        instance.is_active = True
         
         # Update password if provided
         if password:
@@ -217,7 +227,7 @@ class UserListSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 'username', 'email', 'first_name', 'father_name', 'last_name',
-            'is_staff', 'is_superuser', 'is_active', 'groups_count', 'groups_names'
+            'is_superuser', 'groups_count', 'groups_names'
         ]
     
     def get_father_name(self, obj):

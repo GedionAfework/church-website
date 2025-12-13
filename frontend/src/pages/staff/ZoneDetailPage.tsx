@@ -69,7 +69,7 @@ const ZoneDetailPage: React.FC = () => {
     try {
       // Fetch all members that are not in any zone or are in this zone
       const response = await apiClient.get(API_ENDPOINTS.MEMBERS, {
-        params: { page_size: 1000, is_active: true },
+        params: { page_size: 1000 },
       });
       const allMembersData = response.data.results || [];
       // Filter to show only members without a zone or members in this zone
@@ -270,14 +270,6 @@ const ZoneDetailPage: React.FC = () => {
             <div className="detail-item">
               <label>{t('zones.locationHint')}</label>
               <p>{zone.location_hint || '-'}</p>
-            </div>
-            <div className="detail-item">
-              <label>{t('dashboard.active')}</label>
-              <p>
-                <span className={`badge ${zone.is_active ? 'active' : 'inactive'}`}>
-                  {zone.is_active ? t('dashboard.active') : t('common.inactive')}
-                </span>
-              </p>
             </div>
           </div>
         </div>

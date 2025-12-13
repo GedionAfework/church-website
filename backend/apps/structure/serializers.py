@@ -11,13 +11,13 @@ class ZoneSerializer(serializers.ModelSerializer):
         model = Zone
         fields = [
             'id', 'name', 'description', 'location_hint',
-            'is_active', 'members_count', 'zone_leader_name',
+            'members_count', 'zone_leader_name',
             'created_at', 'updated_at'
         ]
         read_only_fields = ['created_at', 'updated_at']
 
     def get_members_count(self, obj):
-        return obj.members.filter(is_active=True).count()
+        return obj.members.count()
 
     def get_zone_leader_name(self, obj):
         if hasattr(obj, 'zone_leader'):
@@ -44,14 +44,14 @@ class ServiceDivisionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceDivision
         fields = [
-            'id', 'name', 'description', 'is_active',
+            'id', 'name', 'description',
             'members_count', 'service_leader_name',
             'created_at', 'updated_at'
         ]
         read_only_fields = ['created_at', 'updated_at']
 
     def get_members_count(self, obj):
-        return obj.members.filter(is_active=True).count()
+        return obj.members.count()
 
     def get_service_leader_name(self, obj):
         if hasattr(obj, 'service_leader'):
@@ -95,13 +95,13 @@ class BibleStudyGroupSerializer(serializers.ModelSerializer):
     members_detail = MemberSerializer(source='members', many=True, read_only=True)
     members = serializers.PrimaryKeyRelatedField(
         many=True,
-        queryset=Member.objects.filter(is_active=True),
+        queryset=Member.objects.all(),
         required=False
     )
     leaders_detail = MemberSerializer(source='leaders', many=True, read_only=True)
     leaders = serializers.PrimaryKeyRelatedField(
         many=True,
-        queryset=Member.objects.filter(is_active=True),
+        queryset=Member.objects.all(),
         required=False
     )
     members_count = serializers.SerializerMethodField()
@@ -140,7 +140,7 @@ class BibleStudyGroupSerializer(serializers.ModelSerializer):
         
         if zone:
             from apps.members.models import Member
-            zone_members = Member.objects.filter(zone=zone, is_active=True)
+            zone_members = Member.objects.filter(zone=zone)
             self.fields['members'].queryset = zone_members
             self.fields['leaders'].queryset = zone_members
 

@@ -33,8 +33,8 @@ class BlogPostAdmin(admin.ModelAdmin):
 
 @admin.register(HeroSection)
 class HeroSectionAdmin(admin.ModelAdmin):
-    list_display = ['title', 'is_active', 'start_date', 'end_date', 'created_at']
-    list_filter = ['is_active', 'layout', 'text_alignment']
+    list_display = ['title', 'start_date', 'end_date', 'created_at']
+    list_filter = ['layout', 'text_alignment']
     search_fields = ['title', 'subtitle']
     readonly_fields = ['created_at', 'updated_at']
     
@@ -61,8 +61,8 @@ class HeroSectionAdmin(admin.ModelAdmin):
 
 @admin.register(SocialFeedConfig)
 class SocialFeedConfigAdmin(admin.ModelAdmin):
-    list_display = ['platform', 'handle_or_page_id', 'is_active', 'created_at']
-    list_filter = ['platform', 'is_active']
+    list_display = ['platform', 'handle_or_page_id', 'created_at']
+    list_filter = ['platform']
     search_fields = ['handle_or_page_id']
     readonly_fields = ['created_at', 'updated_at']
     
@@ -89,8 +89,8 @@ class SocialFeedConfigAdmin(admin.ModelAdmin):
 
 @admin.register(Photo)
 class PhotoAdmin(admin.ModelAdmin):
-    list_display = ['title', 'date', 'year', 'is_active', 'created_at']
-    list_filter = ['year', 'is_active', 'date']
+    list_display = ['title', 'date', 'year', 'created_at']
+    list_filter = ['year', 'date']
     search_fields = ['title', 'description']
     readonly_fields = ['created_at', 'updated_at']
     date_hierarchy = 'date'

@@ -42,7 +42,6 @@ class Member(models.Model):
         related_name='members'
     )
     photo = models.ImageField(upload_to='members/photos/', null=True, blank=True)
-    is_active = models.BooleanField(default=True)
     is_staff_member = models.BooleanField(default=False)
     staff_title = models.CharField(max_length=150, blank=True)
     staff_bio = models.TextField(blank=True)

@@ -4,8 +4,8 @@ from .models import Zone, ZoneGroup, ServiceDivision, ZoneLeader, ServiceLeader
 
 @admin.register(Zone)
 class ZoneAdmin(admin.ModelAdmin):
-    list_display = ['name', 'is_active', 'created_at']
-    list_filter = ['is_active']
+    list_display = ['name', 'created_at']
+    list_filter = []
     search_fields = ['name', 'description']
     readonly_fields = ['created_at', 'updated_at']
     
@@ -78,8 +78,8 @@ class ZoneGroupAdmin(admin.ModelAdmin):
 
 @admin.register(ServiceDivision)
 class ServiceDivisionAdmin(admin.ModelAdmin):
-    list_display = ['name', 'is_active', 'created_at']
-    list_filter = ['is_active']
+    list_display = ['name', 'created_at']
+    list_filter = []
     search_fields = ['name', 'description']
     readonly_fields = ['created_at', 'updated_at']
     

@@ -103,7 +103,6 @@ const DashboardPage: React.FC = () => {
             <StatCard
               title={t('dashboard.members')}
               value={stats.members.total}
-              subtitle={`${t('dashboard.active')}: ${stats.members.active}`}
             />
             <StatCard
               title={t('dashboard.families')}
@@ -119,8 +118,7 @@ const DashboardPage: React.FC = () => {
             />
             <StatCard
               title={t('content.heroSection')}
-              value={stats.hero_sections.active}
-              subtitle={t('dashboard.active')}
+              value={stats.hero_sections.total}
             />
           </div>
 
@@ -130,7 +128,7 @@ const DashboardPage: React.FC = () => {
                 title={`${t('dashboard.recent')} ${t('dashboard.members')}`}
                 items={stats.members.recent}
                 onItemClick={handleMemberClick}
-                getItemLabel={(item) => `${item.first_name} ${item.last_name}`}
+                getItemLabel={(item) => `${item.first_name} ${item.father_name} ${item.last_name}`}
               />
             </div>
 

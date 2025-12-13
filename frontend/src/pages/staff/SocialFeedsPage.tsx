@@ -12,7 +12,6 @@ const SocialFeedsPage: React.FC = () => {
     platform: 'instagram' as 'instagram' | 'facebook' | 'youtube',
     handle_or_page_id: '',
     api_key_or_token: '',
-    is_active: true,
   });
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -40,7 +39,6 @@ const SocialFeedsPage: React.FC = () => {
       platform: 'instagram',
       handle_or_page_id: '',
       api_key_or_token: '',
-      is_active: true,
     });
     setShowForm(true);
   };
@@ -51,7 +49,6 @@ const SocialFeedsPage: React.FC = () => {
       platform: feed.platform,
       handle_or_page_id: feed.handle_or_page_id,
       api_key_or_token: feed.api_key_or_token || '',
-      is_active: feed.is_active,
     });
     setShowForm(true);
   };
@@ -135,16 +132,6 @@ const SocialFeedsPage: React.FC = () => {
               placeholder="Optional"
             />
           </div>
-          <div className="form-group checkbox">
-            <label>
-              <input
-                type="checkbox"
-                checked={formData.is_active}
-                onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-              />
-              {t('dashboard.active')}
-            </label>
-          </div>
           <div className="form-actions">
             <button type="submit">{t('common.save')}</button>
             <button type="button" onClick={handleCancel}>
@@ -175,7 +162,6 @@ const SocialFeedsPage: React.FC = () => {
                 <tr>
                   <th>{t('socialFeeds.platform') || 'Platform'}</th>
                   <th>{t('socialFeeds.handleOrPageId') || 'Handle/Page ID'}</th>
-                  <th>{t('dashboard.active')}</th>
                   <th>{t('common.actions')}</th>
                 </tr>
               </thead>
@@ -192,9 +178,6 @@ const SocialFeedsPage: React.FC = () => {
                       <td><strong>{feed.platform}</strong></td>
                       <td>{feed.handle_or_page_id}</td>
                       <td>
-                        <span className={`badge ${feed.is_active ? 'active' : 'inactive'}`}>
-                          {feed.is_active ? t('dashboard.active') : t('common.inactive')}
-                        </span>
                       </td>
                       <td>
                         <button

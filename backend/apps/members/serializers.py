@@ -14,7 +14,7 @@ class MemberSerializer(serializers.ModelSerializer):
             'id', 'user', 'first_name', 'father_name', 'last_name', 'full_name',
             'gender', 'date_of_birth', 'age', 'use_age_instead_of_birthdate', 'phone', 'email', 'address',
             'zone', 'zone_name', 'service_division', 'service_division_name',
-            'photo', 'is_active', 'is_staff_member', 'staff_title',
+            'photo', 'is_staff_member', 'staff_title',
             'staff_bio', 'show_in_staff_page', 'created_at', 'updated_at'
         ]
         read_only_fields = ['created_at', 'updated_at']

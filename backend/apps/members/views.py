@@ -15,7 +15,7 @@ class MemberViewSet(viewsets.ModelViewSet):
     serializer_class = MemberSerializer
     permission_classes = [MemberPermission]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['zone', 'service_division', 'is_active', 'is_staff_member']
+    filterset_fields = ['zone', 'service_division', 'is_staff_member']
     search_fields = ['first_name', 'last_name', 'email', 'phone']
     ordering_fields = ['first_name', 'last_name', 'created_at']
     ordering = ['last_name', 'first_name']

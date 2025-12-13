@@ -12,7 +12,6 @@ const ServiceDivisionsPage: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    is_active: true,
   });
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -39,7 +38,7 @@ const ServiceDivisionsPage: React.FC = () => {
 
   const handleCreate = () => {
     setEditingDivision(undefined);
-    setFormData({ name: '', description: '', is_active: true });
+    setFormData({ name: '', description: '' });
     setShowForm(true);
   };
 
@@ -48,7 +47,6 @@ const ServiceDivisionsPage: React.FC = () => {
     setFormData({
       name: division.name,
       description: division.description || '',
-      is_active: division.is_active,
     });
     setShowForm(true);
   };
@@ -118,16 +116,6 @@ const ServiceDivisionsPage: React.FC = () => {
               rows={4}
             />
           </div>
-          <div className="form-group checkbox">
-            <label>
-              <input
-                type="checkbox"
-                checked={formData.is_active}
-                onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-              />
-              {t('dashboard.active')}
-            </label>
-          </div>
           <div className="form-actions">
             <button type="submit">{t('common.save')}</button>
             <button type="button" onClick={handleCancel}>
@@ -171,7 +159,6 @@ const ServiceDivisionsPage: React.FC = () => {
                 <tr>
                   <th>{t('serviceDivisions.name') || 'Name'}</th>
                   <th>{t('zones.description')}</th>
-                  <th>{t('dashboard.active')}</th>
                   <th>{t('common.actions')}</th>
                 </tr>
               </thead>
@@ -196,9 +183,6 @@ const ServiceDivisionsPage: React.FC = () => {
                       <td><strong>{division.name}</strong></td>
                       <td>{division.description || '-'}</td>
                       <td>
-                        <span className={`badge ${division.is_active ? 'active' : 'inactive'}`}>
-                          {division.is_active ? t('dashboard.active') : t('common.inactive')}
-                        </span>
                       </td>
                       <td onClick={(e) => e.stopPropagation()}>
                         <button

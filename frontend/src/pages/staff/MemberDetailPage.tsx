@@ -162,14 +162,6 @@ const MemberDetailPage: React.FC = () => {
                 ) : '-'}
               </p>
             </div>
-            <div className="detail-item">
-              <label>{t('members.isActive')}</label>
-              <p>
-                <span className={`badge ${member.is_active ? 'active' : 'inactive'}`}>
-                  {member.is_active ? t('dashboard.active') : t('common.inactive')}
-                </span>
-              </p>
-            </div>
           </div>
         </div>
 

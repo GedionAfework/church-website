@@ -86,7 +86,6 @@ class HeroSection(models.Model):
     button_link = models.CharField(max_length=255, blank=True)
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
-    is_active = models.BooleanField(default=True)
     layout = models.CharField(
         max_length=20,
         choices=LAYOUT_CHOICES,
@@ -125,20 +124,19 @@ class HeroSection(models.Model):
 
     @classmethod
     def get_active_hero(cls):
-        """Get the currently active hero section based on date range and is_active flag"""
+        """Get the currently active hero section based on date range"""
         from django.utils import timezone
         now = timezone.now()
         
-        # Try to find an active hero within date range
+        # Try to find a hero within date range
         hero = cls.objects.filter(
-            is_active=True,
             start_date__lte=now,
             end_date__gte=now
         ).first()
         
-        # If no hero with date range, get any active hero
+        # If no hero with date range, get the most recent one
         if not hero:
-            hero = cls.objects.filter(is_active=True).first()
+            hero = cls.objects.order_by('-created_at').first()
         
         return hero
 
@@ -156,7 +154,6 @@ class SocialFeedConfig(models.Model):
     )
     handle_or_page_id = models.CharField(max_length=255)
     api_key_or_token = models.CharField(max_length=255, blank=True)
-    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -191,10 +188,6 @@ class Photo(models.Model):
     description = models.TextField(
         blank=True,
         help_text="Optional description of the photo"
-    )
-    is_active = models.BooleanField(
-        default=True,
-        help_text="Whether this photo should be displayed"
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

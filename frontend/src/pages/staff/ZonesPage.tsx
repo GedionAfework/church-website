@@ -13,7 +13,6 @@ const ZonesPage: React.FC = () => {
     name: '',
     description: '',
     location_hint: '',
-    is_active: true,
   });
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -40,7 +39,7 @@ const ZonesPage: React.FC = () => {
 
   const handleCreate = () => {
     setEditingZone(undefined);
-    setFormData({ name: '', description: '', location_hint: '', is_active: true });
+    setFormData({ name: '', description: '', location_hint: '' });
     setShowForm(true);
   };
 
@@ -50,7 +49,6 @@ const ZonesPage: React.FC = () => {
       name: zone.name,
       description: zone.description || '',
       location_hint: zone.location_hint || '',
-      is_active: zone.is_active,
     });
     setShowForm(true);
   };
@@ -124,16 +122,6 @@ const ZonesPage: React.FC = () => {
               onChange={(e) => setFormData({ ...formData, location_hint: e.target.value })}
             />
           </div>
-          <div className="form-group checkbox">
-            <label>
-              <input
-                type="checkbox"
-                checked={formData.is_active}
-                onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-              />
-              {t('dashboard.active')}
-            </label>
-          </div>
           <div className="form-actions">
             <button type="submit">{t('common.save')}</button>
             <button type="button" onClick={handleCancel}>
@@ -178,7 +166,6 @@ const ZonesPage: React.FC = () => {
                   <th>{t('zones.name')}</th>
                   <th>{t('zones.description')}</th>
                   <th>{t('zones.locationHint')}</th>
-                  <th>{t('dashboard.active')}</th>
                   <th>{t('common.actions')}</th>
                 </tr>
               </thead>
@@ -203,11 +190,6 @@ const ZonesPage: React.FC = () => {
                       <td><strong>{zone.name}</strong></td>
                       <td>{zone.description || '-'}</td>
                       <td>{zone.location_hint || '-'}</td>
-                      <td>
-                        <span className={`badge ${zone.is_active ? 'active' : 'inactive'}`}>
-                          {zone.is_active ? t('dashboard.active') : t('common.inactive')}
-                        </span>
-                      </td>
                       <td onClick={(e) => e.stopPropagation()}>
                         <button
                           onClick={() => handleEdit(zone)}

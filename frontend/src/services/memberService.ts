@@ -18,7 +18,6 @@ export interface Member {
   zone?: number;
   service_division?: number;
   photo?: string | File;
-  is_active: boolean;
   is_staff_member: boolean;
   staff_title?: string;
   staff_bio?: string;
@@ -37,10 +36,11 @@ export interface MemberListResponse {
 export const memberService = {
   async getMembers(params?: {
     page?: number;
+    page_size?: number;
     search?: string;
     zone?: number;
     service_division?: number;
-    is_active?: boolean;
+    is_staff_member?: boolean;
   }): Promise<MemberListResponse> {
     const response = await apiClient.get<MemberListResponse>(API_ENDPOINTS.MEMBERS, { params });
     return response.data;

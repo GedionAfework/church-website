@@ -45,6 +45,7 @@ export interface AvailablePermissionsResponse {
 export const roleService = {
   async getRoles(params?: {
     page?: number;
+    page_size?: number;
     search?: string;
   }): Promise<RoleListResponse> {
     const response = await apiClient.get<RoleListResponse>(API_ENDPOINTS.GROUPS, { params });

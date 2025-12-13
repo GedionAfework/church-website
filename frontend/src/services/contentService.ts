@@ -24,7 +24,6 @@ export interface HeroSection {
   button_link?: string;
   start_date?: string;
   end_date?: string;
-  is_active: boolean;
   layout: 'classic' | 'left_image' | 'right_image' | 'overlay_dark' | 'overlay_light';
   text_alignment: 'left' | 'center' | 'right';
   button_variant: 'primary' | 'outline' | 'ghost';
@@ -41,7 +40,6 @@ export interface SocialFeedConfig {
   platform: 'instagram' | 'facebook' | 'youtube';
   handle_or_page_id: string;
   api_key_or_token?: string;
-  is_active: boolean;
   created_at?: string;
   updated_at?: string;
 }
@@ -53,7 +51,6 @@ export interface Photo {
   year: number;
   title?: string;
   description?: string;
-  is_active: boolean;
   created_at?: string;
   updated_at?: string;
 }
@@ -133,7 +130,6 @@ export const contentService = {
   // Hero Sections
   async getHeroSections(params?: {
     page?: number;
-    is_active?: boolean;
   }): Promise<ListResponse<HeroSection>> {
     const response = await apiClient.get<ListResponse<HeroSection>>(API_ENDPOINTS.HERO_SECTIONS, { params });
     return response.data;
@@ -193,7 +189,6 @@ export const contentService = {
   async getSocialFeeds(params?: {
     page?: number;
     platform?: string;
-    is_active?: boolean;
   }): Promise<ListResponse<SocialFeedConfig>> {
     const response = await apiClient.get<ListResponse<SocialFeedConfig>>(API_ENDPOINTS.SOCIAL_FEEDS, { params });
     return response.data;
@@ -217,7 +212,6 @@ export const contentService = {
   async getPhotos(params?: {
     page?: number;
     year?: number;
-    is_active?: boolean;
   }): Promise<ListResponse<Photo>> {
     const response = await apiClient.get<ListResponse<Photo>>(API_ENDPOINTS.PHOTOS, { params });
     return response.data;

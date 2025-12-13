@@ -6,7 +6,6 @@ export interface Zone {
   name: string;
   description?: string;
   location_hint?: string;
-  is_active: boolean;
   created_at?: string;
   updated_at?: string;
 }
@@ -22,7 +21,6 @@ export interface ServiceDivision {
   id?: number;
   name: string;
   description?: string;
-  is_active: boolean;
   created_at?: string;
   updated_at?: string;
 }

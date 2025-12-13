@@ -46,7 +46,7 @@ class HeroSectionSerializer(serializers.ModelSerializer):
         model = HeroSection
         fields = [
             'id', 'title', 'subtitle', 'background_image', 'button_text',
-            'button_link', 'start_date', 'end_date', 'is_active',
+            'button_link', 'start_date', 'end_date',
             'layout', 'layout_display', 'text_alignment', 'text_alignment_display',
             'button_variant', 'button_variant_display', 'title_color',
             'subtitle_color', 'overlay_opacity', 'extra_classes',
@@ -72,7 +72,7 @@ class SocialFeedConfigSerializer(serializers.ModelSerializer):
         model = SocialFeedConfig
         fields = [
             'id', 'platform', 'platform_display', 'handle_or_page_id',
-            'api_key_or_token', 'is_active', 'created_at', 'updated_at'
+            'api_key_or_token', 'created_at', 'updated_at'
         ]
         read_only_fields = ['created_at', 'updated_at']
         extra_kwargs = {
@@ -87,7 +87,7 @@ class PhotoSerializer(serializers.ModelSerializer):
         model = Photo
         fields = [
             'id', 'image', 'date', 'year', 'title', 'description',
-            'is_active', 'created_at', 'updated_at'
+            'created_at', 'updated_at'
         ]
         read_only_fields = ['created_at', 'updated_at']
     

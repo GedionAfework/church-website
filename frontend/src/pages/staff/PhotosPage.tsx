@@ -91,7 +91,6 @@ const PhotosPage: React.FC = () => {
       if (bulkUploadMode && images.length > 0) {
         const bulkFormData = new FormData();
         bulkFormData.append('date', formData.date);
-        bulkFormData.append('is_active', 'true');
         
         // Append all images
         images.forEach((img) => {
@@ -120,7 +119,6 @@ const PhotosPage: React.FC = () => {
       
       formDataToSend.append('date', formData.date);
       // Year will be auto-populated from date in the backend
-      formDataToSend.append('is_active', 'true'); // Always active
       
       if (image) {
         formDataToSend.append('image', image);

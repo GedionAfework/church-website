@@ -140,10 +140,6 @@ class UserViewSet(viewsets.ModelViewSet):
         if is_staff is not None:
             queryset = queryset.filter(is_staff=is_staff.lower() == 'true')
         
-        # Filter by is_active if requested
-        is_active = self.request.query_params.get('is_active', None)
-        if is_active is not None:
-            queryset = queryset.filter(is_active=is_active.lower() == 'true')
         
         # Filter by group if requested
         group = self.request.query_params.get('group', None)
@@ -232,7 +228,6 @@ def dashboard_stats(request):
     
     # Get upcoming hero sections
     upcoming_heros = HeroSection.objects.filter(
-        is_active=True,
         start_date__isnull=False
     ).order_by('start_date')[:3]
     upcoming_heros_data = HeroSectionSerializer(upcoming_heros, many=True).data
@@ -240,7 +235,6 @@ def dashboard_stats(request):
     stats = {
         'members': {
             'total': Member.objects.count(),
-            'active': Member.objects.filter(is_active=True).count(),
             'recent': recent_members_data
         },
         'families': {
@@ -248,13 +242,13 @@ def dashboard_stats(request):
             'recent': recent_families_data
         },
         'zones': {
-            'total': Zone.objects.filter(is_active=True).count(),
+            'total': Zone.objects.count(),
         },
         'service_divisions': {
-            'total': ServiceDivision.objects.filter(is_active=True).count(),
+            'total': ServiceDivision.objects.count(),
         },
         'hero_sections': {
-            'active': HeroSection.objects.filter(is_active=True).count(),
+            'total': HeroSection.objects.count(),
             'upcoming': upcoming_heros_data
         }
     }

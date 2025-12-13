@@ -30,7 +30,6 @@ const StaffPage: React.FC = () => {
         params: {
           is_staff_member: true,
           show_in_staff_page: true,
-          is_active: true,
           page_size: 100,
         },
       });

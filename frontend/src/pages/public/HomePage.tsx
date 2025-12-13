@@ -11,7 +11,6 @@ interface SocialFeedConfig {
   platform: 'instagram' | 'facebook' | 'youtube';
   platform_display: string;
   handle_or_page_id: string;
-  is_active: boolean;
 }
 
 const HomePage: React.FC = () => {
@@ -50,7 +49,7 @@ const HomePage: React.FC = () => {
   const fetchSocialFeeds = async () => {
     try {
       const response = await apiClient.get(API_ENDPOINTS.SOCIAL_FEEDS, {
-        params: { is_active: true, page_size: 100 },
+        params: { page_size: 100 },
       });
       setSocialFeeds(response.data.results || []);
     } catch (error) {
