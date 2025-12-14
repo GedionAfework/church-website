@@ -40,7 +40,10 @@ function App() {
       <AlertProvider>
         <Router>
         <Routes>
-          {/* Public routes */}
+          {/* Staff login route - must come before /staff to avoid conflicts */}
+          <Route path="/staff/login" element={<LoginPage />} />
+          
+          {/* Public routes - must come before staff admin routes */}
           <Route path="/" element={<PublicLayout />}>
             <Route index element={<HomePage />} />
             <Route path="blog" element={<BlogListPage />} />
@@ -49,8 +52,8 @@ function App() {
             <Route path="staff" element={<StaffPage />} />
           </Route>
 
-          {/* Staff routes */}
-          <Route path="/staff/login" element={<LoginPage />} />
+          {/* Staff admin routes - matches /staff/dashboard, /staff/members, etc. */}
+          {/* Note: /staff itself is handled by the public route above, so no index route here */}
           <Route
             path="/staff"
             element={
@@ -59,7 +62,6 @@ function App() {
               </ProtectedRoute>
             }
           >
-            <Route index element={<Navigate to="/staff/dashboard" replace />} />
             <Route 
               path="dashboard" 
               element={
