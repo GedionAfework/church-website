@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAlert } from '../../contexts/AlertContext';
 import { structureService, type Zone, type ZoneLeader } from '../../services/structureService';
 import { bibleStudyGroupService, type BibleStudyGroup } from '../../services/bibleStudyGroupService';
 import { memberService, type Member } from '../../services/memberService';
@@ -10,6 +11,7 @@ import { API_ENDPOINTS } from '../../config/api';
 const ZoneDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
+  const { confirm, showError, showSuccess, showWarning } = useAlert();
   const [zone, setZone] = useState<Zone | null>(null);
   const [members, setMembers] = useState<any[]>([]);
   const [allMembers, setAllMembers] = useState<Member[]>([]); // All members for dropdown
@@ -109,31 +111,30 @@ const ZoneDetailPage: React.FC = () => {
     } catch (error: any) {
       console.error('Error adding member to zone:', error);
       const errorMsg = error.response?.data?.detail || error.response?.data?.zone?.[0] || t('zones.errorAddingMember') || 'Error adding member to zone';
-      alert(errorMsg);
+      showError(errorMsg);
     }
   };
 
   const handleRemoveMember = async (memberId: number) => {
-    if (!window.confirm(t('zones.confirmRemoveMember') || 'Are you sure you want to remove this member from the zone?')) {
-      return;
-    }
-    
-    try {
-      // Remove member from zone by setting zone to null
-      await memberService.updateMember(memberId, { zone: null });
-      await fetchMembers();
-      await fetchAllMembers();
-      // If this member was the leader, remove them as leader
-      if (zoneLeader && ((zoneLeader as any).member === memberId || (zoneLeader as any).member_id === memberId)) {
-        if (zoneLeader.id) {
-          await structureService.deleteZoneLeader(zoneLeader.id);
-          await fetchZoneLeader();
+    confirm(t('zones.confirmRemoveMember') || 'Are you sure you want to remove this member from the zone?', async () => {
+      try {
+        // Remove member from zone by setting zone to null
+        await memberService.updateMember(memberId, { zone: null });
+        showSuccess(t('zones.memberRemoved') || 'Member removed from zone successfully');
+        await fetchMembers();
+        await fetchAllMembers();
+        // If this member was the leader, remove them as leader
+        if (zoneLeader && ((zoneLeader as any).member === memberId || (zoneLeader as any).member_id === memberId)) {
+          if (zoneLeader.id) {
+            await structureService.deleteZoneLeader(zoneLeader.id);
+            await fetchZoneLeader();
+          }
         }
+      } catch (error: any) {
+        console.error('Error removing member from zone:', error);
+        showError(error.response?.data?.detail || t('common.error') || 'An error occurred');
       }
-    } catch (error) {
-      console.error('Error removing member from zone:', error);
-      alert(t('common.error'));
-    }
+    });
   };
 
   const handleSetLeader = async () => {
@@ -145,15 +146,17 @@ const ZoneDetailPage: React.FC = () => {
       // Check if member is in this zone
       const member = members.find(m => m.id === memberId);
       if (!member) {
-        alert(t('zones.memberNotInZone') || 'Member must be in this zone to be a leader');
+        showWarning(t('zones.memberNotInZone') || 'Member must be in this zone to be a leader');
         return;
       }
       
       // If there's already a leader, update it; otherwise create new
       if (zoneLeader?.id) {
         await structureService.updateZoneLeader(zoneLeader.id, { member_id: memberId });
+        showSuccess(t('zones.leaderUpdated') || 'Zone leader updated successfully');
       } else {
         await structureService.createZoneLeader({ zone: Number(id), member_id: memberId });
+        showSuccess(t('zones.leaderSet') || 'Zone leader set successfully');
       }
       
       setSelectedLeaderId('');
@@ -161,24 +164,23 @@ const ZoneDetailPage: React.FC = () => {
     } catch (error: any) {
       console.error('Error setting zone leader:', error);
       const errorMsg = error.response?.data?.detail || t('zones.errorSettingLeader') || 'Error setting zone leader';
-      alert(errorMsg);
+      showError(errorMsg);
     }
   };
 
   const handleRemoveLeader = async () => {
     if (!zoneLeader?.id) return;
     
-    if (!window.confirm(t('zones.confirmRemoveLeader') || 'Are you sure you want to remove this leader?')) {
-      return;
-    }
-    
-    try {
-      await structureService.deleteZoneLeader(zoneLeader.id);
-      await fetchZoneLeader();
-    } catch (error) {
-      console.error('Error removing zone leader:', error);
-      alert(t('common.error'));
-    }
+    confirm(t('zones.confirmRemoveLeader') || 'Are you sure you want to remove this leader?', async () => {
+      try {
+        await structureService.deleteZoneLeader(zoneLeader.id);
+        showSuccess(t('zones.leaderRemoved') || 'Zone leader removed successfully');
+        await fetchZoneLeader();
+      } catch (error: any) {
+        console.error('Error removing zone leader:', error);
+        showError(error.response?.data?.detail || t('common.error') || 'An error occurred');
+      }
+    });
   };
 
   const handleCreateBibleStudy = () => {
@@ -192,34 +194,36 @@ const ZoneDetailPage: React.FC = () => {
   };
 
   const handleDeleteBibleStudy = async (groupId: number) => {
-    if (!window.confirm(t('zones.confirmDeleteBibleStudy') || 'Are you sure you want to delete this Bible Study Group?')) {
-      return;
-    }
-    try {
-      await bibleStudyGroupService.deleteBibleStudyGroup(groupId);
-      fetchBibleStudyGroups();
-    } catch (error) {
-      console.error('Error deleting bible study group:', error);
-      alert(t('common.error'));
-    }
+    confirm(t('zones.confirmDeleteBibleStudy') || 'Are you sure you want to delete this Bible Study Group?', async () => {
+      try {
+        await bibleStudyGroupService.deleteBibleStudyGroup(groupId);
+        showSuccess(t('zones.bibleStudyDeleted') || 'Bible study group deleted successfully');
+        fetchBibleStudyGroups();
+      } catch (error: any) {
+        console.error('Error deleting bible study group:', error);
+        showError(error.response?.data?.detail || t('common.error') || 'An error occurred');
+      }
+    });
   };
 
   const handleBibleStudySubmit = async (formData: Partial<BibleStudyGroup>) => {
     try {
       if (editingBibleStudy?.id) {
         await bibleStudyGroupService.updateBibleStudyGroup(editingBibleStudy.id, formData);
+        showSuccess(t('zones.bibleStudyUpdated') || 'Bible study group updated successfully');
       } else {
         await bibleStudyGroupService.createBibleStudyGroup({
           ...formData,
           zone: Number(id),
         });
+        showSuccess(t('zones.bibleStudyCreated') || 'Bible study group created successfully');
       }
       setShowBibleStudyForm(false);
       setEditingBibleStudy(undefined);
       fetchBibleStudyGroups();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving bible study group:', error);
-      alert(t('common.error'));
+      showError(error.response?.data?.detail || t('common.error') || 'An error occurred');
     }
   };
 

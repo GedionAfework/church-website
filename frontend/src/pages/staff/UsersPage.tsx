@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAlert } from '../../contexts/AlertContext';
 import { userService, type User } from '../../services/userService';
 import { roleService, type Role } from '../../services/roleService';
 import { memberService, type Member } from '../../services/memberService';
@@ -8,6 +9,7 @@ import { API_ENDPOINTS } from '../../config/api';
 
 const UsersPage: React.FC = () => {
   const { t } = useTranslation();
+  const { confirm, showError, showSuccess } = useAlert();
   const [users, setUsers] = useState<User[]>([]);
   const [roles, setRoles] = useState<Role[]>([]);
   const [members, setMembers] = useState<Member[]>([]);
@@ -166,16 +168,15 @@ const UsersPage: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     const confirmMessage = t('users.confirmDelete') || 'Are you sure you want to delete this user?';
-    if (!window.confirm(confirmMessage)) {
-      return;
-    }
-
-    try {
-      await userService.deleteUser(id);
-      await fetchUsers();
-    } catch (error: any) {
-      alert(error.response?.data?.detail || t('common.error'));
-    }
+    confirm(confirmMessage, async () => {
+      try {
+        await userService.deleteUser(id);
+        showSuccess(t('users.userDeleted') || 'User deleted successfully');
+        await fetchUsers();
+      } catch (error: any) {
+        showError(error.response?.data?.detail || t('common.error') || 'An error occurred');
+      }
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -238,12 +239,19 @@ const UsersPage: React.FC = () => {
         await userService.createUser(userData);
       }
 
+      if (editingUser) {
+        showSuccess(t('users.userUpdated') || 'User updated successfully');
+      } else {
+        showSuccess(t('users.userCreated') || 'User created successfully');
+      }
       setShowForm(false);
       await fetchUsers();
+      await fetchMembers(); // Refresh members list
     } catch (error: any) {
       console.error('Error creating/updating user:', error);
       console.error('Error response:', error.response?.data);
       console.error('Request data:', userData);
+      showError(error.response?.data?.detail || error.response?.data?.error || t('common.error') || 'An error occurred');
       
       // Get error messages from the response
       let errorMessage = t('common.error');

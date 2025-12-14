@@ -28,6 +28,8 @@
     "back": "Back",
     "yes": "Yes",
     "no": "No",
+    "ok": "OK",
+    "confirm": "Confirm",
     "saving": "Saving...",
     "remove": "Remove"
   },
@@ -90,7 +92,10 @@
     "churchInfo": "Church Information",
     "staffInfo": "Staff Information",
     "viewZone": "View Zone",
-    "viewService": "View Service"
+    "viewService": "View Service",
+    "memberCreated": "Member created successfully",
+    "memberUpdated": "Member updated successfully",
+    "memberDeleted": "Member deleted successfully"
   },
   "families": {
     "title": "Families",
@@ -125,7 +130,12 @@
     "relationshipGuardian": "Guardian",
     "relationshipOther": "Other",
     "noMembers": "No members in this family",
-    "unnamedFamily": "Unnamed Family"
+    "unnamedFamily": "Unnamed Family",
+    "familyCreated": "Family created successfully",
+    "familyUpdated": "Family updated successfully",
+    "familyDeleted": "Family deleted successfully",
+    "memberAdded": "Member added to family successfully",
+    "memberRemoved": "Member removed from family successfully"
   },
   "zones": {
     "title": "Zones",
@@ -171,7 +181,17 @@
     "selectLeadersHelp": "Hold Ctrl/Cmd to select multiple leaders",
     "selectMembersHelp": "Hold Ctrl/Cmd to select multiple members",
     "confirmDeleteBibleStudy": "Are you sure you want to delete this Bible Study Group?",
-    "loadingLeader": "Loading leader..."
+    "loadingLeader": "Loading leader...",
+    "zoneCreated": "Zone created successfully",
+    "zoneUpdated": "Zone updated successfully",
+    "zoneDeleted": "Zone deleted successfully",
+    "memberRemoved": "Member removed from zone successfully",
+    "leaderSet": "Zone leader set successfully",
+    "leaderUpdated": "Zone leader updated successfully",
+    "leaderRemoved": "Zone leader removed successfully",
+    "bibleStudyCreated": "Bible study group created successfully",
+    "bibleStudyUpdated": "Bible study group updated successfully",
+    "bibleStudyDeleted": "Bible study group deleted successfully"
   },
   "serviceDivisions": {
     "title": "Service Divisions",
@@ -181,7 +201,10 @@
     "noServiceDivisions": "No service divisions found",
     "details": "Service Division Details",
     "divisionNotFound": "Service division not found",
-    "noMembers": "No members in this service division"
+    "noMembers": "No members in this service division",
+    "divisionCreated": "Service division created successfully",
+    "divisionUpdated": "Service division updated successfully",
+    "divisionDeleted": "Service division deleted successfully"
   },
   "content": {
     "title": "Content",
@@ -209,7 +232,10 @@
         "postNotFound": "Post not found",
         "searchPlaceholder": "Search posts...",
         "authorAutoSet": "Author is automatically set to the logged-in user",
-        "noContent": "No content available."
+        "noContent": "No content available.",
+        "postCreated": "Blog post created successfully",
+        "postUpdated": "Blog post updated successfully",
+        "postDeleted": "Blog post deleted successfully"
   },
   "hero": {
     "title": "Title",
@@ -240,7 +266,10 @@
     "subtitleColor": "Subtitle Color",
     "extraClasses": "Extra CSS Classes",
     "noHeros": "No hero sections found",
-    "backgroundImageRequired": "Background image is required"
+    "backgroundImageRequired": "Background image is required",
+    "heroCreated": "Hero section created successfully",
+    "heroUpdated": "Hero section updated successfully",
+    "heroDeleted": "Hero section deleted successfully"
   },
   "socialFeeds": {
     "addFeed": "Add Social Feed",
@@ -248,7 +277,10 @@
     "platform": "Platform",
     "handleOrPageId": "Handle or Page ID",
     "apiKeyOrToken": "API Key or Token",
-    "noFeeds": "No social feeds found"
+    "noFeeds": "No social feeds found",
+    "feedCreated": "Social feed created successfully",
+    "feedUpdated": "Social feed updated successfully",
+    "feedDeleted": "Social feed deleted successfully"
   },
   "home": {
     "welcome": "Welcome to Our Church",
@@ -477,7 +509,10 @@
     "confirmDelete": "Are you sure you want to delete this user?",
     "selectMember": "Select Member",
     "searchMember": "Search for a member...",
-    "selectMemberHelp": "Search and select an existing member to create a user account for them"
+    "selectMemberHelp": "Search and select an existing member to create a user account for them",
+    "userCreated": "User created successfully",
+    "userUpdated": "User updated successfully",
+    "userDeleted": "User deleted successfully"
   },
   "photos": {
     "title": "Photos",
@@ -497,7 +532,12 @@
     "untitled": "Untitled",
     "confirmDelete": "Are you sure you want to delete this photo?",
     "bulkUpload": "Bulk Upload (Multiple Images)",
-    "selectedImages": "Selected"
+    "selectedImages": "Selected",
+    "photoCreated": "Photo created successfully",
+    "photoDeleted": "Photo deleted successfully"
+  },
+  "roles": {
+    "roleDeleted": "Role deleted successfully"
   }
 }
 

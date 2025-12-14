@@ -28,6 +28,8 @@
     "back": "ተመለስ",
     "yes": "አዎ",
     "no": "አይ",
+    "ok": "እሺ",
+    "confirm": "አረጋግጥ",
     "saving": "በመቀመጥ ላይ...",
     "remove": "አስወግድ"
   },
@@ -90,7 +92,10 @@
     "churchInfo": "የቤተክርስቲያን መረጃ",
     "staffInfo": "የሰራተኛ መረጃ",
     "viewZone": "ዞን ይመልከቱ",
-    "viewService": "አገልግሎት ይመልከቱ"
+    "viewService": "አገልግሎት ይመልከቱ",
+    "memberCreated": "አባል በትክክል ተፈጥሯል",
+    "memberUpdated": "አባል በትክክል ተዘምኗል",
+    "memberDeleted": "አባል በትክክል ተሰርዟል"
   },
   "families": {
     "title": "ቤተሰቦች",
@@ -111,21 +116,17 @@
     "familyName": "ቤተሰብ",
     "familyNotFound": "ቤተሰብ አልተገኘም",
     "familyInfo": "የቤተሰብ መረጃ",
-    "headMember": "የቤተሰብ አለቃ",
-    "familyMembers": "የቤተሰብ አባላት",
     "addMember": "አባል ጨምር",
     "selectMember": "አባል ይምረጡ",
     "remove": "አስወግድ",
     "confirmRemoveMember": "እርግጠኛ ነዎት ይህንን አባል ከቤተሰብ ማስወገድ ይፈልጋሉ?",
-    "relationship": "ዝምድና",
-    "relationshipFather": "አባት",
-    "relationshipMother": "እናት",
-    "relationshipSon": "ወንድ ልጅ",
-    "relationshipDaughter": "ሴት ልጅ",
-    "relationshipGuardian": "አሳዳሪ",
-    "relationshipOther": "ሌላ",
     "noMembers": "በዚህ ቤተሰብ ውስጥ አባላት የሉም",
-    "unnamedFamily": "ያልተሰየመ ቤተሰብ"
+    "unnamedFamily": "ያልተሰየመ ቤተሰብ",
+    "familyCreated": "ቤተሰብ በትክክል ተፈጥሯል",
+    "familyUpdated": "ቤተሰብ በትክክል ተዘምኗል",
+    "familyDeleted": "ቤተሰብ በትክክል ተሰርዟል",
+    "memberAdded": "አባል ወደ ቤተሰብ በትክክል ተጨመረ",
+    "memberRemoved": "አባል ከቤተሰብ በትክክል ተሰርዟል"
   },
   "zones": {
     "title": "ዞኖች",
@@ -171,7 +172,17 @@
     "selectLeadersHelp": "ብዙ መሪዎችን ለመምረጥ Ctrl/Cmd ይጫኑ",
     "selectMembersHelp": "ብዙ አባላትን ለመምረጥ Ctrl/Cmd ይጫኑ",
     "confirmDeleteBibleStudy": "እርግጠኛ ነዎት ይህንን የመጽሐፍ ቅዱስ ጥናት ቡድን ማስወገድ ይፈልጋሉ?",
-    "loadingLeader": "መሪ በመጫን ላይ..."
+    "loadingLeader": "መሪ በመጫን ላይ...",
+    "zoneCreated": "ዞን በትክክል ተፈጥሯል",
+    "zoneUpdated": "ዞን በትክክል ተስተካክሏል",
+    "zoneDeleted": "ዞን በትክክል ተሰርዟል",
+    "memberRemoved": "አባል ከዞን በትክክል ተሰርዟል",
+    "leaderSet": "የዞን መሪ በትክክል ተዘጋጅቷል",
+    "leaderUpdated": "የዞን መሪ በትክክል ተስተካክሏል",
+    "leaderRemoved": "የዞን መሪ በትክክል ተሰርዟል",
+    "bibleStudyCreated": "የመጽሐፍ ቅዱስ ጥናት ቡድን በትክክል ተፈጥሯል",
+    "bibleStudyUpdated": "የመጽሐፍ ቅዱስ ጥናት ቡድን በትክክል ተስተካክሏል",
+    "bibleStudyDeleted": "የመጽሐፍ ቅዱስ ጥናት ቡድን በትክክል ተሰርዟል"
   },
   "serviceDivisions": {
     "title": "የአገልግሎት ክፍሎች",
@@ -181,7 +192,10 @@
     "noServiceDivisions": "የአገልግሎት ክፍሎች አልተገኙም",
     "details": "የአገልግሎት ክፍል ዝርዝሮች",
     "divisionNotFound": "የአገልግሎት ክፍል አልተገኘም",
-    "noMembers": "በዚህ አገልግሎት ክፍል ውስጥ አባላት የሉም"
+    "noMembers": "በዚህ አገልግሎት ክፍል ውስጥ አባላት የሉም",
+    "divisionCreated": "የአገልግሎት ክፍል በትክክል ተፈጥሯል",
+    "divisionUpdated": "የአገልግሎት ክፍል በትክክል ተዘምኗል",
+    "divisionDeleted": "የአገልግሎት ክፍል በትክክል ተሰርዟል"
   },
   "content": {
     "title": "ይዘት",
@@ -209,7 +223,10 @@
         "postNotFound": "ፖስት አልተገኘም",
         "searchPlaceholder": "ልጥፎችን ይፈልጉ...",
         "authorAutoSet": "ደራሲ በራስ-ሰር ወደ የተጠቃሚው ስም ተቀምጧል",
-        "noContent": "ይዘት አልተገኘም።"
+        "noContent": "ይዘት አልተገኘም።",
+        "postCreated": "የብሎግ ልጥፍ በትክክል ተፈጥሯል",
+        "postUpdated": "የብሎግ ልጥፍ በትክክል ተዘምኗል",
+        "postDeleted": "የብሎግ ልጥፍ በትክክል ተሰርዟል"
   },
   "hero": {
     "title": "ርዕስ",
@@ -240,7 +257,10 @@
     "subtitleColor": "የንዑስ ርዕስ ቀለም",
     "extraClasses": "ተጨማሪ CSS ክፍሎች",
     "noHeros": "የመሪ ክፍሎች አልተገኙም",
-    "backgroundImageRequired": "የጀርባ ምስል ያስፈልጋል"
+    "backgroundImageRequired": "የጀርባ ምስል ያስፈልጋል",
+    "heroCreated": "የመሪ ክፍል በትክክል ተፈጥሯል",
+    "heroUpdated": "የመሪ ክፍል በትክክል ተዘምኗል",
+    "heroDeleted": "የመሪ ክፍል በትክክል ተሰርዟል"
   },
   "socialFeeds": {
     "addFeed": "የማህበራዊ ሚዲያ ጨምር",
@@ -248,7 +268,10 @@
     "platform": "መድረክ",
     "handleOrPageId": "የተጠቃሚ ስም ወይም የገጽ መለያ",
     "apiKeyOrToken": "የ API ቁልፍ ወይም ቶከን",
-    "noFeeds": "ማህበራዊ ሚዲያ አልተገኙም"
+    "noFeeds": "ማህበራዊ ሚዲያ አልተገኙም",
+    "feedCreated": "የማህበራዊ ሚዲያ ምግብ በትክክል ተፈጥሯል",
+    "feedUpdated": "የማህበራዊ ሚዲያ ምግብ በትክክል ተዘምኗል",
+    "feedDeleted": "የማህበራዊ ሚዲያ ምግብ በትክክል ተሰርዟል"
   },
   "home": {
     "welcome": "ወደ እኛ ቤተክርስቲያን እንኳን ደህና መጡ",
@@ -262,24 +285,6 @@
     "title": "የእኛ አገልጋዮች",
     "subtitle": "የተገለጸ ቡድናችንን ይቀላቀሉ",
     "noStaff": "ለማሳየት አገልጋዮች የሉም"
-  },
-  "blog": {
-    "title": "ብሎግ",
-    "addPost": "ፖስት ጨምር",
-    "editPost": "ፖስት አርም",
-    "content": "ይዘት",
-    "author": "ደራሲ",
-    "status": "ሁኔታ",
-    "statusDraft": "አልተጻፈም",
-    "statusPublished": "የታተመ",
-    "publishedAt": "የታተመበት ቀን",
-    "thumbnail": "የአንድ እይታ ምስል",
-    "allStatuses": "ሁሉም ሁኔታዎች",
-    "noPosts": "ፖስቶች አልተገኙም",
-    "by": "በ",
-    "readMore": "ተጨማሪ ያንብቡ",
-    "backToBlog": "ወደ ብሎግ ተመለስ",
-    "postNotFound": "ፖስት አልተገኘም"
   },
   "site": {
     "name": "በኢትዮጵያ ሙሉ ወንጌል አማኞች ቤተክርስቲያን የቤቴል አጥቢያ"
@@ -305,6 +310,7 @@
     "userCount": "ተጠቃሚዎች",
     "noRoles": "ምንም ሚናዎች አልተገኙም",
     "confirmDelete": "እርግጠኛ ነዎት ይህንን ሚና ማስወገድ ይፈልጋሉ?",
+    "roleDeleted": "ሚና በትክክል ተሰርዟል",
     "searchPermissions": "ፍቃዶችን ይፈልጉ (ለምሳሌ: \"dashboard\", \"view_dashboard\")..."
   },
   "permissions": {
@@ -479,7 +485,10 @@
     "searchMember": "አባል ይፈልጉ...",
     "selectMemberHelp": "አባል ይፈልጉ እና ይምረጡ ለእነሱ የተጠቃሚ መለያ ለመፍጠር",
     "memberRequired": "እባክዎ አባል ይምረጡ",
-    "passwordRequirements": "የይለፍ ቃል ቢያንስ 8 ቁምፊዎች መሆን አለበት፣ በጣም የተለመደ ሊሆን አይችልም፣ እና ሙሉ በሙሉ ቁጥር ሊሆን አይችልም።"
+    "passwordRequirements": "የይለፍ ቃል ቢያንስ 8 ቁምፊዎች መሆን አለበት፣ በጣም የተለመደ ሊሆን አይችልም፣ እና ሙሉ በሙሉ ቁጥር ሊሆን አይችልም።",
+    "userCreated": "ተጠቃሚ በትክክል ተፈጥሯል",
+    "userUpdated": "ተጠቃሚ በትክክል ተዘምኗል",
+    "userDeleted": "ተጠቃሚ በትክክል ተሰርዟል"
   },
   "photos": {
     "title": "የፎቶ ማህደር",
@@ -498,7 +507,9 @@
     "untitled": "ያልተሰየመ",
     "confirmDelete": "እርግጠኛ ነዎት ይህንን ፎቶ ማስወገድ ይፈልጋሉ?",
     "bulkUpload": "ብዙ ምስሎች ይጭኑ (Bulk Upload)",
-    "selectedImages": "የተመረጡ"
+    "selectedImages": "የተመረጡ",
+    "photoCreated": "ፎቶ በትክክል ተፈጥሯል",
+    "photoDeleted": "ፎቶ በትክክል ተሰርዟል"
   }
 }
 

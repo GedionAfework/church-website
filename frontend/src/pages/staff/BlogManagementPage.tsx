@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAlert } from '../../contexts/AlertContext';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 import { contentService, type BlogPost } from '../../services/contentService';
@@ -11,6 +12,7 @@ import { useAuth } from '../../contexts/AuthContext';
 const BlogManagementPage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
+  const { confirm, showError, showSuccess } = useAlert();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -129,17 +131,16 @@ const BlogManagementPage: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     const confirmMessage = t('common.confirmDelete') || 'Are you sure you want to delete this post?';
-    if (!window.confirm(confirmMessage)) {
-      return;
-    }
-
-    try {
-      await contentService.deleteBlogPost(id);
-      fetchPosts();
-    } catch (error) {
-      console.error('Error deleting post:', error);
-      alert(t('common.error'));
-    }
+    confirm(confirmMessage, async () => {
+      try {
+        await contentService.deleteBlogPost(id);
+        showSuccess(t('blog.postDeleted') || 'Blog post deleted successfully');
+        fetchPosts();
+      } catch (error: any) {
+        console.error('Error deleting post:', error);
+        showError(error.response?.data?.detail || t('common.error') || 'An error occurred');
+      }
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -158,16 +159,18 @@ const BlogManagementPage: React.FC = () => {
 
       if (editingPost?.id) {
         await contentService.updateBlogPost(editingPost.id, formDataToSend);
+        showSuccess(t('blog.postUpdated') || 'Blog post updated successfully');
       } else {
         await contentService.createBlogPost(formDataToSend);
+        showSuccess(t('blog.postCreated') || 'Blog post created successfully');
       }
       setShowForm(false);
       setEditingPost(undefined);
       quillInstanceRef.current = null;
       fetchPosts();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving post:', error);
-      alert(t('common.error'));
+      showError(error.response?.data?.detail || t('common.error') || 'An error occurred');
     }
   };
 

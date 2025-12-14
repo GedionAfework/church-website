@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAlert } from '../../contexts/AlertContext';
 import { familyService, type Family } from '../../services/familyService';
 import FamilyForm from '../../components/FamilyForm';
 import { formatToEthiopian } from '../../utils/dateFormatter';
 
 const FamiliesPage: React.FC = () => {
   const { t, i18n } = useTranslation();
+  const { confirm, showError, showSuccess } = useAlert();
   const [families, setFamilies] = useState<Family[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -46,17 +48,16 @@ const FamiliesPage: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     const confirmMessage = t('common.confirmDelete') || 'Are you sure you want to delete this family?';
-    if (!window.confirm(confirmMessage)) {
-      return;
-    }
-
-    try {
-      await familyService.deleteFamily(id);
-      fetchFamilies();
-    } catch (error) {
-      console.error('Error deleting family:', error);
-      alert(t('common.error'));
-    }
+    confirm(confirmMessage, async () => {
+      try {
+        await familyService.deleteFamily(id);
+        showSuccess(t('families.familyDeleted') || 'Family deleted successfully');
+        fetchFamilies();
+      } catch (error: any) {
+        console.error('Error deleting family:', error);
+        showError(error.response?.data?.detail || t('common.error') || 'An error occurred');
+      }
+    });
   };
 
   const handleSubmit = async (data: {
@@ -66,13 +67,16 @@ const FamiliesPage: React.FC = () => {
     try {
       if (editingFamily?.id) {
         await familyService.updateFamily(editingFamily.id, data);
+        showSuccess(t('families.familyUpdated') || 'Family updated successfully');
       } else {
         await familyService.createFamily(data);
+        showSuccess(t('families.familyCreated') || 'Family created successfully');
       }
       setShowForm(false);
       setEditingFamily(undefined);
       fetchFamilies();
-    } catch (error) {
+    } catch (error: any) {
+      showError(error.response?.data?.detail || t('common.error') || 'An error occurred');
       throw error;
     }
   };

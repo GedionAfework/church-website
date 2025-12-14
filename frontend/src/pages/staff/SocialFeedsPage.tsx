@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAlert } from '../../contexts/AlertContext';
 import { contentService, type SocialFeedConfig } from '../../services/contentService';
 
 const SocialFeedsPage: React.FC = () => {
   const { t } = useTranslation();
+  const { confirm, showError, showSuccess } = useAlert();
   const [feeds, setFeeds] = useState<SocialFeedConfig[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -55,17 +57,16 @@ const SocialFeedsPage: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     const confirmMessage = t('common.confirmDelete') || 'Are you sure you want to delete this social feed config?';
-    if (!window.confirm(confirmMessage)) {
-      return;
-    }
-
-    try {
-      await contentService.deleteSocialFeed(id);
-      fetchFeeds();
-    } catch (error) {
-      console.error('Error deleting social feed:', error);
-      alert(t('common.error'));
-    }
+    confirm(confirmMessage, async () => {
+      try {
+        await contentService.deleteSocialFeed(id);
+        showSuccess(t('socialFeeds.feedDeleted') || 'Social feed deleted successfully');
+        fetchFeeds();
+      } catch (error: any) {
+        console.error('Error deleting social feed:', error);
+        showError(error.response?.data?.detail || t('common.error') || 'An error occurred');
+      }
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -73,15 +74,17 @@ const SocialFeedsPage: React.FC = () => {
     try {
       if (editingFeed?.id) {
         await contentService.updateSocialFeed(editingFeed.id, formData);
+        showSuccess(t('socialFeeds.feedUpdated') || 'Social feed updated successfully');
       } else {
         await contentService.createSocialFeed(formData);
+        showSuccess(t('socialFeeds.feedCreated') || 'Social feed created successfully');
       }
       setShowForm(false);
       setEditingFeed(undefined);
       fetchFeeds();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving social feed:', error);
-      alert(t('common.error'));
+      showError(error.response?.data?.detail || t('common.error') || 'An error occurred');
     }
   };
 

@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import { AlertProvider } from './contexts/AlertContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { PermissionProtectedRoute } from './components/PermissionProtectedRoute';
 import './i18n/config';
@@ -36,7 +37,8 @@ import PublicLayout from './layouts/PublicLayout';
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <AlertProvider>
+        <Router>
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<PublicLayout />}>
@@ -86,6 +88,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
+      </AlertProvider>
     </AuthProvider>
   );
 }

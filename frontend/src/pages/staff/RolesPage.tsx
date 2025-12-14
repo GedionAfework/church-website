@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAlert } from '../../contexts/AlertContext';
 import { roleService, type Role, type GroupedPermission } from '../../services/roleService';
 
 const RolesPage: React.FC = () => {
   const { t } = useTranslation();
+  const { confirm, showError, showSuccess } = useAlert();
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -76,16 +78,15 @@ const RolesPage: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     const confirmMessage = t('roles.confirmDelete') || 'Are you sure you want to delete this role?';
-    if (!window.confirm(confirmMessage)) {
-      return;
-    }
-
-    try {
-      await roleService.deleteRole(id);
-      await fetchRoles();
-    } catch (error: any) {
-      alert(error.response?.data?.detail || t('common.error'));
-    }
+    confirm(confirmMessage, async () => {
+      try {
+        await roleService.deleteRole(id);
+        showSuccess(t('roles.roleDeleted') || 'Role deleted successfully');
+        await fetchRoles();
+      } catch (error: any) {
+        showError(error.response?.data?.detail || t('common.error') || 'An error occurred');
+      }
+    });
   };
 
   const handlePermissionToggle = (permissionId: number) => {

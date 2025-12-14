@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAlert } from '../../contexts/AlertContext';
 import { contentService, type Photo } from '../../services/contentService';
 import EthiopianDateInput from '../../components/EthiopianDateInput';
 
 const PhotosPage: React.FC = () => {
   const { t } = useTranslation();
+  const { confirm, showError, showSuccess, showWarning } = useAlert();
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -70,18 +72,17 @@ const PhotosPage: React.FC = () => {
 
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm(t('photos.confirmDelete') || 'Are you sure you want to delete this photo?')) {
-      return;
-    }
-
-    try {
-      await contentService.deletePhoto(id);
-      fetchPhotos();
-      fetchAvailableYears();
-    } catch (error) {
-      console.error('Error deleting photo:', error);
-      alert(t('common.error'));
-    }
+    confirm(t('photos.confirmDelete') || 'Are you sure you want to delete this photo?', async () => {
+      try {
+        await contentService.deletePhoto(id);
+        showSuccess(t('photos.photoDeleted') || 'Photo deleted successfully');
+        fetchPhotos();
+        fetchAvailableYears();
+      } catch (error: any) {
+        console.error('Error deleting photo:', error);
+        showError(error.response?.data?.detail || t('common.error') || 'An error occurred');
+      }
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -100,13 +101,12 @@ const PhotosPage: React.FC = () => {
         const result = await contentService.bulkCreatePhotos(bulkFormData);
         
         if (result.errors && result.errors.length > 0) {
-          alert(`${result.created || result.photos?.length || 0} photos created. Some errors occurred.`);
+          showWarning(`${result.created || result.photos?.length || 0} photos created. Some errors occurred.`);
         } else {
-          alert(`${result.photos?.length || result.created || images.length} photos created successfully!`);
+          showSuccess(`${result.photos?.length || result.created || images.length} photos created successfully!`);
         }
         
         setShowForm(false);
-        setEditingPhoto(undefined);
         setImages([]);
         setBulkUploadMode(false);
         fetchPhotos();
@@ -125,6 +125,7 @@ const PhotosPage: React.FC = () => {
       }
 
       await contentService.createPhoto(formDataToSend);
+      showSuccess(t('photos.photoCreated') || 'Photo created successfully');
 
       setShowForm(false);
       setImage(null);
@@ -132,7 +133,7 @@ const PhotosPage: React.FC = () => {
       fetchAvailableYears();
     } catch (error: any) {
       console.error('Error saving photo:', error);
-      alert(error.response?.data?.detail || t('common.error'));
+      showError(error.response?.data?.detail || t('common.error') || 'An error occurred');
     }
   };
 

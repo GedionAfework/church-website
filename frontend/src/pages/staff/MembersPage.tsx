@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAlert } from '../../contexts/AlertContext';
 import { memberService, type Member } from '../../services/memberService';
 import apiClient from '../../services/api';
 import { API_ENDPOINTS } from '../../config/api';
@@ -7,6 +8,7 @@ import MemberForm from '../../components/MemberForm';
 
 const MembersPage: React.FC = () => {
   const { t } = useTranslation();
+  const { confirm, showError, showSuccess } = useAlert();
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -73,17 +75,16 @@ const MembersPage: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     const confirmMessage = t('common.confirmDelete') || 'Are you sure you want to delete this member?';
-    if (!window.confirm(confirmMessage)) {
-      return;
-    }
-
-    try {
-      await memberService.deleteMember(id);
-      fetchMembers();
-    } catch (error) {
-      console.error('Error deleting member:', error);
-      alert(t('common.error'));
-    }
+    confirm(confirmMessage, async () => {
+      try {
+        await memberService.deleteMember(id);
+        showSuccess(t('members.memberDeleted') || 'Member deleted successfully');
+        fetchMembers();
+      } catch (error: any) {
+        console.error('Error deleting member:', error);
+        showError(error.response?.data?.detail || t('common.error') || 'An error occurred');
+      }
+    });
   };
 
   const handleSubmit = async (formData: FormData): Promise<Member> => {

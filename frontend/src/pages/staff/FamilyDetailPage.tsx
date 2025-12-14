@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAlert } from '../../contexts/AlertContext';
 import { familyService, type Family } from '../../services/familyService';
 import apiClient from '../../services/api';
 import { API_ENDPOINTS } from '../../config/api';
@@ -10,6 +11,7 @@ import { memberService, type Member } from '../../services/memberService';
 const FamilyDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { t, i18n } = useTranslation();
+  const { confirm, showError, showSuccess } = useAlert();
   const [family, setFamily] = useState<Family | null>(null);
   const [loading, setLoading] = useState(true);
   const [availableMembers, setAvailableMembers] = useState<Member[]>([]);
@@ -58,28 +60,28 @@ const FamilyDetailPage: React.FC = () => {
         relationship: selectedRelationship,
       });
       await fetchFamily();
+      showSuccess(t('families.memberAdded') || 'Member added to family successfully');
       setShowAddMember(false);
       setSelectedMemberId('');
       setSelectedRelationship('other');
     } catch (error: any) {
-      alert(error.response?.data?.error || t('common.error'));
+      showError(error.response?.data?.error || t('common.error') || 'An error occurred');
     }
   };
 
   const handleRemoveMember = async (memberId: number) => {
     const confirmMessage = t('families.confirmRemoveMember') || 'Are you sure you want to remove this member from the family?';
-    if (!window.confirm(confirmMessage)) {
-      return;
-    }
-
-    try {
-      await apiClient.delete(`${API_ENDPOINTS.FAMILIES}${id}/members/`, {
-        data: { member_id: memberId },
-      });
-      await fetchFamily();
-    } catch (error: any) {
-      alert(error.response?.data?.error || t('common.error'));
-    }
+    confirm(confirmMessage, async () => {
+      try {
+        await apiClient.delete(`${API_ENDPOINTS.FAMILIES}${id}/members/`, {
+          data: { member_id: memberId },
+        });
+        showSuccess(t('families.memberRemoved') || 'Member removed from family successfully');
+        await fetchFamily();
+      } catch (error: any) {
+        showError(error.response?.data?.error || t('common.error') || 'An error occurred');
+      }
+    });
   };
 
   if (loading) {

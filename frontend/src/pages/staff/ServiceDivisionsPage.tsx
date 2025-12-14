@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAlert } from '../../contexts/AlertContext';
 import { structureService, type ServiceDivision } from '../../services/structureService';
 
 const ServiceDivisionsPage: React.FC = () => {
   const { t } = useTranslation();
+  const { confirm, showError, showSuccess } = useAlert();
   const [divisions, setDivisions] = useState<ServiceDivision[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -53,17 +55,16 @@ const ServiceDivisionsPage: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     const confirmMessage = t('common.confirmDelete') || 'Are you sure you want to delete this service division?';
-    if (!window.confirm(confirmMessage)) {
-      return;
-    }
-
-    try {
-      await structureService.deleteServiceDivision(id);
-      fetchDivisions();
-    } catch (error) {
-      console.error('Error deleting service division:', error);
-      alert(t('common.error'));
-    }
+    confirm(confirmMessage, async () => {
+      try {
+        await structureService.deleteServiceDivision(id);
+        showSuccess(t('serviceDivisions.divisionDeleted') || 'Service division deleted successfully');
+        fetchDivisions();
+      } catch (error: any) {
+        console.error('Error deleting service division:', error);
+        showError(error.response?.data?.detail || t('common.error') || 'An error occurred');
+      }
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -71,15 +72,17 @@ const ServiceDivisionsPage: React.FC = () => {
     try {
       if (editingDivision?.id) {
         await structureService.updateServiceDivision(editingDivision.id, formData);
+        showSuccess(t('serviceDivisions.divisionUpdated') || 'Service division updated successfully');
       } else {
         await structureService.createServiceDivision(formData);
+        showSuccess(t('serviceDivisions.divisionCreated') || 'Service division created successfully');
       }
       setShowForm(false);
       setEditingDivision(undefined);
       fetchDivisions();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving service division:', error);
-      alert(t('common.error'));
+      showError(error.response?.data?.detail || t('common.error') || 'An error occurred');
     }
   };
 

@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAlert } from '../../contexts/AlertContext';
 import { structureService, type Zone } from '../../services/structureService';
 
 const ZonesPage: React.FC = () => {
   const { t } = useTranslation();
+  const { confirm, showError, showSuccess } = useAlert();
   const [zones, setZones] = useState<Zone[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -55,17 +57,16 @@ const ZonesPage: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     const confirmMessage = t('common.confirmDelete') || 'Are you sure you want to delete this zone?';
-    if (!window.confirm(confirmMessage)) {
-      return;
-    }
-
-    try {
-      await structureService.deleteZone(id);
-      fetchZones();
-    } catch (error) {
-      console.error('Error deleting zone:', error);
-      alert(t('common.error'));
-    }
+    confirm(confirmMessage, async () => {
+      try {
+        await structureService.deleteZone(id);
+        showSuccess(t('zones.zoneDeleted') || 'Zone deleted successfully');
+        fetchZones();
+      } catch (error: any) {
+        console.error('Error deleting zone:', error);
+        showError(error.response?.data?.detail || t('common.error') || 'An error occurred');
+      }
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -73,15 +74,17 @@ const ZonesPage: React.FC = () => {
     try {
       if (editingZone?.id) {
         await structureService.updateZone(editingZone.id, formData);
+        showSuccess(t('zones.zoneUpdated') || 'Zone updated successfully');
       } else {
         await structureService.createZone(formData);
+        showSuccess(t('zones.zoneCreated') || 'Zone created successfully');
       }
       setShowForm(false);
       setEditingZone(undefined);
       fetchZones();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving zone:', error);
-      alert(t('common.error'));
+      showError(error.response?.data?.detail || t('common.error') || 'An error occurred');
     }
   };
 

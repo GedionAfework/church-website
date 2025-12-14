@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAlert } from '../../contexts/AlertContext';
 import { contentService, type HeroSection } from '../../services/contentService';
 import { formatToEthiopian } from '../../utils/dateFormatter';
 import EthiopianDateInput from '../../components/EthiopianDateInput';
 
 const HeroSectionPage: React.FC = () => {
   const { t, i18n } = useTranslation();
+  const { confirm, showError, showSuccess, showWarning } = useAlert();
   const [heros, setHeros] = useState<HeroSection[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -31,6 +33,7 @@ const HeroSectionPage: React.FC = () => {
 
   useEffect(() => {
     fetchHeros();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   const fetchHeros = async () => {
@@ -90,17 +93,17 @@ const HeroSectionPage: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     const confirmMessage = t('common.confirmDelete') || 'Are you sure you want to delete this hero section?';
-    if (!window.confirm(confirmMessage)) {
-      return;
-    }
-
-    try {
-      await contentService.deleteHeroSection(id);
-      fetchHeros();
-    } catch (error) {
-      console.error('Error deleting hero section:', error);
-      alert(t('common.error'));
-    }
+    confirm(confirmMessage, async () => {
+      try {
+        await contentService.deleteHeroSection(id);
+        showSuccess(t('hero.heroDeleted') || 'Hero section deleted successfully');
+        fetchHeros();
+      } catch (error: unknown) {
+        console.error('Error deleting hero section:', error);
+        const errorMessage = (error as { response?: { data?: { detail?: string } } })?.response?.data?.detail || t('common.error') || 'An error occurred';
+        showError(errorMessage);
+      }
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -108,7 +111,7 @@ const HeroSectionPage: React.FC = () => {
     
     // Validate background image
     if (!editingHero && !backgroundImage) {
-      alert(t('hero.backgroundImageRequired') || 'Background image is required');
+      showWarning(t('hero.backgroundImageRequired') || 'Background image is required');
       return;
     }
     
@@ -124,21 +127,24 @@ const HeroSectionPage: React.FC = () => {
       if (backgroundImage) {
         formDataToSend.append('background_image', backgroundImage);
       } else if (!editingHero) {
-        alert(t('hero.backgroundImageRequired') || 'Background image is required');
+        showWarning(t('hero.backgroundImageRequired') || 'Background image is required');
         return;
       }
 
       if (editingHero?.id) {
         await contentService.updateHeroSection(editingHero.id, formDataToSend);
+        showSuccess(t('hero.heroUpdated') || 'Hero section updated successfully');
       } else {
         await contentService.createHeroSection(formDataToSend);
+        showSuccess(t('hero.heroCreated') || 'Hero section created successfully');
       }
       setShowForm(false);
       setEditingHero(undefined);
       fetchHeros();
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error saving hero section:', error);
-      alert(t('common.error'));
+      const errorMessage = (error as { response?: { data?: { detail?: string } } })?.response?.data?.detail || t('common.error') || 'An error occurred';
+      showError(errorMessage);
     }
   };
 
@@ -222,7 +228,7 @@ const HeroSectionPage: React.FC = () => {
               }}
               required={!editingHero}
             />
-            {editingHero?.background_image && !backgroundImage && (
+            {editingHero?.background_image && !backgroundImage && typeof editingHero.background_image === 'string' && (
               <img
                 src={editingHero.background_image}
                 alt="Current background"
