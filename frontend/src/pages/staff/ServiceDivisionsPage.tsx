@@ -185,8 +185,6 @@ const ServiceDivisionsPage: React.FC = () => {
                     >
                       <td><strong>{division.name}</strong></td>
                       <td>{division.description || '-'}</td>
-                      <td>
-                      </td>
                       <td onClick={(e) => e.stopPropagation()}>
                         <button
                           onClick={() => handleEdit(division)}
