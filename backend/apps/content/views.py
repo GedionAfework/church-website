@@ -39,6 +39,21 @@ class BlogPostViewSet(viewsets.ModelViewSet):
         
         return queryset
 
+    @action(detail=False, methods=['get'], url_path='by-slug/(?P<slug>[^/.]+)')
+    def by_slug(self, request, slug=None):
+        """Retrieve a blog post by slug with full content"""
+        try:
+            # Use select_related to load author relationship
+            post = self.get_queryset().select_related('author').get(slug=slug)
+            # Explicitly use BlogPostSerializer with request context for proper URL generation
+            serializer = BlogPostSerializer(post, context={'request': request})
+            return Response(serializer.data)
+        except BlogPost.DoesNotExist:
+            return Response(
+                {'detail': 'Blog post not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
 
 class HeroSectionViewSet(viewsets.ModelViewSet):
     queryset = HeroSection.objects.all()

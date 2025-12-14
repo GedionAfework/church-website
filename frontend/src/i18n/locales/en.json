@@ -208,7 +208,8 @@
         "backToBlog": "Back to Blog",
         "postNotFound": "Post not found",
         "searchPlaceholder": "Search posts...",
-        "authorAutoSet": "Author is automatically set to the logged-in user"
+        "authorAutoSet": "Author is automatically set to the logged-in user",
+        "noContent": "No content available."
   },
   "hero": {
     "title": "Title",

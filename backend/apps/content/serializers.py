@@ -4,8 +4,15 @@ from apps.members.serializers import MemberSerializer
 
 
 class BlogPostSerializer(serializers.ModelSerializer):
-    author_name = serializers.CharField(source='author.full_name', read_only=True)
+    author_name = serializers.SerializerMethodField()
     status_display = serializers.CharField(source='get_status_display', read_only=True)
+    thumbnail_image = serializers.ImageField(required=False, allow_null=True)
+    
+    def get_author_name(self, obj):
+        """Get author's full name, return empty string if no author"""
+        if obj.author:
+            return obj.author.full_name
+        return ''
 
     class Meta:
         model = BlogPost

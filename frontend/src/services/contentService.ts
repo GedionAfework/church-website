@@ -79,16 +79,8 @@ export const contentService = {
   },
 
   async getBlogPostBySlug(slug: string): Promise<BlogPost> {
-    const response = await apiClient.get<ListResponse<BlogPost>>(`${API_ENDPOINTS.BLOG_POSTS}`, {
-      params: { slug },
-    });
-    // API returns a list response, find the exact slug match
-    const posts = (response.data as ListResponse<BlogPost>).results || [];
-    const post = posts.find(p => p.slug === slug);
-    if (!post) {
-      throw new Error('Post not found');
-    }
-    return post;
+    const response = await apiClient.get<BlogPost>(`${API_ENDPOINTS.BLOG_POSTS}by-slug/${slug}/`);
+    return response.data;
   },
 
   async createBlogPost(post: FormData | Partial<BlogPost>): Promise<BlogPost> {

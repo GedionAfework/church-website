@@ -208,7 +208,8 @@
         "backToBlog": "ወደ ብሎግ ተመለስ",
         "postNotFound": "ፖስት አልተገኘም",
         "searchPlaceholder": "ልጥፎችን ይፈልጉ...",
-        "authorAutoSet": "ደራሲ በራስ-ሰር ወደ የተጠቃሚው ስም ተቀምጧል"
+        "authorAutoSet": "ደራሲ በራስ-ሰር ወደ የተጠቃሚው ስም ተቀምጧል",
+        "noContent": "ይዘት አልተገኘም።"
   },
   "hero": {
     "title": "ርዕስ",

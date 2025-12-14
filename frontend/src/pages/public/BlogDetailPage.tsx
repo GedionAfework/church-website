@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { contentService, type BlogPost } from '../../services/contentService';
 import { formatToEthiopian } from '../../utils/dateFormatter';
+import { API_BASE_URL } from '../../config/api';
 
 const BlogDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -59,7 +60,12 @@ const BlogDetailPage: React.FC = () => {
       <article className="blog-post">
         {post.thumbnail_image && (
           <div className="blog-post-header-image">
-            <img src={post.thumbnail_image} alt={post.title} />
+            <img 
+              src={post.thumbnail_image.startsWith('http') 
+                ? post.thumbnail_image 
+                : `${API_BASE_URL.replace('/api', '')}${post.thumbnail_image}`} 
+              alt={post.title} 
+            />
           </div>
         )}
 
@@ -81,7 +87,7 @@ const BlogDetailPage: React.FC = () => {
 
         <div
           className="blog-post-content"
-          dangerouslySetInnerHTML={{ __html: post.content }}
+          dangerouslySetInnerHTML={{ __html: post.content || '' }}
         />
       </article>
     </div>
